@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services;
-using System.Collections.Generic;
 
 namespace MrLocal_Backend.Controllers
 {

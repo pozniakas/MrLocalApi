@@ -13,9 +13,8 @@ namespace MrLocal_Backend.Controllers
         public List<ShopRepository> Get([FromBody] Helpers.GetSearchArguments body)
         {
             var searchService = new SearchService();
+
             return searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);
         }
     }
-
-    
 }
