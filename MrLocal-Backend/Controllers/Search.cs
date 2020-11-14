@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace MrLocal_Backend.Controllers
 {
-    [Route("api/shop")]
+    [Route("api/search")]
     [ApiController]
-    public class Shop : ControllerBase
+    public class Search : ControllerBase
     {
         [HttpGet]
         public List<ShopRepository> Get([FromBody] GetArguments body)
