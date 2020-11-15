@@ -74,7 +74,7 @@ namespace MrLocal_Backend.Services
             var isValidStatus = (isUpdate && status == "") || Array.Exists(arrayOfStatusTypes, i => i == status) || (!isUpdate && status == null);
             var isValidDescription = (isUpdate && description == "") || (description.Length > 2);
             var isValidTypeOfShop = (isUpdate && typeOfShop == "") || Array.Exists(arrayOfShopTypes, i => i == typeOfShop);
-            var isValidCity = (isUpdate && city != "") || Array.Exists(arrayOfCities, i => i == city);
+            var isValidCity = (isUpdate && city == "") || Array.Exists(arrayOfCities, i => i == city);
 
             return isValidName && isValidStatus && isValidTypeOfShop && isValidCity && isValidDescription;
         }
