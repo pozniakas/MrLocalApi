@@ -9,7 +9,17 @@
     <City>Vilnius</City>
     <CreatedAt>2020-11-15</CreatedAt>
     <UpdatedAt>2020-11-15</UpdatedAt>
-    <DeletedAt>
-    </DeletedAt>
+    <DeletedAt>2020-11-15</DeletedAt>
+  </Shop>
+  <Shop>
+    <Id>828c3ffe-4eba-4edf-89a0-77e1f1668c48</Id>
+    <Name>Cheap strawberries</Name>
+    <Status>Active</Status>
+    <Description>Cheapest strawberries in Lithuania. Speaking only in English</Description>
+    <TypeOfShop>Berries</TypeOfShop>
+    <City>Vilnius</City>
+    <CreatedAt>2020-11-15</CreatedAt>
+    <UpdatedAt>2020-11-15</UpdatedAt>
+    <DeletedAt></DeletedAt>
   </Shop>
 </Shops>
