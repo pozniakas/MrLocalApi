@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services;
+using System;
 
 namespace MrLocal_Backend.Controllers
 {
@@ -17,27 +18,55 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] Helpers.GetShopArguments body)
+        public string Post([FromBody] Helpers.GetShopArguments body)
         {
             var shopService = new ShopService();
 
-            shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.City);
+            try
+            {
+                shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.City);
+
+                return "Shop was created successfully";
+            }
+            catch (ArgumentException e)
+            {
+                return e.Message;
+            }
         }
 
         [HttpPut]
-        public void Put([FromBody] Helpers.GetShopArguments body)
+        public string Put([FromBody] Helpers.GetShopArguments body)
         {
             var shopService = new ShopService();
 
-            shopService.UpdateShop(body.Id, body.Name, body.Status, body.Description, body.TypeOfShop, body.City);
+            try
+            {
+                shopService.UpdateShop(body.Id, body.Name, body.Status, body.Description, body.TypeOfShop, body.City);
+
+                return "Shop was updated successfully";
+
+            }
+            catch (ArgumentException e)
+            {
+                return e.Message;
+            }
         }
 
         [HttpDelete]
-        public void Delete([FromBody] Helpers.GetShopArguments body)
+        public string Delete([FromBody] Helpers.GetShopArguments body)
         {
             var shopService = new ShopService();
+            try
+            {
+                shopService.DeleteShop(body.Id);
 
-            shopService.DeleteShop(body.Id);
+                return "Shop was deleted succesfully";
+            }
+            catch (ArgumentException e)
+            {
+                return e.Message;
+            }
+
         }
     }
 }
