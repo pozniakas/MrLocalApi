@@ -41,7 +41,6 @@ namespace MrLocal_Backend.Controllers
             {
                 shopService.UpdateShop(body.Id, body.Name, body.Status, body.Description, body.TypeOfShop, body.City);
                 return "Shop was updated successfully";
-
             }
             catch (ArgumentException e)
             {
