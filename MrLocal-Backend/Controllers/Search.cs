@@ -10,10 +10,9 @@ namespace MrLocal_Backend.Controllers
     public class Search : ControllerBase
     {
         [HttpGet]
-        public List<ShopRepository> Get([FromBody] Helpers.GetSearchArguments body)
+        public List<ShopRepository> Get([FromBody] Arguments.GetSearch body)
         {
             var searchService = new SearchService();
-
             return searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);
         }
     }

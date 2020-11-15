@@ -1,16 +1,15 @@
 ﻿namespace MrLocal_Backend.Controllers
 {
-    public class Helpers
+    public class Arguments
     {
-        public class GetSearchArguments
+        public class GetSearch
         {
             public string SearchQuery { get; set; }
             public string City { get; set; }
             public string TypeOfShop { get; set; }
-
         }
 
-        public class GetShopArguments
+        public class GetShop
         {
             public string Id { get; set; }
             public string Name { get; set; }

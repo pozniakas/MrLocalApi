@@ -10,22 +10,20 @@ namespace MrLocal_Backend.Controllers
     public class Shop : ControllerBase
     {
         [HttpGet]
-        public ShopRepository Get([FromBody] Helpers.GetShopArguments body)
+        public ShopRepository Get([FromBody] Arguments.GetShop body)
         {
             var shopService = new ShopService();
-
             return shopService.GetShop(body.Id);
         }
 
         [HttpPost]
-        public string Post([FromBody] Helpers.GetShopArguments body)
+        public string Post([FromBody] Arguments.GetShop body)
         {
             var shopService = new ShopService();
 
             try
             {
                 shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.City);
-
                 return "Shop was created successfully";
             }
             catch (ArgumentException e)
@@ -35,14 +33,13 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpPut]
-        public string Put([FromBody] Helpers.GetShopArguments body)
+        public string Put([FromBody] Arguments.GetShop body)
         {
             var shopService = new ShopService();
 
             try
             {
                 shopService.UpdateShop(body.Id, body.Name, body.Status, body.Description, body.TypeOfShop, body.City);
-
                 return "Shop was updated successfully";
 
             }
@@ -53,20 +50,18 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpDelete]
-        public string Delete([FromBody] Helpers.GetShopArguments body)
+        public string Delete([FromBody] Arguments.GetShop body)
         {
             var shopService = new ShopService();
             try
             {
                 shopService.DeleteShop(body.Id);
-
                 return "Shop was deleted succesfully";
             }
             catch (ArgumentException e)
             {
                 return e.Message;
             }
-
         }
     }
 }
