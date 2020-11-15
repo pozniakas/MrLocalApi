@@ -52,6 +52,7 @@ namespace MrLocal_Backend.Controllers
         public string Delete([FromBody] Arguments.GetShop body)
         {
             var shopService = new ShopService();
+
             try
             {
                 shopService.DeleteShop(body.Id);
