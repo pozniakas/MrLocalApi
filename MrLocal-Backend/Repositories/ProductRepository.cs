@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
@@ -11,7 +10,7 @@ namespace MrLocal_Backend.Repositories
     public class ProductRepository
     {
         private const string FileName = "Data/Product.xml";
-        private readonly ConvertPriceType convertPriceType;
+        private readonly XmlData xmlData;
 
         public string Id { get; private set; }
         public string ShopId { get; private set; }
@@ -19,9 +18,9 @@ namespace MrLocal_Backend.Repositories
         public string Description { get; private set; }
         public double Price { get; private set; }
         public PriceTypes PriceType { get; private set; }
-        public DateTime CreatedAt { get; private set; }
-        public DateTime UpdatedAt { get; private set; }
-        public DateTime? DeletedAt { get; private set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
 
         public enum PriceTypes
         {
@@ -42,7 +41,8 @@ namespace MrLocal_Backend.Repositories
                 var xDocument = new XDocument(xElement);
                 xDocument.Save(FileName);
             }
-            convertPriceType = new ConvertPriceType();
+
+            xmlData = new XmlData();
         }
 
         public ProductRepository(string id, string shopId, string name
@@ -60,7 +60,7 @@ namespace MrLocal_Backend.Repositories
             , string description, string pricetype, double? price)
         {
             var id = Guid.NewGuid().ToString();
-            var doc = LoadProductXml();
+            var doc = xmlData.LoadXml(FileName);
 
             var updatedAtStr = DateTime.Now.ToShortDateString();
             var createdAtStr = DateTime.Now.ToShortDateString();
@@ -123,60 +123,17 @@ namespace MrLocal_Backend.Repositories
 
         public ProductRepository FindOne(string id)
         {
-            var listOfProducts = ReadXml();
+            var listOfProducts = xmlData.ReadProductXml(FileName);
             return listOfProducts.First(i => i.Id == id && i.DeletedAt == null);
         }
 
         public List<ProductRepository> FindAll(string shopId)
         {
-            var listOfProducts = ReadXml();
+            var listOfProducts = xmlData.ReadProductXml(FileName);
             return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();
         }
 
-        private XmlDocument LoadProductXml()
-        {
-            var doc = new XmlDocument();
-            doc.Load(FileName);
 
-            return doc;
-        }
-
-        private List<ProductRepository> ReadXml()
-        {
-            var doc = LoadProductXml();
-
-            var allProducts = new List<ProductRepository>();
-
-            foreach (XmlNode nodes in doc.DocumentElement)
-            {
-                allProducts.Add(NodeToProduct(nodes));
-            }
-
-            return allProducts;
-        }
-
-        private ProductRepository NodeToProduct(XmlNode node)
-        {
-            var shopId = node["ShopId"].InnerText;
-            var id = node["Id"].InnerText;
-            var name = node["Name"].InnerText;
-            var description = node["Description"].InnerText;
-            var price = double.Parse(node["Price"].InnerText);
-            var priceType = node["Pricetype"].InnerText;
-            var createdAt = node["CreatedAt"].InnerText;
-            var updatedAt = node["UpdatedAt"].InnerText;
-            var deletedAt = node["DeletedAt"].InnerText;
-            var deletedAtValue = deletedAt != "" ? DateTime.Parse(deletedAt) : (DateTime?)null;
-
-            var product = new ProductRepository(id, shopId, name, description, convertPriceType.StringToPricetype(priceType), price)
-            {
-                UpdatedAt = DateTime.Parse(updatedAt),
-                CreatedAt = DateTime.Parse(createdAt),
-                DeletedAt = deletedAtValue
-            };
-
-            return product;
-        }
 
 
     }

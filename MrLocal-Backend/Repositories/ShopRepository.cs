@@ -1,8 +1,8 @@
-﻿using System;
+﻿using MrLocal_Backend.Repositories.Helpers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
@@ -10,15 +10,17 @@ namespace MrLocal_Backend.Repositories
     public class ShopRepository
     {
         private const string FileName = "Data/Shop.xml";
+        private readonly XmlData xmlData;
+
         public string Id { get; private set; }
         public string Name { get; private set; }
         public string Status { get; private set; }
         public string Description { get; private set; }
         public string TypeOfShop { get; private set; }
         public string City { get; private set; }
-        public DateTime CreatedAt { get; private set; }
-        public DateTime UpdatedAt { get; private set; }
-        public DateTime? DeletedAt { get; private set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
 
         public ShopRepository()
         {
@@ -33,6 +35,8 @@ namespace MrLocal_Backend.Repositories
                 var XmlDocument = new XDocument(XmlElement);
                 XmlDocument.Save(FileName);
             }
+
+            xmlData = new XmlData();
         }
 
         public ShopRepository(string id, string name, string status, string description, string typeOfShop, string city, DateTime createdAt, DateTime updatedAt)
@@ -50,7 +54,7 @@ namespace MrLocal_Backend.Repositories
 
         public void Create(string name, string description, string typeOfShop, string city)
         {
-            var doc = LoadShopXml();
+            var doc = xmlData.LoadXml(FileName);
 
             var shop = doc.CreateElement("Shop");
 
@@ -103,65 +107,15 @@ namespace MrLocal_Backend.Repositories
 
         public ShopRepository FindOne(string id)
         {
-            var listOfShop = ReadXml();
+            var listOfShop = xmlData.ReadShopXml(FileName);
             return listOfShop.First(i => i.Id == id && i.DeletedAt == null);
         }
 
         public List<ShopRepository> FindAll()
         {
-            var listOfShop = ReadXml();
+            var listOfShop = xmlData.ReadShopXml(FileName);
             return listOfShop.Where(i => i.DeletedAt == null).ToList();
         }
 
-
-        private XmlDocument LoadShopXml()
-        {
-            var doc = new XmlDocument();
-            doc.Load(FileName);
-
-            return doc;
-        }
-
-        private List<ShopRepository> ReadXml()
-        {
-            var doc = LoadShopXml();
-            var allShops = new List<ShopRepository>();
-
-            foreach (XmlNode nodes in doc.DocumentElement)
-            {
-                allShops.Add(NodeToShop(nodes));
-            }
-
-            return allShops;
-        }
-
-        private ShopRepository NodeToShop(XmlNode node)
-        {
-            var _id = node["Id"].InnerText;
-            var _name = node["Name"].InnerText;
-            var _status = node["Status"].InnerText;
-            var _description = node["Description"].InnerText;
-            var _typeofShop = node["TypeOfShop"].InnerText;
-            var _city = node["City"].InnerText;
-            var _createdAt = node["CreatedAt"].InnerText;
-            var _updatedAt = node["UpdatedAt"].InnerText;
-            var _deletedAt = node["DeletedAt"].InnerText;
-
-            var formattedCreatedAt = DateTime.Parse(_createdAt);
-            var formattedUpdatedAt = DateTime.Parse(_updatedAt);
-            DateTime? formattedDeletedAt = null;
-
-            if (_deletedAt.Length > 0)
-            {
-                formattedDeletedAt = DateTime.Parse(_deletedAt);
-            }
-
-            var shop = new ShopRepository(_id, _name, _status, _description, _typeofShop, _city, formattedCreatedAt, formattedUpdatedAt)
-            {
-                DeletedAt = formattedDeletedAt
-            };
-
-            return shop;
-        }
     }
 }
