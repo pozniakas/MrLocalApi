@@ -30,5 +30,31 @@ namespace MrLocal_Backend.Services.Helpers
 
             return isValidName && isValidDescription && isValidPrice && isValidShop && doesProductExist && isValidPriceType;
         }
+
+        public bool ValidateShopData(string name, string status, string description, string typeOfShop, string city, bool isUpdate)
+        {
+            string[] arrayOfShopTypes = { "Berries", "Seafood", "Forest food", "Handmade", "Other" };
+            string[] arrayOfCities = { "Vilnius", "Kaunas", "Klaipėda", "Šiauliai", "Panevėžys" };
+            string[] arrayOfStatusTypes = { "Active", "Not Active", "Paused" };
+
+            var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
+            var shops = shopRepository.FindAll();
+
+            var isValidName = (isUpdate && name == "") || (name.Length > 2 && nameRegex.IsMatch(name) && shops.Where(i => i.Name == name).Count() == 0);
+            var isValidStatus = (isUpdate && status == "") || Array.Exists(arrayOfStatusTypes, i => i == status) || (!isUpdate && status == null);
+            var isValidDescription = (isUpdate && description == "") || (description.Length > 2);
+            var isValidTypeOfShop = (isUpdate && typeOfShop == "") || Array.Exists(arrayOfShopTypes, i => i == typeOfShop);
+            var isValidCity = (isUpdate && city == "") || Array.Exists(arrayOfCities, i => i == city);
+
+            return isValidName && isValidStatus && isValidTypeOfShop && isValidCity && isValidDescription;
+        }
+
+        public bool ValidateFilters(ShopRepository shop, string city, string typeOfShop)
+        {
+            return (city != "All cities" && typeOfShop != "All types" && shop.City == city && shop.TypeOfShop == typeOfShop)
+                || (city != "All cities" && typeOfShop == "All types" && shop.City == city)
+                || (city == "All cities" && typeOfShop != "All types" && shop.TypeOfShop == typeOfShop)
+                || (city == "All cities" && typeOfShop == "All types");
+        }
     }
 }

@@ -1,21 +1,22 @@
 ﻿using MrLocal_Backend.Repositories;
+using MrLocal_Backend.Services.Helpers;
 using System;
-using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace MrLocal_Backend.Services
 {
     public class ShopService
     {
         private readonly ShopRepository shopRepository;
+        private readonly ValidateData validateData;
         public ShopService()
         {
             shopRepository = new ShopRepository();
+            validateData = new ValidateData();
         }
 
         public void CreateShop(string name, string description, string typeOfShop, string city)
         {
-            if (ValidateShopData(name, null, description, typeOfShop, city, false))
+            if (validateData.ValidateShopData(name, null, description, typeOfShop, city, false))
             {
                 shopRepository.Create(name, description, typeOfShop, city);
             }
@@ -27,7 +28,7 @@ namespace MrLocal_Backend.Services
 
         public void UpdateShop(string id, string name, string status, string description, string typeOfShop, string city)
         {
-            if (!ValidateShopData(name, status, description, typeOfShop, city, true))
+            if (!validateData.ValidateShopData(name, status, description, typeOfShop, city, true))
             {
                 throw new ArgumentException("Invalid shop parameters for update");
             }
@@ -59,24 +60,6 @@ namespace MrLocal_Backend.Services
             }
 
             return shop;
-        }
-
-        private bool ValidateShopData(string name, string status, string description, string typeOfShop, string city, bool isUpdate)
-        {
-            string[] arrayOfShopTypes = { "Berries", "Seafood", "Forest food", "Handmade", "Other" };
-            string[] arrayOfCities = { "Vilnius", "Kaunas", "Klaipėda", "Šiauliai", "Panevėžys" };
-            string[] arrayOfStatusTypes = { "Active", "Not Active", "Paused" };
-
-            var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
-            var shops = shopRepository.FindAll();
-
-            var isValidName = (isUpdate && name == "") || (name.Length > 2 && nameRegex.IsMatch(name) && shops.Where(i => i.Name == name).Count() == 0);
-            var isValidStatus = (isUpdate && status == "") || Array.Exists(arrayOfStatusTypes, i => i == status) || (!isUpdate && status == null);
-            var isValidDescription = (isUpdate && description == "") || (description.Length > 2);
-            var isValidTypeOfShop = (isUpdate && typeOfShop == "") || Array.Exists(arrayOfShopTypes, i => i == typeOfShop);
-            var isValidCity = (isUpdate && city == "") || Array.Exists(arrayOfCities, i => i == city);
-
-            return isValidName && isValidStatus && isValidTypeOfShop && isValidCity && isValidDescription;
         }
     }
 }
