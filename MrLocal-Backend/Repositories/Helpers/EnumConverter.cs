@@ -1,16 +1,17 @@
 ﻿using System;
+using static MrLocal_Backend.Repositories.ProductRepository;
 
 namespace MrLocal_Backend.Repositories.Helpers
 {
     public class EnumConverter
     {
-        public ProductRepository.PriceTypes StringToPricetype(string pricetype)
+        public PriceTypes StringToPricetype(string pricetype)
         {
             return pricetype switch
             {
-                "GRAMS" => ProductRepository.PriceTypes.GRAMS,
-                "KILOGRAMS" => ProductRepository.PriceTypes.KILOGRAMS,
-                "UNIT" => ProductRepository.PriceTypes.UNIT,
+                "GRAMS" => PriceTypes.GRAMS,
+                "KILOGRAMS" => PriceTypes.KILOGRAMS,
+                "UNIT" => PriceTypes.UNIT,
                 _ => throw new NotImplementedException()
             };
         }
