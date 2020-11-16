@@ -9,6 +9,7 @@ namespace MrLocal_Backend.Repositories
 {
     public class ShopRepository
     {
+        private const string FileName = "Data/Shop.xml";
         public string Id { get; private set; }
         public string Name { get; private set; }
         public string Status { get; private set; }
@@ -26,11 +27,11 @@ namespace MrLocal_Backend.Repositories
                 Directory.CreateDirectory("Data");
             }
 
-            if (!File.Exists("Data/shops.xml"))
+            if (!File.Exists(FileName))
             {
                 var XmlElement = new XElement("Shops");
                 var XmlDocument = new XDocument(XmlElement);
-                XmlDocument.Save("Data/shops.xml");
+                XmlDocument.Save(FileName);
             }
         }
 
@@ -67,13 +68,13 @@ namespace MrLocal_Backend.Repositories
             }
 
             doc.DocumentElement.AppendChild(shop);
-            doc.Save("Data/shops.xml");
+            doc.Save(FileName);
         }
 
         public void Update(string id, string name, string status, string description, string typeOfShop, string city)
         {
             var dateNow = DateTime.Now.ToShortDateString();
-            var doc = XDocument.Load("Data/shops.xml");
+            var doc = XDocument.Load(FileName);
 
             var node = doc.Descendants("Shop").FirstOrDefault(shop => shop.Element("Id").Value == id && shop.Element("DeletedAt").Value == "");
 
@@ -84,20 +85,20 @@ namespace MrLocal_Backend.Repositories
             node.SetElementValue("City", city);
             node.SetElementValue("UpdatedAt", dateNow);
 
-            doc.Save("Data/shops.xml");
+            doc.Save(FileName);
         }
 
         public void Delete(string id)
         {
             var dateNow = DateTime.Now.ToShortDateString();
-            var doc = XDocument.Load("Data/shops.xml");
+            var doc = XDocument.Load(FileName);
 
             var node = doc.Descendants("Shops").Descendants("Shop").FirstOrDefault(cd => cd.Element("Id").Value == id);
 
             node.SetElementValue("DeletedAt", dateNow);
             node.SetElementValue("Status", "Not Active");
 
-            doc.Save("Data/shops.xml");
+            doc.Save(FileName);
         }
 
         public ShopRepository FindOne(string id)
@@ -116,7 +117,7 @@ namespace MrLocal_Backend.Repositories
         private XmlDocument LoadShopXml()
         {
             var doc = new XmlDocument();
-            doc.Load("Data/shops.xml");
+            doc.Load(FileName);
 
             return doc;
         }
