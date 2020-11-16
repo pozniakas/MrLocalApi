@@ -9,6 +9,7 @@ namespace MrLocal_Backend.Repositories
 {
     public class ProductRepository
     {
+        private const string FileName = "Data/Product.xml";
         public string Id { get; private set; }
         public string ShopId { get; private set; }
         public string Name { get; private set; }
@@ -32,11 +33,11 @@ namespace MrLocal_Backend.Repositories
                 Directory.CreateDirectory("Data");
             }
 
-            if (!File.Exists("Data/Product.xml"))
+            if (!File.Exists(FileName))
             {
                 var xElement = new XElement("root");
                 var xDocument = new XDocument(xElement);
-                xDocument.Save("Data/Product.xml");
+                xDocument.Save(FileName);
             }
         }
 
@@ -75,13 +76,13 @@ namespace MrLocal_Backend.Repositories
 
             doc.DocumentElement.AppendChild(product);
 
-            doc.Save("Data/Product.xml");
+            doc.Save(FileName);
         }
 
         public void Update(string id, string shopId, string name
             , string description, string pricetype, double? price)
         {
-            var doc = XDocument.Load("Data/Product.xml");
+            var doc = XDocument.Load(FileName);
 
             var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id && product.Element("ShopId").Value == shopId
             && product.Element("DeletedAt").Value == "");
@@ -103,17 +104,17 @@ namespace MrLocal_Backend.Repositories
                 node.SetElementValue("Price", price.ToString());
             }
 
-            doc.Save("Data/Product.xml");
+            doc.Save(FileName);
         }
 
         public void Delete(string id)
         {
-            var doc = XDocument.Load("Data/Product.xml");
+            var doc = XDocument.Load(FileName);
 
             var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id);
             node.SetElementValue("DeletedAt", DateTime.Now.ToShortDateString());
 
-            doc.Save("Data/Product.xml");
+            doc.Save(FileName);
         }
 
         public ProductRepository FindOne(string id)
@@ -153,7 +154,7 @@ namespace MrLocal_Backend.Repositories
         private XmlDocument LoadProductXml()
         {
             var doc = new XmlDocument();
-            doc.Load("Data/Product.xml");
+            doc.Load(FileName);
 
             return doc;
         }

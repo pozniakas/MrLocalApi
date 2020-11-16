@@ -56,7 +56,7 @@ namespace MrLocal_Backend.Services
         private bool ValidateProductData(string shopId, string name, string description, double price, bool isUpdate, string id = null)
         {
             var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
-            var priceRegex = new Regex(@"-?\d+(?:\.\d+)?");
+            var priceRegex = new Regex(@"\d+(?:\.\d+)?");
             var shops = shopRepository.FindOne(shopId);
 
             var doesProductExist = (id != null) && (productRepository.FindOne(id) != null) || id == null;
