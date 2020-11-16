@@ -128,16 +128,6 @@ namespace MrLocal_Backend.Repositories
             var listOfProducts = ReadXml();
             return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();
         }
-        private string PricetypeToString(PriceTypes? type)
-        {
-            return type switch
-            {
-                PriceTypes.GRAMS => "GRAMS",
-                PriceTypes.KILOGRAMS => "KILOGRAMS",
-                PriceTypes.UNIT => "UNIT",
-                _ => throw new NotImplementedException()
-            };
-        }
 
         private PriceTypes StringToPricetype(string pricetype)
         {
