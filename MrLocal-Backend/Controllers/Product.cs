@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrLocal_Backend.Services;
 using System;
-using static MrLocal_Backend.Controllers.Arguments;
 
 namespace MrLocal_Backend.Controllers
 {
     [Route("api/product")]
     [ApiController]
-    public class Product : ControllerBase
+    public class Product : Arguments
     {
         [HttpPost]
         public string Post([FromBody] GetProduct body)
