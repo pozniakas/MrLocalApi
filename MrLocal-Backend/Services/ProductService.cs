@@ -15,7 +15,7 @@ namespace MrLocal_Backend.Services
             productRepository = new ProductRepository();
         }
 
-        public void AddProductToShop(string shopId, string name, string description, ProductRepository.PriceTypes priceType, double price)
+        public void AddProductToShop(string shopId, string name, string description, string priceType, double price)
         {
             if (ValidateProductData(shopId, name, description, price, false))
             {
@@ -27,7 +27,7 @@ namespace MrLocal_Backend.Services
             }
         }
 
-        public void UpdateProduct(string id, string shopId, string name, string description, ProductRepository.PriceTypes priceType, double price)
+        public void UpdateProduct(string id, string shopId, string name, string description, string priceType, double price)
         {
             if (ValidateProductData(shopId, name, description, price, true, id))
             {
@@ -61,8 +61,8 @@ namespace MrLocal_Backend.Services
 
             var doesProductExist = (id != null) && (productRepository.FindOne(id) != null) || id == null;
             var isValidShop = shops != null;
-            var isValidName = (isUpdate && name == "") || (name.Length > 2 && nameRegex.IsMatch(name));
-            var isValidDescription = (isUpdate && description == "") || (description.Length > 2);
+            var isValidName = (isUpdate && name == null) || (name.Length > 2 && nameRegex.IsMatch(name));
+            var isValidDescription = (isUpdate && description == null) || (description.Length > 2);
             var isValidPrice = priceRegex.IsMatch(price.ToString());
 
             return isValidName && isValidDescription && isValidPrice && isValidShop && doesProductExist;

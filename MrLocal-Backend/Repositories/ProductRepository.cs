@@ -52,7 +52,7 @@ namespace MrLocal_Backend.Repositories
         }
 
         public void Create(string shopId, string name
-            , string description, PriceTypes pricetype, double price)
+            , string description, string pricetype, double price)
         {
             var id = Guid.NewGuid().ToString();
             var doc = LoadProductXml();
@@ -64,7 +64,7 @@ namespace MrLocal_Backend.Repositories
             var product = doc.CreateElement("Product");
 
             string[] titles = { "Id", "ShopId", "Name", "Description", "Pricetype", "Price", "CreatedAt", "UpdatedAt", "DeletedAt" };
-            string[] values = { id, shopId, name, description, PricetypeToString(pricetype), price.ToString("#.##"), createdAtStr, updatedAtStr, deletedAtStr };
+            string[] values = { id, shopId, name, description, pricetype, price.ToString("#.##"), createdAtStr, updatedAtStr, deletedAtStr };
 
             for (var i = 0; i < titles.Length; i++)
             {
@@ -79,24 +79,24 @@ namespace MrLocal_Backend.Repositories
         }
 
         public void Update(string id, string shopId, string name
-            , string description, PriceTypes? pricetype, double? price)
+            , string description, string pricetype, double? price)
         {
             var doc = XDocument.Load("Data/Product.xml");
 
             var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id && product.Element("ShopId").Value == shopId
             && product.Element("DeletedAt").Value == "");
 
-            if (name != "")
+            if (name != null)
             {
                 node.SetElementValue("Name", name);
             }
-            if (description != "")
+            if (description != null)
             {
                 node.SetElementValue("Description", description);
             }
             if (pricetype != null)
             {
-                node.SetElementValue("Pricetype", PricetypeToString(pricetype));
+                node.SetElementValue("Pricetype", pricetype);
             }
             if (price != null)
             {
