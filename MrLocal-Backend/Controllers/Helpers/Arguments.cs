@@ -1,6 +1,8 @@
-﻿namespace MrLocal_Backend.Controllers
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace MrLocal_Backend.Controllers
 {
-    public class Arguments
+    public class Arguments: ControllerBase
     {
         public class GetSearch
         {

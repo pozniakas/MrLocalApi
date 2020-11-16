@@ -7,10 +7,10 @@ namespace MrLocal_Backend.Controllers
 {
     [Route("api/search")]
     [ApiController]
-    public class Search : ControllerBase
+    public class Search : Arguments
     {
         [HttpGet]
-        public List<ShopRepository> Get([FromBody] Arguments.GetSearch body)
+        public List<ShopRepository> Get([FromBody] GetSearch body)
         {
             var searchService = new SearchService();
             return searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);

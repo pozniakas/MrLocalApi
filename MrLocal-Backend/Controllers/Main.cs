@@ -5,7 +5,7 @@ namespace MrLocal_Backend.Controllers
 {
     [ApiController]
     [Route("")]
-    public class Main : ControllerBase
+    public class Main : Arguments
     {
         [HttpGet]
         public string Get()
