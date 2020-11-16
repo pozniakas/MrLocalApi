@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MrLocal_Backend.Repositories.Helpers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace MrLocal_Backend.Repositories
     public class ProductRepository
     {
         private const string FileName = "Data/Product.xml";
+        private readonly ConvertPriceType convertPriceType;
+
         public string Id { get; private set; }
         public string ShopId { get; private set; }
         public string Name { get; private set; }
@@ -39,6 +42,7 @@ namespace MrLocal_Backend.Repositories
                 var xDocument = new XDocument(xElement);
                 xDocument.Save(FileName);
             }
+            convertPriceType = new ConvertPriceType();
         }
 
         public ProductRepository(string id, string shopId, string name
@@ -129,17 +133,6 @@ namespace MrLocal_Backend.Repositories
             return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();
         }
 
-        private PriceTypes StringToPricetype(string pricetype)
-        {
-            return pricetype switch
-            {
-                "GRAMS" => PriceTypes.GRAMS,
-                "KILOGRAMS" => PriceTypes.KILOGRAMS,
-                "UNIT" => PriceTypes.UNIT,
-                _ => throw new NotImplementedException()
-            };
-        }
-
         private XmlDocument LoadProductXml()
         {
             var doc = new XmlDocument();
@@ -175,7 +168,7 @@ namespace MrLocal_Backend.Repositories
             var deletedAt = node["DeletedAt"].InnerText;
             var deletedAtValue = deletedAt != "" ? DateTime.Parse(deletedAt) : (DateTime?)null;
 
-            var product = new ProductRepository(id, shopId, name, description, StringToPricetype(priceType), price)
+            var product = new ProductRepository(id, shopId, name, description, convertPriceType.StringToPricetype(priceType), price)
             {
                 UpdatedAt = DateTime.Parse(updatedAt),
                 CreatedAt = DateTime.Parse(createdAt),
