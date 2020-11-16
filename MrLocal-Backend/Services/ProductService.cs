@@ -16,7 +16,7 @@ namespace MrLocal_Backend.Services
             productRepository = new ProductRepository();
         }
 
-        public void AddProductToShop(string shopId, string name, string description, string priceType, double price)
+        public void AddProductToShop(string shopId, string name, string description, string priceType, double? price)
         {
             if (ValidateProductData(shopId, name, description, price, false, priceType))
             {
@@ -28,7 +28,7 @@ namespace MrLocal_Backend.Services
             }
         }
 
-        public void UpdateProduct(string id, string shopId, string name, string description, string priceType, double price)
+        public void UpdateProduct(string id, string shopId, string name, string description, string priceType, double? price)
         {
             if (ValidateProductData(shopId, name, description, price, true, priceType, id))
             {
@@ -54,7 +54,7 @@ namespace MrLocal_Backend.Services
             }
         }
 
-        private bool ValidateProductData(string shopId, string name, string description, double price, bool isUpdate, string priceType, string id = null)
+        private bool ValidateProductData(string shopId, string name, string description, double? price, bool isUpdate, string priceType, string id = null)
         {
             var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
             var priceRegex = new Regex(@"\d+(?:\.\d+)?");
@@ -65,8 +65,8 @@ namespace MrLocal_Backend.Services
             var isValidShop = shops != null;
             var isValidName = (isUpdate && name == null) || (name.Length > 2 && nameRegex.IsMatch(name));
             var isValidDescription = (isUpdate && description == null) || (description.Length > 2);
-            var isValidPrice = priceRegex.IsMatch(price.ToString()) || (isUpdate && price == 0);
-            var isValidPriceType = priceTypes.Contains(priceType) || (isUpdate && priceType== null);
+            var isValidPrice = priceRegex.IsMatch(price.ToString()) || (isUpdate && price == null);
+            var isValidPriceType = priceTypes.Contains(priceType) || (isUpdate && priceType == null);
 
             return isValidName && isValidDescription && isValidPrice && isValidShop && doesProductExist && isValidPriceType;
         }

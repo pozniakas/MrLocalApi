@@ -24,7 +24,7 @@
             public string ShopId { get; set; }
             public string Name { get; set; }
             public string Description { get; set; }
-            public double Price { get; set; }
+            public double? Price { get; set; }
             public string PriceType { get; set; }
         }
     }
