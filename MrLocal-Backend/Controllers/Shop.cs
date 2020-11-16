@@ -7,7 +7,7 @@ namespace MrLocal_Backend.Controllers
 {
     [Route("api/shop")]
     [ApiController]
-    public class Shop : Arguments
+    public class Shop : ApiController
     {
         [HttpGet]
         public ShopRepository Get([FromBody] GetShop body)

@@ -6,7 +6,7 @@ namespace MrLocal_Backend.Controllers
 {
     [Route("api/product")]
     [ApiController]
-    public class Product : Arguments
+    public class Product : ApiController
     {
         [HttpPost]
         public string Post([FromBody] GetProduct body)

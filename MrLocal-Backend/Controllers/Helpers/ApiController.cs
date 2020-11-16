@@ -2,7 +2,7 @@
 
 namespace MrLocal_Backend.Controllers
 {
-    public class Arguments: ControllerBase
+    public class ApiController: ControllerBase
     {
         public class GetSearch
         {
