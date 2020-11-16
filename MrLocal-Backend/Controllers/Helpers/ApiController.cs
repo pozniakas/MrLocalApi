@@ -4,14 +4,14 @@ namespace MrLocal_Backend.Controllers
 {
     public class ApiController: ControllerBase
     {
-        public class GetSearch
+        public class SearchBody
         {
             public string SearchQuery { get; set; }
             public string City { get; set; }
             public string TypeOfShop { get; set; }
         }
 
-        public class GetShop
+        public class ShopBody
         {
             public string Id { get; set; }
             public string Name { get; set; }
@@ -20,7 +20,7 @@ namespace MrLocal_Backend.Controllers
             public string TypeOfShop { get; set; }
             public string City { get; set; }
         }
-        public class GetProduct
+        public class ProductBody
         {
             public string Id { get; set; }
             public string ShopId { get; set; }

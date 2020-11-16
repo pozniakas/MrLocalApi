@@ -10,14 +10,14 @@ namespace MrLocal_Backend.Controllers
     public class Shop : ApiController
     {
         [HttpGet]
-        public ShopRepository Get([FromBody] GetShop body)
+        public ShopRepository Get([FromBody] ShopBody body)
         {
             var shopService = new ShopService();
             return shopService.GetShop(body.Id);
         }
 
         [HttpPost]
-        public string Post([FromBody] GetShop body)
+        public string Post([FromBody] ShopBody body)
         {
             var shopService = new ShopService();
 
@@ -33,7 +33,7 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpPut]
-        public string Put([FromBody] GetShop body)
+        public string Put([FromBody] ShopBody body)
         {
             var shopService = new ShopService();
 
@@ -49,7 +49,7 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpDelete]
-        public string Delete([FromBody] GetShop body)
+        public string Delete([FromBody] ShopBody body)
         {
             var shopService = new ShopService();
 

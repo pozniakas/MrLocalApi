@@ -10,7 +10,7 @@ namespace MrLocal_Backend.Controllers
     public class Search : ApiController
     {
         [HttpGet]
-        public List<ShopRepository> Get([FromBody] GetSearch body)
+        public List<ShopRepository> Get([FromBody] SearchBody body)
         {
             var searchService = new SearchService();
             return searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);

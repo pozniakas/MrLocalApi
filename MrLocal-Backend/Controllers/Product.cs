@@ -9,7 +9,7 @@ namespace MrLocal_Backend.Controllers
     public class Product : ApiController
     {
         [HttpPost]
-        public string Post([FromBody] GetProduct body)
+        public string Post([FromBody] ProductBody body)
         {
             try
             {
@@ -24,7 +24,7 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpPut]
-        public string Put([FromBody] GetProduct body)
+        public string Put([FromBody] ProductBody body)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpDelete]
-        public string Delete([FromBody] GetProduct body)
+        public string Delete([FromBody] ProductBody body)
         {
             try
             {
