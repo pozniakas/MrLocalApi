@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
 {
-    public class ProductRepository : XmlData
+    public class ProductRepository : XmlRepository
     {
         private const string FileName = "Data/Product.xml";
         

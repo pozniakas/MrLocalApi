@@ -2,7 +2,7 @@
 
 namespace MrLocal_Backend.Repositories.Helpers
 {
-    public class ConvertPriceType
+    public class EnumConverter
     {
         public ProductRepository.PriceTypes StringToPricetype(string pricetype)
         {

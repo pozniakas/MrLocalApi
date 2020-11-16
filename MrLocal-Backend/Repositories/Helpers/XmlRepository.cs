@@ -4,7 +4,7 @@ using System.Xml;
 
 namespace MrLocal_Backend.Repositories.Helpers
 {
-    public class XmlData : ConvertPriceType
+    public class XmlRepository : EnumConverter
     {
         public XmlDocument LoadXml(string FileName)
         {
@@ -12,6 +12,18 @@ namespace MrLocal_Backend.Repositories.Helpers
             doc.Load(FileName);
 
             return doc;
+        }
+        public List<ShopRepository> ReadShopXml(string FileName)
+        {
+            var doc = LoadXml(FileName);
+            var allShops = new List<ShopRepository>();
+
+            foreach (XmlNode nodes in doc.DocumentElement)
+            {
+                allShops.Add(NodeToShop(nodes));
+            }
+
+            return allShops;
         }
 
         public List<ProductRepository> ReadProductXml(string FileName)
@@ -49,19 +61,6 @@ namespace MrLocal_Backend.Repositories.Helpers
             };
 
             return product;
-        }
-
-        public List<ShopRepository> ReadShopXml(string FileName)
-        {
-            var doc = LoadXml(FileName);
-            var allShops = new List<ShopRepository>();
-
-            foreach (XmlNode nodes in doc.DocumentElement)
-            {
-                allShops.Add(NodeToShop(nodes));
-            }
-
-            return allShops;
         }
 
         public ShopRepository NodeToShop(XmlNode node)
