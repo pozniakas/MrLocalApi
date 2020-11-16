@@ -27,6 +27,7 @@ namespace MrLocal_Backend.Repositories
             GRAMS,
             KILOGRAMS
         }
+
         public ProductRepository()
         {
             if (!Directory.Exists("Data"))
