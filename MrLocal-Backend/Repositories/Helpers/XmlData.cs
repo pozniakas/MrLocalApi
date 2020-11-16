@@ -4,15 +4,8 @@ using System.Xml;
 
 namespace MrLocal_Backend.Repositories.Helpers
 {
-    public class XmlData
+    public class XmlData : ConvertPriceType
     {
-        private readonly ConvertPriceType convertPriceType;
-
-        public XmlData()
-        {
-            convertPriceType = new ConvertPriceType();
-        }
-
         public XmlDocument LoadXml(string FileName)
         {
             var doc = new XmlDocument();
@@ -48,7 +41,7 @@ namespace MrLocal_Backend.Repositories.Helpers
             var deletedAt = node["DeletedAt"].InnerText;
             var deletedAtValue = deletedAt != "" ? DateTime.Parse(deletedAt) : (DateTime?)null;
 
-            var product = new ProductRepository(id, shopId, name, description, convertPriceType.StringToPricetype(priceType), price)
+            var product = new ProductRepository(id, shopId, name, description, StringToPricetype(priceType), price)
             {
                 UpdatedAt = DateTime.Parse(updatedAt),
                 CreatedAt = DateTime.Parse(createdAt),

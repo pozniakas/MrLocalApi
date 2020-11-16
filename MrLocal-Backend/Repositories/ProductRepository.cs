@@ -7,11 +7,10 @@ using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
 {
-    public class ProductRepository
+    public class ProductRepository : XmlData
     {
         private const string FileName = "Data/Product.xml";
-        private readonly XmlData xmlData;
-
+        
         public string Id { get; private set; }
         public string ShopId { get; private set; }
         public string Name { get; private set; }
@@ -42,7 +41,6 @@ namespace MrLocal_Backend.Repositories
                 xDocument.Save(FileName);
             }
 
-            xmlData = new XmlData();
         }
 
         public ProductRepository(string id, string shopId, string name
@@ -60,7 +58,7 @@ namespace MrLocal_Backend.Repositories
             , string description, string pricetype, double? price)
         {
             var id = Guid.NewGuid().ToString();
-            var doc = xmlData.LoadXml(FileName);
+            var doc = LoadXml(FileName);
 
             var updatedAtStr = DateTime.Now.ToShortDateString();
             var createdAtStr = DateTime.Now.ToShortDateString();
@@ -123,13 +121,13 @@ namespace MrLocal_Backend.Repositories
 
         public ProductRepository FindOne(string id)
         {
-            var listOfProducts = xmlData.ReadProductXml(FileName);
+            var listOfProducts = ReadProductXml(FileName);
             return listOfProducts.First(i => i.Id == id && i.DeletedAt == null);
         }
 
         public List<ProductRepository> FindAll(string shopId)
         {
-            var listOfProducts = xmlData.ReadProductXml(FileName);
+            var listOfProducts = ReadProductXml(FileName);
             return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();
         }
     }

@@ -4,19 +4,17 @@ using System;
 
 namespace MrLocal_Backend.Services
 {
-    public class ShopService
+    public class ShopService : ValidateData
     {
         private readonly ShopRepository shopRepository;
-        private readonly ValidateData validateData;
         public ShopService()
         {
             shopRepository = new ShopRepository();
-            validateData = new ValidateData();
         }
 
         public void CreateShop(string name, string description, string typeOfShop, string city)
         {
-            if (validateData.ValidateShopData(name, null, description, typeOfShop, city, false))
+            if (ValidateShopData(name, null, description, typeOfShop, city, false))
             {
                 shopRepository.Create(name, description, typeOfShop, city);
             }
@@ -28,7 +26,7 @@ namespace MrLocal_Backend.Services
 
         public void UpdateShop(string id, string name, string status, string description, string typeOfShop, string city)
         {
-            if (!validateData.ValidateShopData(name, status, description, typeOfShop, city, true))
+            if (!ValidateShopData(name, status, description, typeOfShop, city, true))
             {
                 throw new ArgumentException("Invalid shop parameters for update");
             }

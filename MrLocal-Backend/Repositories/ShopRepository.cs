@@ -7,10 +7,9 @@ using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
 {
-    public class ShopRepository
+    public class ShopRepository : XmlData
     {
         private const string FileName = "Data/Shop.xml";
-        private readonly XmlData xmlData;
 
         public string Id { get; private set; }
         public string Name { get; private set; }
@@ -35,8 +34,6 @@ namespace MrLocal_Backend.Repositories
                 var XmlDocument = new XDocument(XmlElement);
                 XmlDocument.Save(FileName);
             }
-
-            xmlData = new XmlData();
         }
 
         public ShopRepository(string id, string name, string status, string description, string typeOfShop, string city, DateTime createdAt, DateTime updatedAt)
@@ -54,7 +51,7 @@ namespace MrLocal_Backend.Repositories
 
         public void Create(string name, string description, string typeOfShop, string city)
         {
-            var doc = xmlData.LoadXml(FileName);
+            var doc = LoadXml(FileName);
 
             var shop = doc.CreateElement("Shop");
 
@@ -107,13 +104,13 @@ namespace MrLocal_Backend.Repositories
 
         public ShopRepository FindOne(string id)
         {
-            var listOfShop = xmlData.ReadShopXml(FileName);
+            var listOfShop = ReadShopXml(FileName);
             return listOfShop.First(i => i.Id == id && i.DeletedAt == null);
         }
 
         public List<ShopRepository> FindAll()
         {
-            var listOfShop = xmlData.ReadShopXml(FileName);
+            var listOfShop = ReadShopXml(FileName);
             return listOfShop.Where(i => i.DeletedAt == null).ToList();
         }
     }

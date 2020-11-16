@@ -4,20 +4,18 @@ using System;
 
 namespace MrLocal_Backend.Services
 {
-    class ProductService
+    class ProductService : ValidateData
     {
         private readonly ProductRepository productRepository;
-        private readonly ValidateData validateData;
 
         public ProductService()
         {
             productRepository = new ProductRepository();
-            validateData = new ValidateData();
         }
 
         public void AddProductToShop(string shopId, string name, string description, string priceType, double? price)
         {
-            if (validateData.ValidateProductData(shopId, name, description, price, false, priceType))
+            if (ValidateProductData(shopId, name, description, price, false, priceType))
             {
                 productRepository.Create(shopId, name, description, priceType, price);
             }
@@ -29,7 +27,7 @@ namespace MrLocal_Backend.Services
 
         public void UpdateProduct(string id, string shopId, string name, string description, string priceType, double? price)
         {
-            if (validateData.ValidateProductData(shopId, name, description, price, true, priceType, id))
+            if (ValidateProductData(shopId, name, description, price, true, priceType, id))
             {
                 productRepository.Update(id, shopId, name, description, priceType, price);
             }
