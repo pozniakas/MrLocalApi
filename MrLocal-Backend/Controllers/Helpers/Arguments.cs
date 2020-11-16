@@ -18,5 +18,14 @@
             public string TypeOfShop { get; set; }
             public string City { get; set; }
         }
+        public class GetProduct
+        {
+            public string Id { get; set; }
+            public string ShopId { get; set; }
+            public string Name { get; set; }
+            public string Description { get; set; }
+            public double Price { get; set; }
+            public string PriceType { get; set; }
+        }
     }
 }

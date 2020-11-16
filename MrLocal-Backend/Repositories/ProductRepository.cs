@@ -80,7 +80,7 @@ namespace MrLocal_Backend.Repositories
         }
 
         public void Update(string id, string shopId, string name
-            , string description, string pricetype, double? price)
+            , string description, string pricetype, double price)
         {
             var doc = XDocument.Load(FileName);
 
@@ -99,7 +99,7 @@ namespace MrLocal_Backend.Repositories
             {
                 node.SetElementValue("Pricetype", pricetype);
             }
-            if (price != null)
+            if (price != 0)
             {
                 node.SetElementValue("Price", price.ToString());
             }

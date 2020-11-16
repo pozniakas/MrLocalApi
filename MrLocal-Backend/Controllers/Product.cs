@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrLocal_Backend.Services;
+using System;
+using static MrLocal_Backend.Controllers.Arguments;
 
 namespace MrLocal_Backend.Controllers
 {
@@ -7,44 +9,49 @@ namespace MrLocal_Backend.Controllers
     [ApiController]
     public class Product : ControllerBase
     {
-        [HttpGet]
-        public string Get([FromBody] GetProductArguments body)
-        {
-            return "Just a test";
-        }
-
         [HttpPost]
-        public string Post([FromBody] GetProductArguments body)
+        public string Post([FromBody] GetProduct body)
         {
-            var productService = new ProductService();
-            productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
-            return "Successfully created";
+            try
+            {
+                var productService = new ProductService();
+                productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
+                return "Product was created successfully";
+            }
+            catch (ArgumentException e)
+            {
+                return e.Message;
+            }
         }
 
         [HttpPut]
-        public string Put([FromBody] GetProductArguments body)
+        public string Put([FromBody] GetProduct body)
         {
-            var productService = new ProductService();
-            productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
-            return "Successfully updated";
+            try
+            {
+                var productService = new ProductService();
+                productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
+                return "Product was updated successfully";
+            }
+            catch (ArgumentException e)
+            {
+                return e.Message;
+            }
         }
 
         [HttpDelete]
-        public string Delete([FromBody] GetProductArguments body)
+        public string Delete([FromBody] GetProduct body)
         {
-            var productService = new ProductService();
-            productService.DeleteProduct(body.Id);
-            return "Successfully deleted";
+            try
+            {
+                var productService = new ProductService();
+                productService.DeleteProduct(body.Id);
+                return "Product was deleted succesfully";
+            }
+            catch (ArgumentException e)
+            {
+                return e.Message;
+            }
         }
-
-    }
-    public class GetProductArguments
-    {
-        public string Id { get; set; }
-        public string ShopId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public double Price { get; set; }
-        public string PriceType { get; set; }
     }
 }
