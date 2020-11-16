@@ -116,6 +116,5 @@ namespace MrLocal_Backend.Repositories
             var listOfShop = xmlData.ReadShopXml(FileName);
             return listOfShop.Where(i => i.DeletedAt == null).ToList();
         }
-
     }
 }

@@ -132,9 +132,5 @@ namespace MrLocal_Backend.Repositories
             var listOfProducts = xmlData.ReadProductXml(FileName);
             return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();
         }
-
-
-
-
     }
 }
