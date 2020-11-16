@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Shops>
+  <Shop>
+    <Id>4e57de16-f622-4864-a7f8-a171c64da0e7</Id>
+    <Name>Pigios braškės</Name>
+    <Status>Not Active</Status>
+    <Description>Testas testukas</Description>
+    <TypeOfShop>Berries</TypeOfShop>
+    <City>Vilnius</City>
+    <CreatedAt>11/13/2020</CreatedAt>
+    <UpdatedAt>11/13/2020</UpdatedAt>
+    <DeletedAt>
+    </DeletedAt>
+  </Shop>
+  <Shop>
+    <Id>5260c46f-a9fc-42a4-ae87-c8e4f13bfb6c</Id>
+    <Name>Pigios braškės</Name>
+    <Status>Not Active</Status>
+    <Description>Testas testukas</Description>
+    <TypeOfShop>Berries</TypeOfShop>
+    <City>Vilnius</City>
+    <CreatedAt>11/13/2020</CreatedAt>
+    <UpdatedAt>11/13/2020</UpdatedAt>
+    <DeletedAt>
+    </DeletedAt>
+  </Shop>
+  <Shop>
+    <Id>cff4e4d9-7857-4444-80dc-5346e789efbd</Id>
+    <Name>Pigios braškės</Name>
+    <Status>Not Active</Status>
+    <Description>Testas testukas</Description>
+    <TypeOfShop>Berries</TypeOfShop>
+    <City>Vilnius</City>
+    <CreatedAt>11/13/2020</CreatedAt>
+    <UpdatedAt>11/13/2020</UpdatedAt>
+    <DeletedAt>
+    </DeletedAt>
+  </Shop>
+  <Shop>
+    <Id>10a8ecc9-755c-478e-b758-d0c977c2ba29</Id>
+    <Name>Pigios braškės</Name>
+    <Status>Not Active</Status>
+    <Description>Testas testukas</Description>
+    <TypeOfShop>Berries</TypeOfShop>
+    <City>Vilnius</City>
+    <CreatedAt>11/13/2020</CreatedAt>
+    <UpdatedAt>11/13/2020</UpdatedAt>
+    <DeletedAt>
+    </DeletedAt>
+  </Shop>
+  <Shop>
+    <Id>4062cb65-e7c5-4bce-a373-f6fd7ad3ead3</Id>
+    <Name>Pigios braškės</Name>
+    <Status>Not Active</Status>
+    <Description>Testas testukas</Description>
+    <TypeOfShop>Berries</TypeOfShop>
+    <City>Vilnius</City>
+    <CreatedAt>11/13/2020</CreatedAt>
+    <UpdatedAt>11/13/2020</UpdatedAt>
+    <DeletedAt>
+    </DeletedAt>
+  </Shop>
+  <Shop>
+    <Id>150c5c54-64e0-499e-8423-aac167f452c2</Id>
+    <Name>Pigios braškės</Name>
+    <Status>Not Active</Status>
+    <Description>Testas testukas</Description>
+    <TypeOfShop>Berries</TypeOfShop>
+    <City>Vilnius</City>
+    <CreatedAt>11/13/2020</CreatedAt>
+    <UpdatedAt>11/13/2020</UpdatedAt>
+    <DeletedAt>
+    </DeletedAt>
+  </Shop>
+</Shops>
