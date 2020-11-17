@@ -17,9 +17,6 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpGet]
-        public List<ShopRepository> Get([FromBody] SearchBody body)
-        {
-            return searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);
-        }
+        public List<ShopRepository> Get([FromBody] SearchBody body) => searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);   
     }
 }
