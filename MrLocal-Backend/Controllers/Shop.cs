@@ -9,18 +9,22 @@ namespace MrLocal_Backend.Controllers
     [ApiController]
     public class Shop : ApiController
     {
+        private readonly ShopService shopService;
+
+        public Shop()
+        {
+            shopService = new ShopService();
+        }
+
         [HttpGet]
         public ShopRepository Get([FromBody] ShopBody body)
-        {
-            var shopService = new ShopService();
+        { 
             return shopService.GetShop(body.Id);
         }
 
         [HttpPost]
         public string Post([FromBody] ShopBody body)
         {
-            var shopService = new ShopService();
-
             try
             {
                 shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.City);
@@ -35,8 +39,6 @@ namespace MrLocal_Backend.Controllers
         [HttpPut]
         public string Put([FromBody] ShopBody body)
         {
-            var shopService = new ShopService();
-
             try
             {
                 shopService.UpdateShop(body.Id, body.Name, body.Status, body.Description, body.TypeOfShop, body.City);
@@ -51,8 +53,6 @@ namespace MrLocal_Backend.Controllers
         [HttpDelete]
         public string Delete([FromBody] ShopBody body)
         {
-            var shopService = new ShopService();
-
             try
             {
                 shopService.DeleteShop(body.Id);
