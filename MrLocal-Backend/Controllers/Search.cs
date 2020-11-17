@@ -9,11 +9,14 @@ namespace MrLocal_Backend.Controllers
     [ApiController]
     public class Search : ApiController
     {
-        [HttpGet]
-        public List<ShopRepository> Get([FromBody] SearchBody body)
+        private readonly SearchService searchService;
+
+        public Search()
         {
-            var searchService = new SearchService();
-            return searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);
+            searchService = new SearchService();
         }
+
+        [HttpGet]
+        public List<ShopRepository> Get([FromBody] SearchBody body) => searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);   
     }
 }

@@ -8,12 +8,18 @@ namespace MrLocal_Backend.Controllers
     [ApiController]
     public class Product : ApiController
     {
+        private readonly ProductService productService;
+
+        public Product()
+        {
+            productService = new ProductService();
+        }
+
         [HttpPost]
         public string Post([FromBody] ProductBody body)
         {
             try
             {
-                var productService = new ProductService();
                 productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
                 return "Product was created successfully";
             }
@@ -28,7 +34,6 @@ namespace MrLocal_Backend.Controllers
         {
             try
             {
-                var productService = new ProductService();
                 productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
                 return "Product was updated successfully";
             }
@@ -43,7 +48,6 @@ namespace MrLocal_Backend.Controllers
         {
             try
             {
-                var productService = new ProductService();
                 productService.DeleteProduct(body.Id);
                 return "Product was deleted succesfully";
             }
