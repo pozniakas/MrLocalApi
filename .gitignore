@@ -2,6 +2,7 @@
 */**/bin/Release
 */**/obj/Debug
 */**/obj/Release
+*/**/Data
 *.swp
 *.*~
 project.lock.json
