@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MrLocal_Backend.Repositories.Helpers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,18 +8,19 @@ using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
 {
-    public class ProductRepository
+    public class ProductRepository : XmlRepository
     {
         private const string FileName = "Data/Product.xml";
+        
         public string Id { get; private set; }
         public string ShopId { get; private set; }
         public string Name { get; private set; }
         public string Description { get; private set; }
         public double Price { get; private set; }
         public PriceTypes PriceType { get; private set; }
-        public DateTime CreatedAt { get; private set; }
-        public DateTime UpdatedAt { get; private set; }
-        public DateTime? DeletedAt { get; private set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
 
         public enum PriceTypes
         {
@@ -26,6 +28,7 @@ namespace MrLocal_Backend.Repositories
             GRAMS,
             KILOGRAMS
         }
+
         public ProductRepository()
         {
             if (!Directory.Exists("Data"))
@@ -39,6 +42,7 @@ namespace MrLocal_Backend.Repositories
                 var xDocument = new XDocument(xElement);
                 xDocument.Save(FileName);
             }
+
         }
 
         public ProductRepository(string id, string shopId, string name
@@ -56,7 +60,7 @@ namespace MrLocal_Backend.Repositories
             , string description, string pricetype, double? price)
         {
             var id = Guid.NewGuid().ToString();
-            var doc = LoadProductXml();
+            var doc = LoadXml(FileName);
 
             var updatedAtStr = DateTime.Now.ToShortDateString();
             var createdAtStr = DateTime.Now.ToShortDateString();
@@ -119,50 +123,17 @@ namespace MrLocal_Backend.Repositories
 
         public ProductRepository FindOne(string id)
         {
-            var listOfProducts = ReadXml();
+            var listOfProducts = ReadProductXml(FileName);
             return listOfProducts.First(i => i.Id == id && i.DeletedAt == null);
         }
 
         public List<ProductRepository> FindAll(string shopId)
         {
-            var listOfProducts = ReadXml();
+            var listOfProducts = ReadProductXml(FileName);
             return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();
         }
 
-        private PriceTypes StringToPricetype(string pricetype)
-        {
-            return pricetype switch
-            {
-                "GRAMS" => PriceTypes.GRAMS,
-                "KILOGRAMS" => PriceTypes.KILOGRAMS,
-                "UNIT" => PriceTypes.UNIT,
-                _ => throw new NotImplementedException()
-            };
-        }
-
-        private XmlDocument LoadProductXml()
-        {
-            var doc = new XmlDocument();
-            doc.Load(FileName);
-
-            return doc;
-        }
-
-        private List<ProductRepository> ReadXml()
-        {
-            var doc = LoadProductXml();
-
-            var allProducts = new List<ProductRepository>();
-
-            foreach (XmlNode nodes in doc.DocumentElement)
-            {
-                allProducts.Add(NodeToProduct(nodes));
-            }
-
-            return allProducts;
-        }
-
-        private ProductRepository NodeToProduct(XmlNode node)
+        public ProductRepository NodeToObject(XmlNode node)
         {
             var shopId = node["ShopId"].InnerText;
             var id = node["Id"].InnerText;
@@ -184,7 +155,5 @@ namespace MrLocal_Backend.Repositories
 
             return product;
         }
-
-
     }
 }

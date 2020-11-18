@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MrLocal_Backend.Repositories.Helpers;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -7,18 +8,19 @@ using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
 {
-    public class ShopRepository
+    public class ShopRepository : XmlRepository
     {
         private const string FileName = "Data/Shop.xml";
+
         public string Id { get; private set; }
         public string Name { get; private set; }
         public string Status { get; private set; }
         public string Description { get; private set; }
         public string TypeOfShop { get; private set; }
         public string City { get; private set; }
-        public DateTime CreatedAt { get; private set; }
-        public DateTime UpdatedAt { get; private set; }
-        public DateTime? DeletedAt { get; private set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
 
         public ShopRepository()
         {
@@ -50,7 +52,7 @@ namespace MrLocal_Backend.Repositories
 
         public void Create(string name, string description, string typeOfShop, string city)
         {
-            var doc = LoadShopXml();
+            var doc = LoadXml(FileName);
 
             var shop = doc.CreateElement("Shop");
 
@@ -103,39 +105,17 @@ namespace MrLocal_Backend.Repositories
 
         public ShopRepository FindOne(string id)
         {
-            var listOfShop = ReadXml();
+            var listOfShop = ReadShopXml(FileName);
             return listOfShop.First(i => i.Id == id && i.DeletedAt == null);
         }
 
         public List<ShopRepository> FindAll()
         {
-            var listOfShop = ReadXml();
+            var listOfShop = ReadShopXml(FileName);
             return listOfShop.Where(i => i.DeletedAt == null).ToList();
         }
 
-
-        private XmlDocument LoadShopXml()
-        {
-            var doc = new XmlDocument();
-            doc.Load(FileName);
-
-            return doc;
-        }
-
-        private List<ShopRepository> ReadXml()
-        {
-            var doc = LoadShopXml();
-            var allShops = new List<ShopRepository>();
-
-            foreach (XmlNode nodes in doc.DocumentElement)
-            {
-                allShops.Add(NodeToShop(nodes));
-            }
-
-            return allShops;
-        }
-
-        private ShopRepository NodeToShop(XmlNode node)
+        public ShopRepository NodeToObject(XmlNode node)
         {
             var _id = node["Id"].InnerText;
             var _name = node["Name"].InnerText;
