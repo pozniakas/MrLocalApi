@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using System.Configuration;
 
 namespace MrLocal_Backend.Repositories
 {
     public class ShopRepository : XmlRepository
     {
-        private const string FileName = "Data/Shop.xml";
+        readonly string fileName;
 
         public string Id { get; private set; }
         public string Name { get; private set; }
@@ -23,16 +24,18 @@ namespace MrLocal_Backend.Repositories
 
         public ShopRepository()
         {
+            fileName = ConfigurationManager.AppSettings.Get("SHOP_REPOSITORY_FILE_NAME");
+
             if (!Directory.Exists("Data"))
             {
                 Directory.CreateDirectory("Data");
             }
 
-            if (!File.Exists(FileName))
+            if (!File.Exists(fileName))
             {
                 var XmlElement = new XElement("root");
                 var XmlDocument = new XDocument(XmlElement);
-                XmlDocument.Save(FileName);
+                XmlDocument.Save(fileName);
             }
         }
 
@@ -51,7 +54,7 @@ namespace MrLocal_Backend.Repositories
 
         public void Create(string name, string description, string typeOfShop, string city)
         {
-            var doc = LoadXml(FileName);
+            var doc = LoadXml(fileName);
 
             var shop = doc.CreateElement("Shop");
 
@@ -69,13 +72,13 @@ namespace MrLocal_Backend.Repositories
             }
 
             doc.DocumentElement.AppendChild(shop);
-            doc.Save(FileName);
+            doc.Save(fileName);
         }
 
         public void Update(string id, string name, string status, string description, string typeOfShop, string city)
         {
             var dateNow = DateTime.Now.ToShortDateString();
-            var doc = XDocument.Load(FileName);
+            var doc = XDocument.Load(fileName);
 
             var node = doc.Descendants("Shop").FirstOrDefault(shop => shop.Element("Id").Value == id && shop.Element("DeletedAt").Value == "");
 
@@ -86,31 +89,31 @@ namespace MrLocal_Backend.Repositories
             node.SetElementValue("City", city);
             node.SetElementValue("UpdatedAt", dateNow);
 
-            doc.Save(FileName);
+            doc.Save(fileName);
         }
 
         public void Delete(string id)
         {
             var dateNow = DateTime.Now.ToShortDateString();
-            var doc = XDocument.Load(FileName);
+            var doc = XDocument.Load(fileName);
 
             var node = doc.Descendants("Shop").FirstOrDefault(cd => cd.Element("Id").Value == id);
 
             node.SetElementValue("DeletedAt", dateNow);
             node.SetElementValue("Status", "Not Active");
 
-            doc.Save(FileName);
+            doc.Save(fileName);
         }
 
         public ShopRepository FindOne(string id)
         {
-            var listOfShop = ReadShopXml(FileName);
+            var listOfShop = ReadShopXml(fileName);
             return listOfShop.First(i => i.Id == id && i.DeletedAt == null);
         }
 
         public List<ShopRepository> FindAll()
         {
-            var listOfShop = ReadShopXml(FileName);
+            var listOfShop = ReadShopXml(fileName);
             return listOfShop.Where(i => i.DeletedAt == null).ToList();
         }
     }
