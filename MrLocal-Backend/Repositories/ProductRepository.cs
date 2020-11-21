@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
@@ -131,29 +130,6 @@ namespace MrLocal_Backend.Repositories
         {
             var listOfProducts = ReadProductXml(FileName);
             return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();
-        }
-
-        public ProductRepository NodeToObject(XmlNode node)
-        {
-            var shopId = node["ShopId"].InnerText;
-            var id = node["Id"].InnerText;
-            var name = node["Name"].InnerText;
-            var description = node["Description"].InnerText;
-            var price = double.Parse(node["Price"].InnerText);
-            var priceType = node["Pricetype"].InnerText;
-            var createdAt = node["CreatedAt"].InnerText;
-            var updatedAt = node["UpdatedAt"].InnerText;
-            var deletedAt = node["DeletedAt"].InnerText;
-            var deletedAtValue = deletedAt != "" ? DateTime.Parse(deletedAt) : (DateTime?)null;
-
-            var product = new ProductRepository(id, shopId, name, description, StringToPricetype(priceType), price)
-            {
-                UpdatedAt = DateTime.Parse(updatedAt),
-                CreatedAt = DateTime.Parse(createdAt),
-                DeletedAt = deletedAtValue
-            };
-
-            return product;
         }
     }
 }
