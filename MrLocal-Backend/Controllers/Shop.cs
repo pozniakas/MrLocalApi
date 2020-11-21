@@ -2,12 +2,13 @@
 using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services;
 using System;
+using static MrLocal_Backend.Models.Body;
 
 namespace MrLocal_Backend.Controllers
 {
     [Route("api/shop")]
     [ApiController]
-    public class Shop : ApiController
+    public class Shop : ControllerBase
     {
         private readonly ShopService shopService;
 
@@ -16,10 +17,10 @@ namespace MrLocal_Backend.Controllers
             shopService = new ShopService();
         }
 
-        [HttpGet]
-        public ShopRepository Get([FromBody] ShopBody body)
-        { 
-            return shopService.GetShop(body.Id);
+        [HttpGet("{id}")]
+        public ShopRepository Get(string id)
+        {
+            return shopService.GetShop(id);
         }
 
         [HttpPost]
@@ -50,12 +51,12 @@ namespace MrLocal_Backend.Controllers
             }
         }
 
-        [HttpDelete]
-        public string Delete([FromBody] ShopBody body)
+        [HttpDelete("{id}")]
+        public string Delete(string id)
         {
             try
             {
-                shopService.DeleteShop(body.Id);
+                shopService.DeleteShop(id);
                 return "Shop was deleted succesfully";
             }
             catch (ArgumentException e)

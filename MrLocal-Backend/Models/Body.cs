@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace MrLocal_Backend.Controllers
+namespace MrLocal_Backend.Models
 {
-    public class ApiController: ControllerBase
+    public class Body : ControllerBase
     {
         public class SearchBody
         {

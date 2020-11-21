@@ -55,12 +55,7 @@ namespace MrLocal_Backend.Repositories.Helpers
 
             var formattedCreatedAt = DateTime.Parse(_createdAt);
             var formattedUpdatedAt = DateTime.Parse(_updatedAt);
-            DateTime? formattedDeletedAt = null;
-
-            if (_deletedAt.Length > 0)
-            {
-                formattedDeletedAt = DateTime.Parse(_deletedAt);
-            }
+            var formattedDeletedAt = _deletedAt != "" ? DateTime.Parse(_deletedAt) : (DateTime?)null;
 
             var shop = new ShopRepository(_id, _name, _status, _description, _typeofShop, _city, formattedCreatedAt, formattedUpdatedAt)
             {

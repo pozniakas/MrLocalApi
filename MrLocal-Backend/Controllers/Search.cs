@@ -2,12 +2,13 @@
 using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services;
 using System.Collections.Generic;
+using static MrLocal_Backend.Models.Body;
 
 namespace MrLocal_Backend.Controllers
 {
     [Route("api/search")]
     [ApiController]
-    public class Search : ApiController
+    public class Search : ControllerBase
     {
         private readonly SearchService searchService;
 

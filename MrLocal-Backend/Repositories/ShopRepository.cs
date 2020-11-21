@@ -30,7 +30,7 @@ namespace MrLocal_Backend.Repositories
 
             if (!File.Exists(FileName))
             {
-                var XmlElement = new XElement("Shops");
+                var XmlElement = new XElement("root");
                 var XmlDocument = new XDocument(XmlElement);
                 XmlDocument.Save(FileName);
             }
@@ -94,7 +94,7 @@ namespace MrLocal_Backend.Repositories
             var dateNow = DateTime.Now.ToShortDateString();
             var doc = XDocument.Load(FileName);
 
-            var node = doc.Descendants("Shops").Descendants("Shop").FirstOrDefault(cd => cd.Element("Id").Value == id);
+            var node = doc.Descendants("Shop").FirstOrDefault(cd => cd.Element("Id").Value == id);
 
             node.SetElementValue("DeletedAt", dateNow);
             node.SetElementValue("Status", "Not Active");
