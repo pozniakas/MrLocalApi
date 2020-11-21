@@ -17,10 +17,10 @@ namespace MrLocal_Backend.Controllers
             shopService = new ShopService();
         }
 
-        [HttpGet]
-        public ShopRepository Get([FromBody] ShopBody body)
-        { 
-            return shopService.GetShop(body.Id);
+        [HttpGet("{id}")]
+        public ShopRepository Get(string id)
+        {
+            return shopService.GetShop(id);
         }
 
         [HttpPost]
@@ -51,12 +51,12 @@ namespace MrLocal_Backend.Controllers
             }
         }
 
-        [HttpDelete]
-        public string Delete([FromBody] ShopBody body)
+        [HttpDelete("{id}")]
+        public string Delete(string id)
         {
             try
             {
-                shopService.DeleteShop(body.Id);
+                shopService.DeleteShop(id);
                 return "Shop was deleted succesfully";
             }
             catch (ArgumentException e)

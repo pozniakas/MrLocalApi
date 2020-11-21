@@ -44,12 +44,12 @@ namespace MrLocal_Backend.Controllers
             }
         }
 
-        [HttpDelete]
-        public string Delete([FromBody] ProductBody body)
+        [HttpDelete("{id}")]
+        public string Delete(string id)
         {
             try
             {
-                productService.DeleteProduct(body.Id);
+                productService.DeleteProduct(id);
                 return "Product was deleted succesfully";
             }
             catch (ArgumentException e)
