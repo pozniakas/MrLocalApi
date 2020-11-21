@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
 {
-    public class ShopRepository : XmlRepository, IRepository
+    public class ShopRepository : XmlRepository, IShopRepository
     {
         private const string FileName = "Data/Shop.xml";
 
@@ -113,16 +113,6 @@ namespace MrLocal_Backend.Repositories
         {
             var listOfShop = ReadShopXml(FileName);
             return listOfShop.Where(i => i.DeletedAt == null).ToList();
-        }
-
-        public void Create(string shopId, string name, string description, string pricetype, double? price)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Update(string id, string shopId, string name, string description, string pricetype, double? price)
-        {
-            throw new NotImplementedException();
         }
     }
 }
