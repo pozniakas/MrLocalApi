@@ -31,7 +31,7 @@ namespace MrLocal_Backend.Repositories
 
         public ProductRepository()
         {
-            fileName = ConfigurationManager.AppSettings.Get("Key0");
+            fileName = ConfigurationManager.AppSettings.Get("PRODUCT_REPOSITORY_FILE_NAME");
 
             if (!Directory.Exists("Data"))
             {

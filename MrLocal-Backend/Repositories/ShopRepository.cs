@@ -24,7 +24,7 @@ namespace MrLocal_Backend.Repositories
 
         public ShopRepository()
         {
-            fileName = ConfigurationManager.AppSettings.Get("Key1");
+            fileName = ConfigurationManager.AppSettings.Get("SHOP_REPOSITORY_FILE_NAME");
 
             if (!Directory.Exists("Data"))
             {
