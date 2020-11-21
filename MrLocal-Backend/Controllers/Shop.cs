@@ -2,12 +2,13 @@
 using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services;
 using System;
+using static MrLocal_Backend.Models.Body;
 
 namespace MrLocal_Backend.Controllers
 {
     [Route("api/shop")]
     [ApiController]
-    public class Shop : ApiController
+    public class Shop : ControllerBase
     {
         private readonly ShopService shopService;
 

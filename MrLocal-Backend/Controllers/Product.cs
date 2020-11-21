@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrLocal_Backend.Services;
 using System;
+using static MrLocal_Backend.Models.Body;
 
 namespace MrLocal_Backend.Controllers
 {
     [Route("api/product")]
     [ApiController]
-    public class Product : ApiController
+    public class Product : ControllerBase
     {
         private readonly ProductService productService;
 
