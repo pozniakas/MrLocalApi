@@ -1,4 +1,5 @@
 ﻿using MrLocal_Backend.Repositories.Helpers;
+using MrLocal_Backend.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,16 +8,16 @@ using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
 {
-    public class ProductRepository : XmlRepository
+    public class ProductRepository : XmlRepository, IRepository
     {
         private const string FileName = "Data/Product.xml";
         
-        public string Id { get; private set; }
-        public string ShopId { get; private set; }
-        public string Name { get; private set; }
-        public string Description { get; private set; }
-        public double Price { get; private set; }
-        public PriceTypes PriceType { get; private set; }
+        public string Id { get;  set; }
+        public string ShopId { get;  set; }
+        public string Name { get;  set; }
+        public string Description { get;  set; }
+        public double Price { get;  set; }
+        public PriceTypes PriceType { get;  set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
@@ -130,6 +131,16 @@ namespace MrLocal_Backend.Repositories
         {
             var listOfProducts = ReadProductXml(FileName);
             return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();
+        }
+
+        public void Create(string name, string description, string typeOfShop, string city)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(string id, string name, string status, string description, string typeOfShop, string city)
+        {
+            throw new NotImplementedException();
         }
     }
 }
