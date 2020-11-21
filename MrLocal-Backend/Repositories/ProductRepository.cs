@@ -4,13 +4,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
+using System.Configuration;
 
 namespace MrLocal_Backend.Repositories
 {
     public class ProductRepository : XmlRepository
     {
-        private const string FileName = "Data/Product.xml";
-        
+        readonly string fileName;
+
         public string Id { get; private set; }
         public string ShopId { get; private set; }
         public string Name { get; private set; }
@@ -30,16 +31,18 @@ namespace MrLocal_Backend.Repositories
 
         public ProductRepository()
         {
+            fileName = ConfigurationManager.AppSettings.Get("Key0");
+
             if (!Directory.Exists("Data"))
             {
                 Directory.CreateDirectory("Data");
             }
 
-            if (!File.Exists(FileName))
+            if (!File.Exists(fileName))
             {
                 var xElement = new XElement("root");
                 var xDocument = new XDocument(xElement);
-                xDocument.Save(FileName);
+                xDocument.Save(fileName);
             }
 
         }
@@ -59,7 +62,7 @@ namespace MrLocal_Backend.Repositories
             , string description, string pricetype, double? price)
         {
             var id = Guid.NewGuid().ToString();
-            var doc = LoadXml(FileName);
+            var doc = LoadXml(fileName);
 
             var updatedAtStr = DateTime.Now.ToShortDateString();
             var createdAtStr = DateTime.Now.ToShortDateString();
@@ -79,13 +82,13 @@ namespace MrLocal_Backend.Repositories
 
             doc.DocumentElement.AppendChild(product);
 
-            doc.Save(FileName);
+            doc.Save(fileName);
         }
 
         public void Update(string id, string shopId, string name
             , string description, string pricetype, double? price)
         {
-            var doc = XDocument.Load(FileName);
+            var doc = XDocument.Load(fileName);
 
             var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id && product.Element("ShopId").Value == shopId
             && product.Element("DeletedAt").Value == "");
@@ -107,28 +110,28 @@ namespace MrLocal_Backend.Repositories
                 node.SetElementValue("Price", price.ToString());
             }
 
-            doc.Save(FileName);
+            doc.Save(fileName);
         }
 
         public void Delete(string id)
         {
-            var doc = XDocument.Load(FileName);
+            var doc = XDocument.Load(fileName);
 
             var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id);
             node.SetElementValue("DeletedAt", DateTime.Now.ToShortDateString());
 
-            doc.Save(FileName);
+            doc.Save(fileName);
         }
 
         public ProductRepository FindOne(string id)
         {
-            var listOfProducts = ReadProductXml(FileName);
+            var listOfProducts = ReadProductXml(fileName);
             return listOfProducts.First(i => i.Id == id && i.DeletedAt == null);
         }
 
         public List<ProductRepository> FindAll(string shopId)
         {
-            var listOfProducts = ReadProductXml(FileName);
+            var listOfProducts = ReadProductXml(fileName);
             return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();
         }
     }
