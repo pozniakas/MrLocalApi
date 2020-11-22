@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MrLocal_Backend.Controllers.Interfaces;
 using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace MrLocal_Backend.Controllers
 {
     [Route("api/search")]
     [ApiController]
-    public class Search : ControllerBase
+    public class Search : ControllerBase, ISearch
     {
         private readonly SearchService searchService;
 
@@ -18,6 +19,6 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpGet]
-        public List<ShopRepository> Get([FromBody] SearchBody body) => searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);   
+        public List<ShopRepository> Get([FromBody] SearchBody body) => searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);
     }
 }
