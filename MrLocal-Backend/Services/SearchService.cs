@@ -1,12 +1,13 @@
 ﻿using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services.Helpers;
+using MrLocal_Backend.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace MrLocal_Backend.Services
 {
-    public class SearchService : ValidateData
+    public class SearchService : ValidateData, ISearchService
     {
         private readonly ShopRepository shopRepository;
 
