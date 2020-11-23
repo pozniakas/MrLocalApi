@@ -55,6 +55,8 @@ namespace MrLocal_Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<string> Delete(string id)
         {
+            await Task.Delay(0);
+
             try
             {
                 shopService.DeleteShop(id);
