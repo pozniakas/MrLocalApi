@@ -53,12 +53,12 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ShopRepository> Delete(string id)
+        public async Task<string> Delete(string id)
         {
             try
             {
                 shopService.DeleteShop(id);
-                return await shopService.GetShop(id);
+                return "Shop was deleted succesfully";
             }
             catch (ArgumentException e)
             {

@@ -47,12 +47,12 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ProductRepository> Delete(string id)
+        public async Task<string> Delete(string id)
         {
             try
             {
                 productService.DeleteProduct(id);
-                return await productService.GetProduct(id);
+                return "Product was deleted succesfully";
             }
             catch (ArgumentException e)
             {
