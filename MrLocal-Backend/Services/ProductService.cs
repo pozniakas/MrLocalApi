@@ -1,6 +1,7 @@
 ﻿using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services.Helpers;
 using System;
+using System.Threading.Tasks;
 
 namespace MrLocal_Backend.Services
 {
@@ -49,6 +50,33 @@ namespace MrLocal_Backend.Services
             {
                 throw new ArgumentException("Invalid products parameters for creation");
             }
+        }
+        public async Task<ProductRepository> GetProduct(string id)
+        {
+            await Task.Delay(1000);
+
+            var product = productRepository.FindOne(id);
+
+            if (product == null)
+            {
+                throw new ArgumentException("Invalid id for getting shop");
+            }
+
+            return product;
+        }
+
+        public async Task<ProductRepository> GetProductByName(string name)
+        {
+            await Task.Delay(1000);
+
+            var product = productRepository.FindOneByName(name);
+
+            if (product == null)
+            {
+                throw new ArgumentException("Invalid name for getting shop");
+            }
+
+            return product;
         }
     }
 }

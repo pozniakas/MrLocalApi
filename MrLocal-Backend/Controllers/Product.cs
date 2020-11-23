@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services;
 using System;
+using System.Threading.Tasks;
 using static MrLocal_Backend.Models.Body;
 
 namespace MrLocal_Backend.Controllers
@@ -17,44 +19,44 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpPost]
-        public string Post([FromBody] ProductBody body)
+        public async Task<ProductRepository> Post([FromBody] ProductBody body)
         {
             try
             {
                 productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
-                return "Product was created successfully";
+                return await productService.GetProductByName(body.Name);
             }
             catch (ArgumentException e)
             {
-                return e.Message;
+                throw new ArgumentException(e.Message);
             }
         }
 
         [HttpPut]
-        public string Put([FromBody] ProductBody body)
+        public async Task<ProductRepository> Put([FromBody] ProductBody body)
         {
             try
             {
                 productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
-                return "Product was updated successfully";
+                return await productService.GetProductByName(body.Name);
             }
             catch (ArgumentException e)
             {
-                return e.Message;
+                throw new ArgumentException(e.Message);
             }
         }
 
         [HttpDelete("{id}")]
-        public string Delete(string id)
+        public async Task<ProductRepository> Delete(string id)
         {
             try
             {
                 productService.DeleteProduct(id);
-                return "Product was deleted succesfully";
+                return await productService.GetProduct(id);
             }
             catch (ArgumentException e)
             {
-                return e.Message;
+                throw new ArgumentException(e.Message); ;
             }
         }
     }

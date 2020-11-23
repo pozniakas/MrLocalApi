@@ -1,10 +1,10 @@
 ﻿using MrLocal_Backend.Repositories.Helpers;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using System.Configuration;
 
 namespace MrLocal_Backend.Repositories
 {
@@ -115,6 +115,12 @@ namespace MrLocal_Backend.Repositories
         {
             var listOfShop = ReadShopXml(fileName);
             return listOfShop.Where(i => i.DeletedAt == null).ToList();
+        }
+
+        public ShopRepository FindOneByName(string name)
+        {
+            var listOfShop = ReadShopXml(fileName);
+            return listOfShop.First(i => i.Name == name && i.DeletedAt == null);
         }
     }
 }

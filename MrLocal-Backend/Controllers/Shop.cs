@@ -2,6 +2,7 @@
 using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services;
 using System;
+using System.Threading.Tasks;
 using static MrLocal_Backend.Models.Body;
 
 namespace MrLocal_Backend.Controllers
@@ -18,50 +19,50 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public ShopRepository Get(string id)
+        public async Task<ShopRepository> GetAsync(string id)
         {
-            return shopService.GetShop(id);
+            return await shopService.GetShop(id);
         }
 
         [HttpPost]
-        public string Post([FromBody] ShopBody body)
+        public async Task<ShopRepository> Post([FromBody] ShopBody body)
         {
             try
             {
                 shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.City);
-                return "Shop was created successfully";
+                return await shopService.GetShopByName(body.Name);
             }
             catch (ArgumentException e)
             {
-                return e.Message;
+                throw new ArgumentException(e.Message);
             }
         }
 
         [HttpPut]
-        public string Put([FromBody] ShopBody body)
+        public async Task<ShopRepository> Put([FromBody] ShopBody body)
         {
             try
             {
                 shopService.UpdateShop(body.Id, body.Name, body.Status, body.Description, body.TypeOfShop, body.City);
-                return "Shop was updated successfully";
+                return await shopService.GetShopByName(body.Name);
             }
             catch (ArgumentException e)
             {
-                return e.Message;
+                throw new ArgumentException(e.Message);
             }
         }
 
         [HttpDelete("{id}")]
-        public string Delete(string id)
+        public async Task<ShopRepository> Delete(string id)
         {
             try
             {
                 shopService.DeleteShop(id);
-                return "Shop was deleted succesfully";
+                return await shopService.GetShop(id);
             }
             catch (ArgumentException e)
             {
-                return e.Message;
+                throw new ArgumentException(e.Message);
             }
         }
     }

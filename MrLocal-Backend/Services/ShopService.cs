@@ -1,12 +1,14 @@
 ﻿using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services.Helpers;
 using System;
+using System.Threading.Tasks;
 
 namespace MrLocal_Backend.Services
 {
     public class ShopService : ValidateData
     {
         private readonly ShopRepository shopRepository;
+
         public ShopService()
         {
             shopRepository = new ShopRepository();
@@ -48,13 +50,29 @@ namespace MrLocal_Backend.Services
             }
         }
 
-        public ShopRepository GetShop(string id)
+        public async Task<ShopRepository> GetShop(string id)
         {
+            await Task.Delay(1000);
+
             var shop = shopRepository.FindOne(id);
 
             if (shop == null)
             {
                 throw new ArgumentException("Invalid id for getting shop");
+            }
+
+            return shop;
+        }
+
+        public async Task<ShopRepository> GetShopByName(string name)
+        {
+            await Task.Delay(1000);
+
+            var shop = shopRepository.FindOneByName(name);
+
+            if (shop == null)
+            {
+                throw new ArgumentException("Invalid name for getting shop");
             }
 
             return shop;
