@@ -11,6 +11,6 @@ namespace MrLocal_Backend.Repositories.Interfaces
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
 
-        public void Delete(string id);
+        public Task<string> Delete(string id);
     }
 }

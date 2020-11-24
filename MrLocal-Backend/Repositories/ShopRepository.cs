@@ -81,37 +81,57 @@ namespace MrLocal_Backend.Repositories
 
         public async Task<ShopRepository> Update(string id, string name, string status, string description, string typeOfShop, string city)
         {
-            var dateNow = DateTime.Now.ToShortDateString();
-            var doc = XDocument.Load(fileName);
-
-            var node = doc.Descendants("Shop").FirstOrDefault(shop => shop.Element("Id").Value == id && shop.Element("DeletedAt").Value == "");
-
-            node.SetElementValue("Name", name);
-            node.SetElementValue("Status", status);
-            node.SetElementValue("Description", description);
-            node.SetElementValue("TypeOfShop", typeOfShop);
-            node.SetElementValue("City", city);
-            node.SetElementValue("UpdatedAt", dateNow);
-
-            doc.Save(fileName);
-
             return await Task.Run(() =>
             {
+                var dateNow = DateTime.Now.ToShortDateString();
+                var doc = XDocument.Load(fileName);
+
+                var node = doc.Descendants("Shop").FirstOrDefault(shop => shop.Element("Id").Value == id && shop.Element("DeletedAt").Value == "");
+
+                if (name != null)
+                {
+                    node.SetElementValue("Name", name);
+                }
+
+                if (status != null)
+                {
+                    node.SetElementValue("Status", status);
+                }
+                if (description != null)
+                {
+                    node.SetElementValue("Description", description);
+                }
+                if (typeOfShop != null)
+                {
+                    node.SetElementValue("TypeOfShop", typeOfShop);
+                }
+                if (city != null)
+                {
+                    node.SetElementValue("City", city);
+                }
+                node.SetElementValue("UpdatedAt", dateNow);
+
+                doc.Save(fileName);
+
                 return new ShopRepository(id, name, status, description, typeOfShop, city, DateTime.Parse(dateNow), DateTime.Parse(dateNow));
             });
         }
 
-        public void Delete(string id)
+        public async Task<string> Delete(string id)
         {
-            var dateNow = DateTime.Now.ToShortDateString();
-            var doc = XDocument.Load(fileName);
+            return await Task.Run(() =>
+            {
+                var dateNow = DateTime.Now.ToShortDateString();
+                var doc = XDocument.Load(fileName);
 
-            var node = doc.Descendants("Shop").FirstOrDefault(cd => cd.Element("Id").Value == id);
+                var node = doc.Descendants("Shop").FirstOrDefault(cd => cd.Element("Id").Value == id);
 
-            node.SetElementValue("DeletedAt", dateNow);
-            node.SetElementValue("Status", "Not Active");
+                node.SetElementValue("DeletedAt", dateNow);
+                node.SetElementValue("Status", "Not Active");
 
-            doc.Save(fileName);
+                doc.Save(fileName);
+                return id;
+            });
         }
 
         public async Task<ShopRepository> FindOne(string id)
