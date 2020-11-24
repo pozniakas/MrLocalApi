@@ -54,7 +54,7 @@ namespace MrLocal_Backend.Repositories.Helpers
                 return (T)(object)shop;
             }
 
-            else if (typeof(T) == typeof(ShopRepository))
+            else if (typeof(T) == typeof(ProductRepository))
             {
                 var price = double.Parse(node["Price"].InnerText);
                 var priceType = node["Pricetype"].InnerText;
