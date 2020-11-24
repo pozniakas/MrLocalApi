@@ -21,11 +21,10 @@ namespace MrLocal_Backend.Controllers
         [HttpPost]
         public async Task<ProductRepository> Post([FromBody] ProductBody body)
         {
-            await Task.Delay(0);
             try
             {
-                productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
-                return null;
+                var createdProduct = await productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
+                return createdProduct;
             }
             catch (ArgumentException e)
             {
@@ -36,11 +35,10 @@ namespace MrLocal_Backend.Controllers
         [HttpPut]
         public async Task<ProductRepository> Put([FromBody] ProductBody body)
         {
-            await Task.Delay(0);
             try
             {
-                productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
-                return null;
+                var updatedProduct = await productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
+                return updatedProduct;
             }
             catch (ArgumentException e)
             {

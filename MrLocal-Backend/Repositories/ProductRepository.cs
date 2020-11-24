@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
@@ -58,9 +59,11 @@ namespace MrLocal_Backend.Repositories
             Price = price;
         }
 
-        public void Create(string shopId, string name
+        public async Task<ProductRepository> Create(string shopId, string name
             , string description, string pricetype, double? price)
         {
+            await Task.Delay(0);
+
             var id = Guid.NewGuid().ToString();
             var doc = LoadXml(fileName);
 
@@ -83,11 +86,15 @@ namespace MrLocal_Backend.Repositories
             doc.DocumentElement.AppendChild(product);
 
             doc.Save(fileName);
+
+            return new ProductRepository(id, shopId, name, description, StringToPricetype(pricetype), (double) price);
         }
 
-        public void Update(string id, string shopId, string name
+        public async Task<ProductRepository> Update(string id, string shopId, string name
             , string description, string pricetype, double? price)
         {
+            await Task.Delay(0);
+
             var doc = XDocument.Load(fileName);
 
             var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id && product.Element("ShopId").Value == shopId
@@ -111,6 +118,8 @@ namespace MrLocal_Backend.Repositories
             }
 
             doc.Save(fileName);
+
+            return new ProductRepository(id, shopId, name, description, StringToPricetype(pricetype), (double)price);
         }
 
         public void Delete(string id)

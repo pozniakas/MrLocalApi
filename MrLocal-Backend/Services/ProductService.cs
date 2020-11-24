@@ -14,11 +14,12 @@ namespace MrLocal_Backend.Services
             productRepository = new ProductRepository();
         }
 
-        public void AddProductToShop(string shopId, string name, string description, string priceType, double? price)
+        public async Task<ProductRepository> AddProductToShop(string shopId, string name, string description, string priceType, double? price)
         {
             if (ValidateProductData(shopId, name, description, price, false, priceType))
             {
-                productRepository.Create(shopId, name, description, priceType, price);
+                var createdProduct = await productRepository.Create(shopId, name, description, priceType, price);
+                return createdProduct;
             }
             else
             {
@@ -26,11 +27,12 @@ namespace MrLocal_Backend.Services
             }
         }
 
-        public void UpdateProduct(string id, string shopId, string name, string description, string priceType, double? price)
+        public async Task<ProductRepository> UpdateProduct(string id, string shopId, string name, string description, string priceType, double? price)
         {
             if (ValidateProductData(shopId, name, description, price, true, priceType, id))
             {
-                productRepository.Update(id, shopId, name, description, priceType, price);
+                var updatedProduct = await productRepository.Update(id, shopId, name, description, priceType, price);
+                return updatedProduct;
             }
             else
             {
@@ -50,19 +52,6 @@ namespace MrLocal_Backend.Services
             {
                 throw new ArgumentException("Invalid products parameters for creation");
             }
-        }
-        public async Task<ProductRepository> GetProduct(string id)
-        {
-            await Task.Delay(0);
-
-            var product = productRepository.FindOne(id);
-
-            if (product == null)
-            {
-                throw new ArgumentException("Invalid id for getting shop");
-            }
-
-            return product;
         }
     }
 }
