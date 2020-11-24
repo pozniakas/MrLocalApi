@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MrLocal_Backend.Controllers.Interfaces;
 using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services;
 using System;
@@ -8,7 +9,7 @@ namespace MrLocal_Backend.Controllers
 {
     [Route("api/shop")]
     [ApiController]
-    public class Shop : ControllerBase
+    public class Shop : ControllerBase, IShop
     {
         private readonly ShopService shopService;
 

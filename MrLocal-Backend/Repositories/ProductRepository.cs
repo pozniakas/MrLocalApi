@@ -1,23 +1,24 @@
 ﻿using MrLocal_Backend.Repositories.Helpers;
+using MrLocal_Backend.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using System.Configuration;
 
 namespace MrLocal_Backend.Repositories
 {
-    public class ProductRepository : XmlRepository<ProductRepository>
+    public class ProductRepository : XmlRepository<ProductRepository>, IProductRepository
     {
         readonly string fileName;
 
-        public string Id { get; private set; }
-        public string ShopId { get; private set; }
-        public string Name { get; private set; }
-        public string Description { get; private set; }
-        public double Price { get; private set; }
-        public PriceTypes PriceType { get; private set; }
+        public string Id { get; set; }
+        public string ShopId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public double Price { get; set; }
+        public PriceTypes PriceType { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
