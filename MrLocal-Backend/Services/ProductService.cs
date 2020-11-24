@@ -53,7 +53,7 @@ namespace MrLocal_Backend.Services
         }
         public async Task<ProductRepository> GetProduct(string id)
         {
-            await Task.Delay(1000);
+            await Task.Delay(0);
 
             var product = productRepository.FindOne(id);
 
@@ -67,7 +67,7 @@ namespace MrLocal_Backend.Services
 
         public async Task<ProductRepository> GetProductByName(string name)
         {
-            await Task.Delay(1000);
+            await Task.Delay(0);
 
             var product = productRepository.FindOneByName(name);
 

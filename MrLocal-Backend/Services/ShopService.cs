@@ -52,7 +52,7 @@ namespace MrLocal_Backend.Services
 
         public async Task<ShopRepository> GetShop(string id)
         {
-            await Task.Delay(1000);
+            await Task.Delay(0);
 
             var shop = shopRepository.FindOne(id);
 
@@ -66,7 +66,7 @@ namespace MrLocal_Backend.Services
 
         public async Task<ShopRepository> GetShopByName(string name)
         {
-            await Task.Delay(1000);
+            await Task.Delay(0);
 
             var shop = shopRepository.FindOneByName(name);
 
