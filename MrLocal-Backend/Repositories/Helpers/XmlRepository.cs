@@ -1,22 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace MrLocal_Backend.Repositories.Helpers
 {
     public class XmlRepository<T> : EnumConverter
     {
-        public XmlDocument LoadXml(string FileName)
+        public async Task<XmlDocument> LoadXml(string FileName)
         {
-            var doc = new XmlDocument();
-            doc.Load(FileName);
+            return await Task.Run(() =>
+             {
+                 var doc = new XmlDocument();
+                 doc.Load(FileName);
 
-            return doc;
+                 return doc;
+             });
         }
 
-        public List<T> ReadXml(string FileName)
+        public async Task<List<T>> ReadXml(string FileName)
         {
-            var doc = LoadXml(FileName);
+            var doc = await LoadXml(FileName);
             var allObjects = new List<T>();
 
             foreach (XmlNode nodes in doc.DocumentElement)

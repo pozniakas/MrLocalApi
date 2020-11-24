@@ -11,9 +11,9 @@ namespace MrLocal_Backend.Repositories.Interfaces
         public double Price { get; set; }
         public PriceTypes PriceType { get; set; }
 
-        Task<ProductRepository> Create(string shopId, string name, string description, string pricetype, double? price);
-        Task<ProductRepository> Update(string id, string shopId, string name, string description, string pricetype, double? price);
-        public ProductRepository FindOne(string id);
-        public List<ProductRepository> FindAll(string shopId);
+        public Task<ProductRepository> Create(string shopId, string name, string description, string pricetype, double? price);
+        public Task<ProductRepository> Update(string id, string shopId, string name, string description, string pricetype, double? price);
+        public Task<ProductRepository> FindOne(string id);
+        public Task<List<ProductRepository>> FindAll(string shopId);
     }
 }

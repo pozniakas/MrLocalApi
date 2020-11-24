@@ -42,7 +42,7 @@ namespace MrLocal_Backend.Repositories
 
             if (!File.Exists(fileName))
             {
-                var xElement = new XElement("root");
+                var xElement = new XElement("Products");
                 var xDocument = new XDocument(xElement);
                 xDocument.Save(fileName);
             }
@@ -63,10 +63,8 @@ namespace MrLocal_Backend.Repositories
         public async Task<ProductRepository> Create(string shopId, string name
             , string description, string pricetype, double? price)
         {
-            await Task.Delay(0);
-
             var id = Guid.NewGuid().ToString();
-            var doc = LoadXml(fileName);
+            var doc = await LoadXml(fileName);
 
             var updatedAtStr = DateTime.Now.ToShortDateString();
             var createdAtStr = DateTime.Now.ToShortDateString();
@@ -94,54 +92,67 @@ namespace MrLocal_Backend.Repositories
         public async Task<ProductRepository> Update(string id, string shopId, string name
             , string description, string pricetype, double? price)
         {
-            await Task.Delay(0);
+            var dateNow = DateTime.Now.ToShortDateString();
+            var doc = await LoadXml(fileName);
+            var allNodes = doc.SelectNodes("Product");
 
-            var doc = XDocument.Load(fileName);
-
-            var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id && product.Element("ShopId").Value == shopId
-            && product.Element("DeletedAt").Value == "");
-
-            if (name != null)
+            foreach (XElement node in allNodes)
             {
-                node.SetElementValue("Name", name);
-            }
-            if (description != null)
-            {
-                node.SetElementValue("Description", description);
-            }
-            if (pricetype != null)
-            {
-                node.SetElementValue("Pricetype", pricetype);
-            }
-            if (price != null)
-            {
-                node.SetElementValue("Price", price.ToString());
-            }
+                if (node.Element("Id").Value == id && node.Element("ShopId").Value == shopId)
+                {
+                    if (name != null)
+                    {
+                        node.SetElementValue("Name", name);
+                    }
+                    if (description != null)
+                    {
+                        node.SetElementValue("Description", description);
+                    }
+                    if (pricetype != null)
+                    {
+                        node.SetElementValue("Pricetype", pricetype);
+                    }
+                    if (price != null)
+                    {
+                        node.SetElementValue("Price", price.ToString());
+                    }
 
-            doc.Save(fileName);
-
+                    node.SetElementValue("UpdatedAt", dateNow);
+                    doc.Save(fileName);
+                }
+            }
             return new ProductRepository(id, shopId, name, description, StringToPricetype(pricetype), (double)price);
         }
 
-        public void Delete(string id)
+        public async Task<string> Delete(string id)
         {
-            var doc = XDocument.Load(fileName);
+            var dateNow = DateTime.Now.ToShortDateString();
+            var doc = await LoadXml(fileName);
+            var allNodes = doc.SelectNodes("Product");
 
-            var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id);
-            node.SetElementValue("DeletedAt", DateTime.Now.ToShortDateString());
+            foreach (XElement node in allNodes)
+            {
+                if (node.Element("Id").Value == id)
+                {
+                    node.SetElementValue("DeletedAt", dateNow);
+                    doc.Save(fileName);
 
-            doc.Save(fileName);
+                    return id;
+                }
+            }
+
+            throw new ArgumentException("Can't delete the product with invalid id");
         }
 
-        public ProductRepository FindOne(string id)
+        public async Task<ProductRepository> FindOne(string id)
         {
-            var listOfProducts = ReadXml(fileName);
+            var listOfProducts = await ReadXml(fileName);
             return listOfProducts.First(i => i.Id == id && i.DeletedAt == null);
         }
 
-        public List<ProductRepository> FindAll(string shopId)
+        public async Task<List<ProductRepository>> FindAll(string shopId)
         {
-            var listOfProducts = ReadXml(fileName);
+            var listOfProducts = await ReadXml(fileName);
             return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();
         }
     }

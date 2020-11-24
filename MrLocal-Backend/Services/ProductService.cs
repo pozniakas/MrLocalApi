@@ -41,13 +41,14 @@ namespace MrLocal_Backend.Services
             }
         }
 
-        public void DeleteProduct(string id)
+        public async Task<string> DeleteProduct(string id)
         {
-            var products = productRepository.FindOne(id);
+            var products = await productRepository.FindOne(id);
 
             if (products != null)
             {
-                productRepository.Delete(id);
+                var deletedProductId = await productRepository.Delete(id);
+                return deletedProductId;
             }
             else
             {

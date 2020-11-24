@@ -3,6 +3,7 @@ using MrLocal_Backend.Controllers.Interfaces;
 using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using static MrLocal_Backend.Models.Body;
 
 namespace MrLocal_Backend.Controllers
@@ -19,6 +20,6 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpGet]
-        public List<ShopRepository> Get([FromBody] SearchBody body) => searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);
+        public async Task<List<ShopRepository>> Get([FromBody] SearchBody body) => await searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);
     }
 }

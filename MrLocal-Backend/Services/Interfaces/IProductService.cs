@@ -7,6 +7,6 @@ namespace MrLocal_Backend.Services.Interfaces
     {
         Task<ProductRepository> AddProductToShop(string shopId, string name, string description, string priceType, double? price);
         Task<ProductRepository> UpdateProduct(string id, string shopId, string name, string description, string priceType, double? price);
-        public void DeleteProduct(string id);
+        public Task<string> DeleteProduct(string id);
     }
 }

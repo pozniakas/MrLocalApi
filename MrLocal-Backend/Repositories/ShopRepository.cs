@@ -6,6 +6,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml;
 using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
@@ -35,7 +36,7 @@ namespace MrLocal_Backend.Repositories
 
             if (!File.Exists(fileName))
             {
-                var XmlElement = new XElement("root");
+                var XmlElement = new XElement("Shops");
                 var XmlDocument = new XDocument(XmlElement);
                 XmlDocument.Save(fileName);
             }
@@ -56,9 +57,7 @@ namespace MrLocal_Backend.Repositories
 
         public async Task<ShopRepository> Create(string name, string description, string typeOfShop, string city)
         {
-            await Task.Delay(0);
-
-            var doc = LoadXml(fileName);
+            var doc = await LoadXml(fileName);
 
             var shop = doc.CreateElement("Shop");
 
@@ -83,47 +82,57 @@ namespace MrLocal_Backend.Repositories
 
         public async Task<ShopRepository> Update(string id, string name, string status, string description, string typeOfShop, string city)
         {
-            await Task.Delay(0);
-
             var dateNow = DateTime.Now.ToShortDateString();
-            var doc = XDocument.Load(fileName);
+            var doc = await LoadXml(fileName);
+            var allNodes = doc.SelectNodes("Shop");
 
-            var node = doc.Descendants("Shop").FirstOrDefault(shop => shop.Element("Id").Value == id && shop.Element("DeletedAt").Value == "");
-
-            node.SetElementValue("Name", name);
-            node.SetElementValue("Status", status);
-            node.SetElementValue("Description", description);
-            node.SetElementValue("TypeOfShop", typeOfShop);
-            node.SetElementValue("City", city);
-            node.SetElementValue("UpdatedAt", dateNow);
-
-            doc.Save(fileName);
+            foreach (XElement node in allNodes)
+            {
+                if (node.Element("Id").Value == id && node.Element("DeletedAt").Value == "")
+                {
+                    node.SetElementValue("Name", name);
+                    node.SetElementValue("Status", status);
+                    node.SetElementValue("Description", description);
+                    node.SetElementValue("TypeOfShop", typeOfShop);
+                    node.SetElementValue("City", city);
+                    node.SetElementValue("UpdatedAt", dateNow);
+                    doc.Save(fileName);
+                }
+            }
 
             return new ShopRepository(id, name, status, description, typeOfShop, city, DateTime.Parse(dateNow), DateTime.Parse(dateNow));
         }
 
-        public void Delete(string id)
+        public async Task<string> Delete(string id)
         {
             var dateNow = DateTime.Now.ToShortDateString();
-            var doc = XDocument.Load(fileName);
+            var doc = await LoadXml(fileName);
+            var allNodes = doc.SelectNodes("Shop");
 
-            var node = doc.Descendants("Shop").FirstOrDefault(cd => cd.Element("Id").Value == id);
+            foreach (XElement node in allNodes)
+            {
+                if (node.Element("Id").Value == id)
+                {
+                    node.SetElementValue("DeletedAt", dateNow);
+                    node.SetElementValue("Status", "Not Active");
+                    doc.Save(fileName);
 
-            node.SetElementValue("DeletedAt", dateNow);
-            node.SetElementValue("Status", "Not Active");
+                    return id;
+                }
+            }
 
-            doc.Save(fileName);
+            throw new ArgumentException("Can't delete the shop with invalid id");
         }
 
-        public ShopRepository FindOne(string id)
+        public async Task<ShopRepository> FindOne(string id)
         {
-            var listOfShop = ReadXml(fileName);
+            var listOfShop = await ReadXml(fileName);
             return listOfShop.First(i => i.Id == id && i.DeletedAt == null);
         }
 
-        public List<ShopRepository> FindAll()
+        public async Task<List<ShopRepository>> FindAll()
         {
-            var listOfShop = ReadXml(fileName);
+            var listOfShop = await ReadXml(fileName);
             return listOfShop.Where(i => i.DeletedAt == null).ToList();
         }
     }

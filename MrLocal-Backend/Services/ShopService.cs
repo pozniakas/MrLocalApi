@@ -17,7 +17,9 @@ namespace MrLocal_Backend.Services
 
         public async Task<ShopRepository> CreateShop(string name, string description, string typeOfShop, string city)
         {
-            if (ValidateShopData(name, null, description, typeOfShop, city, false))
+            var isValidated = await ValidateShopData(name, null, description, typeOfShop, city, false);
+
+            if (isValidated)
             {
                 var createdShop = await shopRepository.Create(name, description, typeOfShop, city);
                 return createdShop;
@@ -30,7 +32,9 @@ namespace MrLocal_Backend.Services
 
         public async Task<ShopRepository> UpdateShop(string id, string name, string status, string description, string typeOfShop, string city)
         {
-            if (!ValidateShopData(name, status, description, typeOfShop, city, true))
+            var isValidated = await ValidateShopData(name, status, description, typeOfShop, city, true);
+            
+            if (!isValidated)
             {
                 throw new ArgumentException("Invalid shop parameters for update");
             }
@@ -39,13 +43,14 @@ namespace MrLocal_Backend.Services
             return updatedShop;
         }
 
-        public void DeleteShop(string id)
+        public async Task<string> DeleteShop(string id)
         {
-            var shop = shopRepository.FindOne(id);
+            var shop = await shopRepository.FindOne(id);
 
             if (shop != null)
             {
-                shopRepository.Delete(id);
+                var deletedShopid = await shopRepository.Delete(id);
+                return deletedShopid;
             }
             else
             {
@@ -55,9 +60,7 @@ namespace MrLocal_Backend.Services
 
         public async Task<ShopRepository> GetShop(string id)
         {
-            await Task.Delay(0);
-
-            var shop = shopRepository.FindOne(id);
+            var shop = await shopRepository.FindOne(id);
 
             if (shop == null)
             {

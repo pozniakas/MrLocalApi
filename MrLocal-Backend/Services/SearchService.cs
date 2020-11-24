@@ -4,6 +4,7 @@ using MrLocal_Backend.Services.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace MrLocal_Backend.Services
 {
@@ -16,9 +17,9 @@ namespace MrLocal_Backend.Services
             shopRepository = new ShopRepository();
         }
 
-        public List<ShopRepository> SearchForShops(string searchQuery, string city = "All cities", string typeOfShop = "All types")
+        public async Task<List<ShopRepository>> SearchForShops(string searchQuery, string city = "All cities", string typeOfShop = "All types")
         {
-            var shopList = shopRepository.FindAll().Where(i => ValidateFilters(i, city, typeOfShop));
+            var shopList = (await shopRepository.FindAll()).Where(i => ValidateFilters(i, city, typeOfShop));
             var trimmedSearchQuery = searchQuery.Trim();
             var regex = new Regex(@"^(?=.*\b" + trimmedSearchQuery + @"\b).*$");
 
