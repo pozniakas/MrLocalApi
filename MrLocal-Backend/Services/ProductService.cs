@@ -47,8 +47,8 @@ namespace MrLocal_Backend.Services
 
             if (products != null)
             {
-                var deletedProductId = await productRepository.Delete(id);
-                return deletedProductId;
+                productRepository.Delete(id);
+                return id;
             }
             else
             {

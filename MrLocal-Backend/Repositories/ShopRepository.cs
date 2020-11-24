@@ -103,25 +103,17 @@ namespace MrLocal_Backend.Repositories
             return new ShopRepository(id, name, status, description, typeOfShop, city, DateTime.Parse(dateNow), DateTime.Parse(dateNow));
         }
 
-        public async Task<string> Delete(string id)
+        public void Delete(string id)
         {
             var dateNow = DateTime.Now.ToShortDateString();
-            var doc = await LoadXml(fileName);
-            var allNodes = doc.SelectNodes("Shop");
+            var doc = XDocument.Load(fileName);
 
-            foreach (XElement node in allNodes)
-            {
-                if (node.Element("Id").Value == id)
-                {
-                    node.SetElementValue("DeletedAt", dateNow);
-                    node.SetElementValue("Status", "Not Active");
-                    doc.Save(fileName);
+            var node = doc.Descendants("Shop").FirstOrDefault(cd => cd.Element("Id").Value == id);
 
-                    return id;
-                }
-            }
+            node.SetElementValue("DeletedAt", dateNow);
+            node.SetElementValue("Status", "Not Active");
 
-            throw new ArgumentException("Can't delete the shop with invalid id");
+            doc.Save(fileName);
         }
 
         public async Task<ShopRepository> FindOne(string id)

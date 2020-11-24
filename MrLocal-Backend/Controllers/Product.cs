@@ -52,7 +52,7 @@ namespace MrLocal_Backend.Controllers
         {
             try
             {
-                productService.DeleteProduct(id);
+                await productService.DeleteProduct(id);
                 return "Product was deleted succesfully";
             }
             catch (ArgumentException e)
