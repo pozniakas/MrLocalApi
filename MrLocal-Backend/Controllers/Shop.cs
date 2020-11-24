@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MrLocal_Backend.Controllers.Interfaces;
 using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services;
 using System;
@@ -9,7 +10,7 @@ namespace MrLocal_Backend.Controllers
 {
     [Route("api/shop")]
     [ApiController]
-    public class Shop : ControllerBase
+    public class Shop : ControllerBase, IShop
     {
         private readonly ShopService shopService;
 
@@ -19,7 +20,7 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ShopRepository> GetAsync(string id)
+        public async Task<ShopRepository> Get(string id)
         {
             return await shopService.GetShop(id);
         }

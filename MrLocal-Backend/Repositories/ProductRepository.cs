@@ -1,4 +1,5 @@
 ﻿using MrLocal_Backend.Repositories.Helpers;
+using MrLocal_Backend.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -9,16 +10,16 @@ using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
 {
-    public class ProductRepository : XmlRepository
+    public class ProductRepository : XmlRepository<ProductRepository>, IProductRepository
     {
         readonly string fileName;
 
-        public string Id { get; private set; }
-        public string ShopId { get; private set; }
-        public string Name { get; private set; }
-        public string Description { get; private set; }
-        public double Price { get; private set; }
-        public PriceTypes PriceType { get; private set; }
+        public string Id { get; set; }
+        public string ShopId { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public double Price { get; set; }
+        public PriceTypes PriceType { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
@@ -134,13 +135,13 @@ namespace MrLocal_Backend.Repositories
 
         public ProductRepository FindOne(string id)
         {
-            var listOfProducts = ReadProductXml(fileName);
+            var listOfProducts = ReadXml(fileName);
             return listOfProducts.First(i => i.Id == id && i.DeletedAt == null);
         }
 
         public List<ProductRepository> FindAll(string shopId)
         {
-            var listOfProducts = ReadProductXml(fileName);
+            var listOfProducts = ReadXml(fileName);
             return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();
         }
     }

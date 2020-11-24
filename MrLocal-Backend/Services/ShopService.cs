@@ -1,11 +1,12 @@
 ﻿using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services.Helpers;
+using MrLocal_Backend.Services.Interfaces;
 using System;
 using System.Threading.Tasks;
 
 namespace MrLocal_Backend.Services
 {
-    public class ShopService : ValidateData
+    public class ShopService : ValidateData, IShopService
     {
         private readonly ShopRepository shopRepository;
 

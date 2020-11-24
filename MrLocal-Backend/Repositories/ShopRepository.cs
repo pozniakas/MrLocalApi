@@ -1,4 +1,5 @@
 ﻿using MrLocal_Backend.Repositories.Helpers;
+using MrLocal_Backend.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -9,16 +10,16 @@ using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
 {
-    public class ShopRepository : XmlRepository
+    public class ShopRepository : XmlRepository<ShopRepository>, IShopRepository
     {
         readonly string fileName;
 
-        public string Id { get; private set; }
-        public string Name { get; private set; }
-        public string Status { get; private set; }
-        public string Description { get; private set; }
-        public string TypeOfShop { get; private set; }
-        public string City { get; private set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Status { get; set; }
+        public string Description { get; set; }
+        public string TypeOfShop { get; set; }
+        public string City { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
@@ -77,7 +78,7 @@ namespace MrLocal_Backend.Repositories
             doc.DocumentElement.AppendChild(shop);
             doc.Save(fileName);
 
-            return new ShopRepository(id, name, "Not Active", description, typeOfShop, city,DateTime.Parse(dateNow), DateTime.Parse(dateNow));
+            return new ShopRepository(id, name, "Not Active", description, typeOfShop, city, DateTime.Parse(dateNow), DateTime.Parse(dateNow));
         }
 
         public async Task<ShopRepository> Update(string id, string name, string status, string description, string typeOfShop, string city)
@@ -116,13 +117,13 @@ namespace MrLocal_Backend.Repositories
 
         public ShopRepository FindOne(string id)
         {
-            var listOfShop = ReadShopXml(fileName);
+            var listOfShop = ReadXml(fileName);
             return listOfShop.First(i => i.Id == id && i.DeletedAt == null);
         }
 
         public List<ShopRepository> FindAll()
         {
-            var listOfShop = ReadShopXml(fileName);
+            var listOfShop = ReadXml(fileName);
             return listOfShop.Where(i => i.DeletedAt == null).ToList();
         }
     }

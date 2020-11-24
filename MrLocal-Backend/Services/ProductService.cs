@@ -1,11 +1,12 @@
 ﻿using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services.Helpers;
+using MrLocal_Backend.Services.Interfaces;
 using System;
 using System.Threading.Tasks;
 
 namespace MrLocal_Backend.Services
 {
-    class ProductService : ValidateData
+    class ProductService : ValidateData, IProductService
     {
         private readonly ProductRepository productRepository;
 
