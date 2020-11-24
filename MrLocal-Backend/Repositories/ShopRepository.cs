@@ -8,7 +8,7 @@ using System.Configuration;
 
 namespace MrLocal_Backend.Repositories
 {
-    public class ShopRepository : XmlRepository
+    public class ShopRepository : XmlRepository<ShopRepository>
     {
         readonly string fileName;
 
@@ -107,13 +107,13 @@ namespace MrLocal_Backend.Repositories
 
         public ShopRepository FindOne(string id)
         {
-            var listOfShop = ReadShopXml(fileName);
+            var listOfShop = ReadXml(fileName);
             return listOfShop.First(i => i.Id == id && i.DeletedAt == null);
         }
 
         public List<ShopRepository> FindAll()
         {
-            var listOfShop = ReadShopXml(fileName);
+            var listOfShop = ReadXml(fileName);
             return listOfShop.Where(i => i.DeletedAt == null).ToList();
         }
     }
