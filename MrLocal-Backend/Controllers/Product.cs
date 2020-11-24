@@ -21,7 +21,6 @@ namespace MrLocal_Backend.Controllers
         [HttpPost]
         public async Task<ProductRepository> Post([FromBody] ProductBody body)
         {
-            await Task.Delay(0);
             try
             {
                 var createdProduct = await productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
@@ -36,7 +35,6 @@ namespace MrLocal_Backend.Controllers
         [HttpPut]
         public async Task<ProductRepository> Put([FromBody] ProductBody body)
         {
-            await Task.Delay(0);
             try
             {
                 var updatedProduct = await productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
