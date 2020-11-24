@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Controllers.Interfaces;
+using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services;
 using System;
 using System.Threading.Tasks;
@@ -59,7 +59,7 @@ namespace MrLocal_Backend.Controllers
             }
             catch (ArgumentException e)
             {
-                throw new ArgumentException(e.Message); ;
+                throw new ArgumentException(e.Message);
             }
         }
     }
