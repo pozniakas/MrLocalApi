@@ -92,7 +92,6 @@ namespace MrLocal_Backend.Repositories
                 {
                     node.SetElementValue("Name", name);
                 }
-
                 if (status != null)
                 {
                     node.SetElementValue("Status", status);
