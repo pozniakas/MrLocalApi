@@ -6,7 +6,6 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
@@ -83,24 +82,23 @@ namespace MrLocal_Backend.Repositories
         public async Task<ShopRepository> Update(string id, string name, string status, string description, string typeOfShop, string city)
         {
             var dateNow = DateTime.Now.ToShortDateString();
-            var doc = await LoadXml(fileName);
-            var allNodes = doc.SelectNodes("Shop");
+            var doc = XDocument.Load(fileName);
 
-            foreach (XElement node in allNodes)
+            var node = doc.Descendants("Shop").FirstOrDefault(shop => shop.Element("Id").Value == id && shop.Element("DeletedAt").Value == "");
+
+            node.SetElementValue("Name", name);
+            node.SetElementValue("Status", status);
+            node.SetElementValue("Description", description);
+            node.SetElementValue("TypeOfShop", typeOfShop);
+            node.SetElementValue("City", city);
+            node.SetElementValue("UpdatedAt", dateNow);
+
+            doc.Save(fileName);
+
+            return await Task.Run(() =>
             {
-                if (node.Element("Id").Value == id && node.Element("DeletedAt").Value == "")
-                {
-                    node.SetElementValue("Name", name);
-                    node.SetElementValue("Status", status);
-                    node.SetElementValue("Description", description);
-                    node.SetElementValue("TypeOfShop", typeOfShop);
-                    node.SetElementValue("City", city);
-                    node.SetElementValue("UpdatedAt", dateNow);
-                    doc.Save(fileName);
-                }
-            }
-
-            return new ShopRepository(id, name, status, description, typeOfShop, city, DateTime.Parse(dateNow), DateTime.Parse(dateNow));
+                return new ShopRepository(id, name, status, description, typeOfShop, city, DateTime.Parse(dateNow), DateTime.Parse(dateNow));
+            });
         }
 
         public void Delete(string id)
