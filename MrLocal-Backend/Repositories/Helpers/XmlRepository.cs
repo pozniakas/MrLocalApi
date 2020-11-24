@@ -4,7 +4,7 @@ using System.Xml;
 
 namespace MrLocal_Backend.Repositories.Helpers
 {
-    public class XmlRepository : EnumConverter
+    public class XmlRepository<T> : EnumConverter
     {
         public XmlDocument LoadXml(string FileName)
         {
@@ -14,41 +14,24 @@ namespace MrLocal_Backend.Repositories.Helpers
             return doc;
         }
 
-        public List<ShopRepository> ReadShopXml(string FileName)
+        public List<T> ReadXml(string FileName)
         {
             var doc = LoadXml(FileName);
-            var allShops = new List<ShopRepository>();
+            var allObjects = new List<T>();
 
             foreach (XmlNode nodes in doc.DocumentElement)
             {
-                allShops.Add(NodeToShop(nodes));
+                allObjects.Add(NodeToObject(nodes));
             }
 
-            return allShops;
+            return allObjects;
         }
 
-        public List<ProductRepository> ReadProductXml(string FileName)
-        {
-            var doc = LoadXml(FileName);
-
-            var allProducts = new List<ProductRepository>();
-
-            foreach (XmlNode nodes in doc.DocumentElement)
-            {
-                allProducts.Add(NodeToProduct(nodes));
-            }
-
-            return allProducts;
-        }
-
-        public ShopRepository NodeToShop(XmlNode node)
+        public T NodeToObject(XmlNode node)
         {
             var _id = node["Id"].InnerText;
             var _name = node["Name"].InnerText;
-            var _status = node["Status"].InnerText;
             var _description = node["Description"].InnerText;
-            var _typeofShop = node["TypeOfShop"].InnerText;
-            var _city = node["City"].InnerText;
             var _createdAt = node["CreatedAt"].InnerText;
             var _updatedAt = node["UpdatedAt"].InnerText;
             var _deletedAt = node["DeletedAt"].InnerText;
@@ -57,35 +40,39 @@ namespace MrLocal_Backend.Repositories.Helpers
             var formattedUpdatedAt = DateTime.Parse(_updatedAt);
             var formattedDeletedAt = _deletedAt != "" ? DateTime.Parse(_deletedAt) : (DateTime?)null;
 
-            var shop = new ShopRepository(_id, _name, _status, _description, _typeofShop, _city, formattedCreatedAt, formattedUpdatedAt)
+            if (typeof(T) == typeof(ShopRepository))
             {
-                DeletedAt = formattedDeletedAt
-            };
+                var _city = node["City"].InnerText;
+                var _status = node["Status"].InnerText;
+                var _typeofShop = node["TypeOfShop"].InnerText;
 
-            return shop;
-        }
+                var shop = new ShopRepository(_id, _name, _status, _description, _typeofShop, _city, formattedCreatedAt, formattedUpdatedAt)
+                {
+                    DeletedAt = formattedDeletedAt
+                };
 
-        public ProductRepository NodeToProduct(XmlNode node)
-        {
-            var shopId = node["ShopId"].InnerText;
-            var id = node["Id"].InnerText;
-            var name = node["Name"].InnerText;
-            var description = node["Description"].InnerText;
-            var price = double.Parse(node["Price"].InnerText);
-            var priceType = node["Pricetype"].InnerText;
-            var createdAt = node["CreatedAt"].InnerText;
-            var updatedAt = node["UpdatedAt"].InnerText;
-            var deletedAt = node["DeletedAt"].InnerText;
-            var deletedAtValue = deletedAt != "" ? DateTime.Parse(deletedAt) : (DateTime?)null;
+                return (T)(object)shop;
+            }
 
-            var product = new ProductRepository(id, shopId, name, description, StringToPricetype(priceType), price)
+            else if (typeof(T) == typeof(ShopRepository))
             {
-                UpdatedAt = DateTime.Parse(updatedAt),
-                CreatedAt = DateTime.Parse(createdAt),
-                DeletedAt = deletedAtValue
-            };
+                var price = double.Parse(node["Price"].InnerText);
+                var priceType = node["Pricetype"].InnerText;
+                var shopId = node["ShopId"].InnerText;
 
-            return product;
+                var product = new ProductRepository(_id, shopId, _name, _description, StringToPricetype(priceType), price)
+                {
+                    UpdatedAt = formattedUpdatedAt,
+                    CreatedAt = formattedCreatedAt,
+                    DeletedAt = formattedDeletedAt
+                };
+
+                return (T)(object)product;
+            }
+            else
+            {
+                throw new TypeAccessException();
+            }
         }
     }
 }
