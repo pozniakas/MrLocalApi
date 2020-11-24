@@ -7,9 +7,9 @@ namespace MrLocal_Backend.Controllers.Interfaces
 {
     interface IShop
     {
-        Task<ShopRepository> Get(string id);
-        Task<ShopRepository> Post([FromBody] ShopBody body);
-        Task<ShopRepository> Put([FromBody] ShopBody body);
-        Task<string> Delete(string id);
+        public Task<ShopRepository> Get(string id);
+        public Task<ShopRepository> Post([FromBody] ShopBody body);
+        public Task<ShopRepository> Put([FromBody] ShopBody body);
+        public Task<string> Delete(string id);
     }
 }

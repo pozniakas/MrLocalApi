@@ -7,8 +7,8 @@ namespace MrLocal_Backend.Controllers.Interfaces
 {
     interface IProduct
     {
-        Task<ProductRepository> Post([FromBody] ProductBody body);
-        Task<ProductRepository> Put([FromBody] ProductBody body);
-        Task<string> Delete(string id);
+        public Task<ProductRepository> Post([FromBody] ProductBody body);
+        public Task<ProductRepository> Put([FromBody] ProductBody body);
+        public Task<string> Delete(string id);
     }
 }
