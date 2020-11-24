@@ -12,16 +12,4 @@
     <DeletedAt>
     </DeletedAt>
   </Shop>
-  <Shop>
-    <Id>caa175ed-c98e-4f0d-86c9-eb603cde9b0c</Id>
-    <Name>Arbuzai</Name>
-    <Status>Not Active</Status>
-    <Description>test</Description>
-    <TypeOfShop>Berries</TypeOfShop>
-    <City>Vilnius</City>
-    <CreatedAt>2020-11-24</CreatedAt>
-    <UpdatedAt>2020-11-24</UpdatedAt>
-    <DeletedAt>
-    </DeletedAt>
-  </Shop>
 </root>
