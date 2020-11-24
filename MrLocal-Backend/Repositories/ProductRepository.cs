@@ -134,11 +134,5 @@ namespace MrLocal_Backend.Repositories
             var listOfProducts = ReadProductXml(fileName);
             return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();
         }
-
-        public ProductRepository FindOneByName(string name)
-        {
-            var listOfProducts = ReadProductXml(fileName);
-            return listOfProducts.First(i => i.Name == name && i.DeletedAt == null);
-        }
     }
 }

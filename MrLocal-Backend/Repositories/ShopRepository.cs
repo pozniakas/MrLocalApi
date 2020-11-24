@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
@@ -52,8 +53,10 @@ namespace MrLocal_Backend.Repositories
             DeletedAt = null;
         }
 
-        public void Create(string name, string description, string typeOfShop, string city)
+        public async Task<ShopRepository> Create(string name, string description, string typeOfShop, string city)
         {
+            await Task.Delay(0);
+
             var doc = LoadXml(fileName);
 
             var shop = doc.CreateElement("Shop");
@@ -73,10 +76,14 @@ namespace MrLocal_Backend.Repositories
 
             doc.DocumentElement.AppendChild(shop);
             doc.Save(fileName);
+
+            return new ShopRepository(id, name, "Not Active", description, typeOfShop, city,DateTime.Parse(dateNow), DateTime.Parse(dateNow));
         }
 
-        public void Update(string id, string name, string status, string description, string typeOfShop, string city)
+        public async Task<ShopRepository> Update(string id, string name, string status, string description, string typeOfShop, string city)
         {
+            await Task.Delay(0);
+
             var dateNow = DateTime.Now.ToShortDateString();
             var doc = XDocument.Load(fileName);
 
@@ -90,6 +97,8 @@ namespace MrLocal_Backend.Repositories
             node.SetElementValue("UpdatedAt", dateNow);
 
             doc.Save(fileName);
+
+            return new ShopRepository(id, name, status, description, typeOfShop, city, DateTime.Parse(dateNow), DateTime.Parse(dateNow));
         }
 
         public void Delete(string id)
@@ -115,12 +124,6 @@ namespace MrLocal_Backend.Repositories
         {
             var listOfShop = ReadShopXml(fileName);
             return listOfShop.Where(i => i.DeletedAt == null).ToList();
-        }
-
-        public ShopRepository FindOneByName(string name)
-        {
-            var listOfShop = ReadShopXml(fileName);
-            return listOfShop.First(i => i.Name == name && i.DeletedAt == null);
         }
     }
 }

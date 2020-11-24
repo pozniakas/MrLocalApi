@@ -29,8 +29,8 @@ namespace MrLocal_Backend.Controllers
         {
             try
             {
-                shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.City);
-                return await shopService.GetShopByName(body.Name);
+                var createdShop = await shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.City);
+                return createdShop;
             }
             catch (ArgumentException e)
             {
@@ -43,8 +43,8 @@ namespace MrLocal_Backend.Controllers
         {
             try
             {
-                shopService.UpdateShop(body.Id, body.Name, body.Status, body.Description, body.TypeOfShop, body.City);
-                return await shopService.GetShopByName(body.Name);
+                var updatedShop = await shopService.UpdateShop(body.Id, body.Name, body.Status, body.Description, body.TypeOfShop, body.City);
+                return updatedShop;
             }
             catch (ArgumentException e)
             {

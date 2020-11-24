@@ -14,11 +14,12 @@ namespace MrLocal_Backend.Services
             shopRepository = new ShopRepository();
         }
 
-        public void CreateShop(string name, string description, string typeOfShop, string city)
+        public async Task<ShopRepository> CreateShop(string name, string description, string typeOfShop, string city)
         {
             if (ValidateShopData(name, null, description, typeOfShop, city, false))
             {
-                shopRepository.Create(name, description, typeOfShop, city);
+                var createdShop = await shopRepository.Create(name, description, typeOfShop, city);
+                return createdShop;
             }
             else
             {
@@ -26,14 +27,15 @@ namespace MrLocal_Backend.Services
             }
         }
 
-        public void UpdateShop(string id, string name, string status, string description, string typeOfShop, string city)
+        public async Task<ShopRepository> UpdateShop(string id, string name, string status, string description, string typeOfShop, string city)
         {
             if (!ValidateShopData(name, status, description, typeOfShop, city, true))
             {
                 throw new ArgumentException("Invalid shop parameters for update");
             }
 
-            shopRepository.Update(id, name, status, description, typeOfShop, city);
+            var updatedShop = await shopRepository.Update(id, name, status, description, typeOfShop, city);
+            return updatedShop;
         }
 
         public void DeleteShop(string id)
@@ -59,20 +61,6 @@ namespace MrLocal_Backend.Services
             if (shop == null)
             {
                 throw new ArgumentException("Invalid id for getting shop");
-            }
-
-            return shop;
-        }
-
-        public async Task<ShopRepository> GetShopByName(string name)
-        {
-            await Task.Delay(0);
-
-            var shop = shopRepository.FindOneByName(name);
-
-            if (shop == null)
-            {
-                throw new ArgumentException("Invalid name for getting shop");
             }
 
             return shop;

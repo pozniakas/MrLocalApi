@@ -64,19 +64,5 @@ namespace MrLocal_Backend.Services
 
             return product;
         }
-
-        public async Task<ProductRepository> GetProductByName(string name)
-        {
-            await Task.Delay(0);
-
-            var product = productRepository.FindOneByName(name);
-
-            if (product == null)
-            {
-                throw new ArgumentException("Invalid name for getting shop");
-            }
-
-            return product;
-        }
     }
 }
