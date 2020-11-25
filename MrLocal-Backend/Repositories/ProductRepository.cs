@@ -120,7 +120,8 @@ namespace MrLocal_Backend.Repositories
                 doc.Save(fileName);
 
 
-                return new ProductRepository(id, shopId, name, description, StringToPricetype(pricetype), (double)price);
+                return new ProductRepository(id, shopId, name ?? node.Element("Name").Value.ToString(), 
+                    description ?? node.Element("Description").Value.ToString(), StringToPricetype(pricetype), (double)price);
             });
         }
 

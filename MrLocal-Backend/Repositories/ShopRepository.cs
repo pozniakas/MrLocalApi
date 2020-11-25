@@ -83,7 +83,7 @@ namespace MrLocal_Backend.Repositories
         {
             return await Task.Run(() =>
             {
-                var dateNow = DateTime.Now.ToShortDateString();
+                var dateNow = DateTime.Now;
                 var doc = XDocument.Load(fileName);
 
                 var node = doc.Descendants("Shop").FirstOrDefault(shop => shop.Element("Id").Value == id && shop.Element("DeletedAt").Value == "");
@@ -112,7 +112,11 @@ namespace MrLocal_Backend.Repositories
 
                 doc.Save(fileName);
 
-                return new ShopRepository(id, name, status, description, typeOfShop, city, DateTime.Parse(dateNow), DateTime.Parse(dateNow));
+                return new ShopRepository(id, name ?? node.Element("Name").Value.ToString(), 
+                    status ?? node.Element("Status").Value.ToString(), 
+                    description ?? node.Element("Description").Value.ToString(), 
+                    typeOfShop ?? node.Element("TypeOfShop").Value.ToString(), 
+                    city ?? node.Element("City").Value.ToString(), dateNow, dateNow);
             });
         }
 
