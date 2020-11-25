@@ -116,7 +116,7 @@ namespace MrLocal_Backend.Repositories
                     status ?? node.Element("Status").Value.ToString(), 
                     description ?? node.Element("Description").Value.ToString(), 
                     typeOfShop ?? node.Element("TypeOfShop").Value.ToString(), 
-                    city ?? node.Element("City").Value.ToString(), dateNow, dateNow);
+                    city ?? node.Element("City").Value.ToString(), DateTime.Parse(node.Element("CreatedAT").Value), dateNow);
             });
         }
 
