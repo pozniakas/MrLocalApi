@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace MrLocal_Backend.Repositories.Interfaces
 {
@@ -9,9 +10,9 @@ namespace MrLocal_Backend.Repositories.Interfaces
         public string TypeOfShop { get; set; }
         public string City { get; set; }
 
-        public void Create(string name, string description, string typeOfShop, string city);
-        public void Update(string id, string name, string status, string description, string typeOfShop, string city);
-        public ShopRepository FindOne(string id);
-        public List<ShopRepository> FindAll();
+        public Task<ShopRepository> Create(string name, string description, string typeOfShop, string city);
+        public Task<ShopRepository> Update(string id, string name, string status, string description, string typeOfShop, string city);
+        public Task<ShopRepository> FindOne(string id);
+        public Task<List<ShopRepository>> FindAll();
     }
 }

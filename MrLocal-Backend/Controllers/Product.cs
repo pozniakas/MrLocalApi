@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrLocal_Backend.Controllers.Interfaces;
+using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services;
 using System;
+using System.Threading.Tasks;
 using static MrLocal_Backend.Models.Body;
 
 namespace MrLocal_Backend.Controllers
@@ -18,44 +20,44 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpPost]
-        public string Post([FromBody] ProductBody body)
+        public async Task<ProductRepository> Post([FromBody] ProductBody body)
         {
             try
             {
-                productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
-                return "Product was created successfully";
+                var createdProduct = await productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
+                return createdProduct;
             }
             catch (ArgumentException e)
             {
-                return e.Message;
+                throw new ArgumentException(e.Message);
             }
         }
 
         [HttpPut]
-        public string Put([FromBody] ProductBody body)
+        public async Task<ProductRepository> Put([FromBody] ProductBody body)
         {
             try
             {
-                productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
-                return "Product was updated successfully";
+                var updatedProduct = await productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
+                return updatedProduct;
             }
             catch (ArgumentException e)
             {
-                return e.Message;
+                throw new ArgumentException(e.Message);
             }
         }
 
         [HttpDelete("{id}")]
-        public string Delete(string id)
+        public async Task<string> Delete(string id)
         {
             try
             {
-                productService.DeleteProduct(id);
+                await productService.DeleteProduct(id);
                 return "Product was deleted succesfully";
             }
             catch (ArgumentException e)
             {
-                return e.Message;
+                throw new ArgumentException(e.Message);
             }
         }
     }

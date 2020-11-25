@@ -2,6 +2,7 @@
 using MrLocal_Backend.Services.Helpers;
 using MrLocal_Backend.Services.Interfaces;
 using System;
+using System.Threading.Tasks;
 
 namespace MrLocal_Backend.Services
 {
@@ -14,11 +15,12 @@ namespace MrLocal_Backend.Services
             productRepository = new ProductRepository();
         }
 
-        public void AddProductToShop(string shopId, string name, string description, string priceType, double? price)
+        public async Task<ProductRepository> AddProductToShop(string shopId, string name, string description, string priceType, double? price)
         {
             if (ValidateProductData(shopId, name, description, price, false, priceType))
             {
-                productRepository.Create(shopId, name, description, priceType, price);
+                var createdProduct = await productRepository.Create(shopId, name, description, priceType, price);
+                return createdProduct;
             }
             else
             {
@@ -26,11 +28,12 @@ namespace MrLocal_Backend.Services
             }
         }
 
-        public void UpdateProduct(string id, string shopId, string name, string description, string priceType, double? price)
+        public async Task<ProductRepository> UpdateProduct(string id, string shopId, string name, string description, string priceType, double? price)
         {
             if (ValidateProductData(shopId, name, description, price, true, priceType, id))
             {
-                productRepository.Update(id, shopId, name, description, priceType, price);
+                var updatedProduct = await productRepository.Update(id, shopId, name, description, priceType, price);
+                return updatedProduct;
             }
             else
             {
@@ -38,13 +41,14 @@ namespace MrLocal_Backend.Services
             }
         }
 
-        public void DeleteProduct(string id)
+        public async Task<string> DeleteProduct(string id)
         {
-            var products = productRepository.FindOne(id);
+            var products = await productRepository.FindOne(id);
 
             if (products != null)
             {
-                productRepository.Delete(id);
+                var deletedProduct = await productRepository.Delete(id);
+                return deletedProduct;
             }
             else
             {

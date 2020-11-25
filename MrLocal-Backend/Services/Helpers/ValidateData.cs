@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace MrLocal_Backend.Services.Helpers
 {
@@ -33,14 +34,14 @@ namespace MrLocal_Backend.Services.Helpers
             return isValidName && isValidDescription && isValidPrice && isValidShop && doesProductExist && isValidPriceType;
         }
 
-        public bool ValidateShopData(string name, string status, string description, string typeOfShop, string city, bool isUpdate)
+        public async Task<bool> ValidateShopData(string name, string status, string description, string typeOfShop, string city, bool isUpdate)
         {
             string[] arrayOfShopTypes = { "Berries", "Seafood", "Forest food", "Handmade", "Other" };
             string[] arrayOfCities = { "Vilnius", "Kaunas", "Klaipėda", "Šiauliai", "Panevėžys" };
             string[] arrayOfStatusTypes = { "Active", "Not Active", "Paused" };
 
             var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
-            var shops = shopRepository.FindAll();
+            var shops = await shopRepository.FindAll();
 
             var isValidName = (isUpdate && name == "") || (name.Length > 2 && nameRegex.IsMatch(name) && shops.Where(i => i.Name == name).Count() == 0);
             var isValidStatus = (isUpdate && status == "") || Array.Exists(arrayOfStatusTypes, i => i == status) || (!isUpdate && status == null);

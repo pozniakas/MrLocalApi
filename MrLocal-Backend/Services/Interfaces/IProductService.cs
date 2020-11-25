@@ -1,9 +1,12 @@
-﻿namespace MrLocal_Backend.Services.Interfaces
+﻿using MrLocal_Backend.Repositories;
+using System.Threading.Tasks;
+
+namespace MrLocal_Backend.Services.Interfaces
 {
     interface IProductService
     {
-        public void AddProductToShop(string shopId, string name, string description, string priceType, double? price);
-        public void UpdateProduct(string id, string shopId, string name, string description, string priceType, double? price);
-        public void DeleteProduct(string id);
+        public Task<ProductRepository> AddProductToShop(string shopId, string name, string description, string priceType, double? price);
+        public Task<ProductRepository> UpdateProduct(string id, string shopId, string name, string description, string priceType, double? price);
+        public Task<string> DeleteProduct(string id);
     }
 }
