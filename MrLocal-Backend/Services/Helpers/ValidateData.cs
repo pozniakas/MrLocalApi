@@ -26,10 +26,10 @@ namespace MrLocal_Backend.Services.Helpers
 
             var doesProductExist = (id != null) && (productRepository.FindOne(id) != null) || id == null;
             var isValidShop = shops != null;
-            var isValidName = (isUpdate && name == null) || (name.Length > 2 && nameRegex.IsMatch(name));
-            var isValidDescription = (isUpdate && description == null) || (description.Length > 2);
+            var isValidName = (isUpdate && IsStringEmty(name)) || (name.Length > 2 && nameRegex.IsMatch(name));
+            var isValidDescription = (isUpdate && IsStringEmty(description)) || (description.Length > 2);
             var isValidPrice = priceRegex.IsMatch(price.ToString()) || (isUpdate && price == null);
-            var isValidPriceType = priceTypes.Contains(priceType) || (isUpdate && priceType == null);
+            var isValidPriceType = priceTypes.Contains(priceType) || (isUpdate && IsStringEmty(priceType));
 
             return isValidName && isValidDescription && isValidPrice && isValidShop && doesProductExist && isValidPriceType;
         }
@@ -43,11 +43,11 @@ namespace MrLocal_Backend.Services.Helpers
             var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
             var shops = await shopRepository.FindAll();
 
-            var isValidName = (isUpdate && name == null) || (name.Length > 2 && nameRegex.IsMatch(name) && shops.Where(i => i.Name == name).Count() == 0);
-            var isValidStatus = (isUpdate && status == null) || Array.Exists(arrayOfStatusTypes, i => i == status) || (!isUpdate && status == null);
-            var isValidDescription = (isUpdate && description == null) || (description.Length > 2);
-            var isValidTypeOfShop = (isUpdate && typeOfShop == null) || Array.Exists(arrayOfShopTypes, i => i == typeOfShop);
-            var isValidCity = (isUpdate && city == null) || Array.Exists(arrayOfCities, i => i == city);
+            var isValidName = (isUpdate && IsStringEmty(name)) || (name.Length > 2 && nameRegex.IsMatch(name) && shops.Where(i => i.Name == name).Count() == 0);
+            var isValidStatus = (isUpdate && IsStringEmty(status)) || Array.Exists(arrayOfStatusTypes, i => i == status) || (!isUpdate && IsStringEmty(status));
+            var isValidDescription = (isUpdate && IsStringEmty(description)) || (description.Length > 2);
+            var isValidTypeOfShop = (isUpdate && IsStringEmty(description)) || Array.Exists(arrayOfShopTypes, i => i == typeOfShop);
+            var isValidCity = (isUpdate && IsStringEmty(city)) || Array.Exists(arrayOfCities, i => i == city);
 
             return isValidName && isValidStatus && isValidTypeOfShop && isValidCity && isValidDescription;
         }
@@ -59,5 +59,6 @@ namespace MrLocal_Backend.Services.Helpers
                 || (city == "All cities" && typeOfShop != "All types" && shop.TypeOfShop == typeOfShop)
                 || (city == "All cities" && typeOfShop == "All types");
         }
+        private bool IsStringEmty(string str) => str == null || str.Length == 0;
     }
 }
