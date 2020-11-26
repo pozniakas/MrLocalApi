@@ -6,10 +6,6 @@ namespace MrLocal_Backend.LoggerService
     {
         private static readonly ILogger logger = LogManager.GetCurrentClassLogger();
 
-        public LoggerManager()
-        {
-        }
-
         public void LogDebug(string message)
         {
             logger.Debug(message);
