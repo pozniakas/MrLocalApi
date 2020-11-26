@@ -61,7 +61,7 @@ namespace MrLocal_Backend.Repositories
             var shop = doc.CreateElement("Shop");
 
             var id = Guid.NewGuid().ToString();
-            var dateNow = DateTime.Now.ToShortDateString();
+            var dateNow = DateTime.UtcNow.ToShortDateString();
 
             string[] titles = { "Id", "Name", "Status", "Description", "TypeOfShop", "City", "CreatedAt", "UpdatedAt", "DeletedAt" };
             string[] values = { id, name, "Not Active", description, typeOfShop, city, dateNow, dateNow, "" };
@@ -83,7 +83,7 @@ namespace MrLocal_Backend.Repositories
         {
             return await Task.Run(() =>
             {
-                var dateNow = DateTime.Now.ToShortDateString();
+                var dateNow = DateTime.UtcNow.ToShortDateString();
                 var doc = XDocument.Load(fileName);
 
                 var node = doc.Descendants("Shop").FirstOrDefault(shop => shop.Element("Id").Value == id && shop.Element("DeletedAt").Value == "");
@@ -124,7 +124,7 @@ namespace MrLocal_Backend.Repositories
         {
             return await Task.Run(() =>
             {
-                var dateNow = DateTime.Now.ToShortDateString();
+                var dateNow = DateTime.UtcNow.ToShortDateString();
                 var doc = XDocument.Load(fileName);
 
                 var node = doc.Descendants("Shop").FirstOrDefault(cd => cd.Element("Id").Value == id);

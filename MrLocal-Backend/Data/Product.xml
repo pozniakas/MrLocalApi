@@ -1,14 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Products>
   <Product>
-    <Id>47eeffa2-0245-4765-bc8a-46cd723dac2a</Id>
-    <ShopId>05a0014d-0920-4381-b84d-03dfec83c614</ShopId>
-    <Name>Braskes</Name>
-    <Description>testets</Description>
-    <Pricetype>KILOGRAMS</Pricetype>
-    <Price>4,6</Price>
-    <CreatedAt>2020-11-26</CreatedAt>
-    <UpdatedAt>2020-11-26</UpdatedAt>
-    <DeletedAt></DeletedAt>
   </Product>
 </Products>
