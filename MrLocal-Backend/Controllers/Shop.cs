@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrLocal_Backend.Controllers.Interfaces;
+using MrLocal_Backend.LoggerService;
 using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services;
 using System;
@@ -13,58 +14,60 @@ namespace MrLocal_Backend.Controllers
     public class Shop : ControllerBase, IShop
     {
         private readonly ShopService shopService;
+        private readonly ILoggerManager _logger;
 
-        public Shop()
+        public Shop(ILoggerManager logger)
         {
             shopService = new ShopService();
+            _logger = logger;
         }
 
         [HttpGet("{id}")]
-        public async Task<ShopRepository> Get(string id)
+        public async Task<IActionResult> Get(string id)
         {
-            return await shopService.GetShop(id);
+            _logger.LogInfo("Fetching all the Shops from the storage");
+
+            var getShop = await shopService.GetShop(id);
+            
+            _logger.LogInfo("Returning products");
+
+            return Ok(getShop);
         }
 
         [HttpPost]
-        public async Task<ShopRepository> Post([FromBody] ShopBody body)
+        public async Task<IActionResult> Post([FromBody] ShopBody body)
         {
-            try
-            {
-                var createdShop = await shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.City);
-                return createdShop;
-            }
-            catch (ArgumentException e)
-            {
-                throw new ArgumentException(e.Message);
-            }
+            _logger.LogInfo("Fetching all the Shops from the storage");
+
+            var createdShop = await shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.City);
+
+            _logger.LogInfo("Returning shops");
+
+            return Ok(createdShop);     
         }
 
         [HttpPut]
-        public async Task<ShopRepository> Put([FromBody] ShopBody body)
+        public async Task<IActionResult> Put([FromBody] ShopBody body)
         {
-            try
-            {
-                var updatedShop = await shopService.UpdateShop(body.Id, body.Name, body.Status, body.Description, body.TypeOfShop, body.City);
-                return updatedShop;
-            }
-            catch (ArgumentException e)
-            {
-                throw new ArgumentException(e.Message);
-            }
+            _logger.LogInfo("Fetching all the Shops from the storage");
+
+            var updatedShop = await shopService.UpdateShop(body.Id, body.Name, body.Status, body.Description, body.TypeOfShop, body.City);
+
+            _logger.LogInfo("Returning shops");
+
+            return Ok(updatedShop);     
         }
 
         [HttpDelete("{id}")]
-        public async Task<string> Delete(string id)
+        public async Task<IActionResult> Delete(string id)
         {
-            try
-            {
-                await shopService.DeleteShop(id);
-                return "Shop was deleted succesfully";
-            }
-            catch (ArgumentException e)
-            {
-                throw new ArgumentException(e.Message);
-            }
+            _logger.LogInfo("Fetching all the Shops from the storage");
+
+            await shopService.DeleteShop(id);
+
+            _logger.LogInfo($"Deleting shop");
+
+            return Ok();   
         }
     }
 }
