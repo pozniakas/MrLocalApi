@@ -28,6 +28,7 @@ namespace MrLocal_Backend.Repositories
         public ShopRepository()
         {
             fileName = ConfigurationManager.AppSettings.Get("SHOP_REPOSITORY_FILE_NAME");
+            xmlRepository = new Lazy<XmlRepository<ShopRepository>>();
 
             if (!Directory.Exists("Data"))
             {
