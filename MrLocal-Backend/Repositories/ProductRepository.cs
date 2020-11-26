@@ -108,27 +108,39 @@ namespace MrLocal_Backend.Repositories
                 {
                     node.SetElementValue("Name", name);
                 }
+                else
+                {
+                    name = node.Element("Name").Value.ToString();
+                }
                 if (!IsStringEmpty(description))
                 {
                     node.SetElementValue("Description", description);
+                }
+                else
+                {
+                    description = node.Element("Description").Value.ToString();
                 }
                 if (!IsStringEmpty(pricetype))
                 {
                     node.SetElementValue("Pricetype", pricetype);
                 }
+                else
+                {
+                    pricetype = node.Element("Pricetype").Value.ToString();
+                }
                 if (price != null)
                 {
                     node.SetElementValue("Price", price.ToString());
+                }
+                else
+                {
+                    price = double.Parse(node.Element("Price").Value);
                 }
                 node.SetElementValue("UpdatedAt", dateNow);
 
                 doc.Save(fileName);
 
-
-                return new ProductRepository(id, shopId, IsStringEmpty(name) ? node.Element("Name").Value.ToString() : name,
-                    IsStringEmpty(description) ? node.Element("Description").Value.ToString() : description,
-                    IsStringEmpty(pricetype) ? StringToPricetype(node.Element("PriceType").Value) : StringToPricetype(pricetype),
-                    price == null ? double.Parse(node.Element("Price").Value) : (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(dateNow));
+                return new ProductRepository(id, shopId, name, description, StringToPricetype(pricetype), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(dateNow));
             });
         }
 

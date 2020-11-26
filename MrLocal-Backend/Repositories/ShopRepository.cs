@@ -94,31 +94,47 @@ namespace MrLocal_Backend.Repositories
                 {
                     node.SetElementValue("Name", name);
                 }
+                else
+                {
+                    name = node.Element("Name").Value.ToString();
+                }
                 if (!IsStringEmpty(status))
                 {
                     node.SetElementValue("Status", status);
+                }
+                else
+                {
+                    status = node.Element("Status").Value.ToString();
                 }
                 if (!IsStringEmpty(description))
                 {
                     node.SetElementValue("Description", description);
                 }
+                else
+                {
+                    description = node.Element("Description").Value.ToString();
+                }
                 if (!IsStringEmpty(typeOfShop))
                 {
                     node.SetElementValue("TypeOfShop", typeOfShop);
+                }
+                else
+                {
+                    typeOfShop = node.Element("TypeOfShop").Value.ToString();
                 }
                 if (!IsStringEmpty(city))
                 {
                     node.SetElementValue("City", city);
                 }
+                else
+                {
+                    city = node.Element("City").Value.ToString();
+                }
                 node.SetElementValue("UpdatedAt", dateNow);
 
                 doc.Save(fileName);
 
-                return new ShopRepository(id, IsStringEmpty(name) ? node.Element("Name").Value.ToString() : name,
-                    IsStringEmpty(status) ? node.Element("Status").Value.ToString() : status,
-                    IsStringEmpty(description) ? node.Element("Description").Value.ToString() : description,
-                    IsStringEmpty(typeOfShop) ? node.Element("TypeOfShop").Value.ToString() : typeOfShop,
-                    IsStringEmpty(city) ? node.Element("City").Value.ToString() : city, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(dateNow));
+                return new ShopRepository(id, name, status, description, typeOfShop, city, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(dateNow));
             });
         }
 
