@@ -10,9 +10,10 @@ using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
 {
-    public class ShopRepository : XmlRepository<ShopRepository>, IShopRepository
+    public class ShopRepository : IShopRepository
     {
         readonly string fileName;
+        private readonly Lazy<XmlRepository<ShopRepository>> xmlRepository = null;
 
         public string Id { get; set; }
         public string Name { get; set; }
@@ -56,7 +57,7 @@ namespace MrLocal_Backend.Repositories
 
         public async Task<ShopRepository> Create(string name, string description, string typeOfShop, string city)
         {
-            var doc = await LoadXml(fileName);
+            var doc = await xmlRepository.Value.LoadXml(fileName);
 
             var shop = doc.CreateElement("Shop");
 
@@ -135,13 +136,13 @@ namespace MrLocal_Backend.Repositories
 
         public async Task<ShopRepository> FindOne(string id)
         {
-            var listOfShop = await ReadXml(fileName);
+            var listOfShop = await xmlRepository.Value.ReadXml(fileName);
             return listOfShop.First(i => i.Id == id && i.DeletedAt == null);
         }
 
         public async Task<List<ShopRepository>> FindAll()
         {
-            var listOfShop = await ReadXml(fileName);
+            var listOfShop = await xmlRepository.Value.ReadXml(fileName);
             return listOfShop.Where(i => i.DeletedAt == null).ToList();
         }
     }
