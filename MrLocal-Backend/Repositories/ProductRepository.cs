@@ -97,20 +97,22 @@ namespace MrLocal_Backend.Repositories
         {
             return await Task.Run(() =>
             {
+                static bool IsStringEmpty(string str) => str == null || str.Length == 0;
+
                 var dateNow = DateTime.UtcNow.ToString();
                 var doc = XDocument.Load(fileName);
 
                 var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id && product.Element("ShopId").Value == shopId && product.Element("DeletedAt").Value == "");
 
-                if (name != null && name.Length > 0)
+                if (!IsStringEmpty(name))
                 {
                     node.SetElementValue("Name", name);
                 }
-                if (description != null && description.Length > 0)
+                if (!IsStringEmpty(description))
                 {
                     node.SetElementValue("Description", description);
                 }
-                if (pricetype != null && pricetype.Length > 0)
+                if (!IsStringEmpty(pricetype))
                 {
                     node.SetElementValue("Pricetype", pricetype);
                 }
@@ -123,9 +125,9 @@ namespace MrLocal_Backend.Repositories
                 doc.Save(fileName);
 
 
-                return new ProductRepository(id, shopId, (name == null || name.Length == 0) ? node.Element("Name").Value.ToString() : name,
-                    (description == null || description.Length == 0) ? node.Element("Description").Value.ToString() : description,
-                    (pricetype == null || pricetype.Length == 0) ? StringToPricetype(node.Element("PriceType").Value) : StringToPricetype(pricetype),
+                return new ProductRepository(id, shopId, IsStringEmpty(name) ? node.Element("Name").Value.ToString() : name,
+                    IsStringEmpty(description) ? node.Element("Description").Value.ToString() : description,
+                    IsStringEmpty(pricetype) ? StringToPricetype(node.Element("PriceType").Value) : StringToPricetype(pricetype),
                     price == null ? double.Parse(node.Element("Price").Value) : (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(dateNow));
             });
         }

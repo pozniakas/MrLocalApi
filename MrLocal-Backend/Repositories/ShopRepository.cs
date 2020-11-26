@@ -83,28 +83,30 @@ namespace MrLocal_Backend.Repositories
         {
             return await Task.Run(() =>
             {
+                static bool IsStringEmpty(string str) => str == null || str.Length == 0;
+
                 var dateNow = DateTime.UtcNow.ToString();
                 var doc = XDocument.Load(fileName);
 
                 var node = doc.Descendants("Shop").FirstOrDefault(shop => shop.Element("Id").Value == id && shop.Element("DeletedAt").Value == "");
 
-                if (name != null && name.Length > 0)
+                if (!IsStringEmpty(name))
                 {
                     node.SetElementValue("Name", name);
                 }
-                if (status != null && status.Length > 0)
+                if (!IsStringEmpty(status))
                 {
                     node.SetElementValue("Status", status);
                 }
-                if (description != null && description.Length > 0)
+                if (!IsStringEmpty(description))
                 {
                     node.SetElementValue("Description", description);
                 }
-                if (typeOfShop != null && typeOfShop.Length > 0)
+                if (!IsStringEmpty(typeOfShop))
                 {
                     node.SetElementValue("TypeOfShop", typeOfShop);
                 }
-                if (city != null && city.Length > 0)
+                if (!IsStringEmpty(city))
                 {
                     node.SetElementValue("City", city);
                 }
@@ -112,11 +114,11 @@ namespace MrLocal_Backend.Repositories
 
                 doc.Save(fileName);
 
-                return new ShopRepository(id, (name == null || name.Length == 0) ? node.Element("Name").Value.ToString() : name,
-                    (status == null || status.Length == 0) ? node.Element("Status").Value.ToString() : status,
-                    (description == null || description.Length == 0) ? node.Element("Description").Value.ToString() : description,
-                    (typeOfShop == null || typeOfShop.Length == 0) ? node.Element("TypeOfShop").Value.ToString() : typeOfShop,
-                    (city == null || city.Length == 0) ? node.Element("City").Value.ToString() : city, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(dateNow));
+                return new ShopRepository(id, IsStringEmpty(name) ? node.Element("Name").Value.ToString() : name,
+                    IsStringEmpty(status) ? node.Element("Status").Value.ToString() : status,
+                    IsStringEmpty(description) ? node.Element("Description").Value.ToString() : description,
+                    IsStringEmpty(typeOfShop) ? node.Element("TypeOfShop").Value.ToString() : typeOfShop,
+                    IsStringEmpty(city) ? node.Element("City").Value.ToString() : city, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(dateNow));
             });
         }
 

@@ -19,6 +19,8 @@ namespace MrLocal_Backend.Services.Helpers
         }
         public bool ValidateProductData(string shopId, string name, string description, double? price, bool isUpdate, string priceType, string id = null)
         {
+            static bool IsStringEmpty(string str) => str == null || str.Length == 0;
+
             var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
             var priceRegex = new Regex(@"\d+(?:\.\d+)?");
             var shops = shopRepository.FindOne(shopId);
@@ -26,16 +28,18 @@ namespace MrLocal_Backend.Services.Helpers
 
             var doesProductExist = (id != null) && (productRepository.FindOne(id) != null) || id == null;
             var isValidShop = shops != null;
-            var isValidName = (isUpdate && IsStringEmty(name)) || (name.Length > 2 && nameRegex.IsMatch(name));
-            var isValidDescription = (isUpdate && IsStringEmty(description)) || (description.Length > 2);
+            var isValidName = (isUpdate && IsStringEmpty(name)) || (name.Length > 2 && nameRegex.IsMatch(name));
+            var isValidDescription = (isUpdate && IsStringEmpty(description)) || (description.Length > 2);
             var isValidPrice = priceRegex.IsMatch(price.ToString()) || (isUpdate && price == null);
-            var isValidPriceType = priceTypes.Contains(priceType) || (isUpdate && IsStringEmty(priceType));
+            var isValidPriceType = priceTypes.Contains(priceType) || (isUpdate && IsStringEmpty(priceType));
 
             return isValidName && isValidDescription && isValidPrice && isValidShop && doesProductExist && isValidPriceType;
         }
 
         public async Task<bool> ValidateShopData(string name, string status, string description, string typeOfShop, string city, bool isUpdate)
         {
+            static bool IsStringEmpty(string str) => str == null || str.Length == 0;
+
             string[] arrayOfShopTypes = { "Berries", "Seafood", "Forest food", "Handmade", "Other" };
             string[] arrayOfCities = { "Vilnius", "Kaunas", "Klaipėda", "Šiauliai", "Panevėžys" };
             string[] arrayOfStatusTypes = { "Active", "Not Active", "Paused" };
@@ -43,11 +47,11 @@ namespace MrLocal_Backend.Services.Helpers
             var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
             var shops = await shopRepository.FindAll();
 
-            var isValidName = (isUpdate && IsStringEmty(name)) || (name.Length > 2 && nameRegex.IsMatch(name) && shops.Where(i => i.Name == name).Count() == 0);
-            var isValidStatus = (isUpdate && IsStringEmty(status)) || Array.Exists(arrayOfStatusTypes, i => i == status) || (!isUpdate && IsStringEmty(status));
-            var isValidDescription = (isUpdate && IsStringEmty(description)) || (description.Length > 2);
-            var isValidTypeOfShop = (isUpdate && IsStringEmty(description)) || Array.Exists(arrayOfShopTypes, i => i == typeOfShop);
-            var isValidCity = (isUpdate && IsStringEmty(city)) || Array.Exists(arrayOfCities, i => i == city);
+            var isValidName = (isUpdate && IsStringEmpty(name)) || (name.Length > 2 && nameRegex.IsMatch(name) && shops.Where(i => i.Name == name).Count() == 0);
+            var isValidStatus = (isUpdate && IsStringEmpty(status)) || Array.Exists(arrayOfStatusTypes, i => i == status) || (!isUpdate && IsStringEmpty(status));
+            var isValidDescription = (isUpdate && IsStringEmpty(description)) || (description.Length > 2);
+            var isValidTypeOfShop = (isUpdate && IsStringEmpty(description)) || Array.Exists(arrayOfShopTypes, i => i == typeOfShop);
+            var isValidCity = (isUpdate && IsStringEmpty(city)) || Array.Exists(arrayOfCities, i => i == city);
 
             return isValidName && isValidStatus && isValidTypeOfShop && isValidCity && isValidDescription;
         }
@@ -59,6 +63,5 @@ namespace MrLocal_Backend.Services.Helpers
                 || (city == "All cities" && typeOfShop != "All types" && shop.TypeOfShop == typeOfShop)
                 || (city == "All cities" && typeOfShop == "All types");
         }
-        private bool IsStringEmty(string str) => str == null || str.Length == 0;
     }
 }
