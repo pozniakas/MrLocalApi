@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Http;
-using MrLocal_Backend.LoggerService;
-using MrLocal_Backend.Models;
-using System.Net;
 
-namespace MrLocal_Backend.Extencions
+namespace MrLocal_Backend.Exceptions
 {
     public static class ExceptionMiddlewareExtensions
     {

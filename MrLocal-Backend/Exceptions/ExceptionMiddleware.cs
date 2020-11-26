@@ -5,7 +5,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace MrLocal_Backend.Extencions
+namespace MrLocal_Backend.Exceptions
 {
     public class ExceptionMiddleware
     {
@@ -40,7 +40,7 @@ namespace MrLocal_Backend.Extencions
                 return context.Response.WriteAsync(new ErrorDetails()
                 {
                     StatusCode = context.Response.StatusCode = 400,
-                    Message =  exception.Message
+                    Message = exception.Message
                 }.ToString());
             }
             else
