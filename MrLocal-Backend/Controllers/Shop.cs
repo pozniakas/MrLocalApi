@@ -65,7 +65,7 @@ namespace MrLocal_Backend.Controllers
 
             await shopService.DeleteShop(id);
 
-            _logger.LogInfo($"Deleting shop");
+            _logger.LogInfo("Deleting shop");
 
             return Ok();   
         }
