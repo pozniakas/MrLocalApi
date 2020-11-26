@@ -1,15 +1,3 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Shops>
-  <Shop>
-    <Id>9df4ca19-388a-405e-ad14-7299c57efca1</Id>
-    <Name>sssss</Name>
-    <Status>Not Active</Status>
-    <Description>jnvdfl</Description>
-    <TypeOfShop>Berries</TypeOfShop>
-    <City>Vilnius</City>
-    <CreatedAt>11/26/2020</CreatedAt>
-    <UpdatedAt>11/26/2020</UpdatedAt>
-    <DeletedAt>
-    </DeletedAt>
-  </Shop>
 </Shops>
