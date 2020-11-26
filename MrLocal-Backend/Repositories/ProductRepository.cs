@@ -99,15 +99,15 @@ namespace MrLocal_Backend.Repositories
 
                 var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id && product.Element("ShopId").Value == shopId && product.Element("DeletedAt").Value == "");
 
-                if (name != null)
+                if (name != null && name.Length > 0)
                 {
                     node.SetElementValue("Name", name);
                 }
-                if (description != null)
+                if (description != null && description.Length > 0)
                 {
                     node.SetElementValue("Description", description);
                 }
-                if (pricetype != null)
+                if (pricetype != null && pricetype.Length > 0)
                 {
                     node.SetElementValue("Pricetype", pricetype);
                 }
@@ -120,10 +120,10 @@ namespace MrLocal_Backend.Repositories
                 doc.Save(fileName);
 
 
-                return new ProductRepository(id, shopId, name ?? node.Element("Name").Value.ToString(),
-                    description ?? node.Element("Description").Value.ToString(),
-                    pricetype != null ? StringToPricetype(pricetype) : StringToPricetype(node.Element("Description").Value),
-                    price != null ? (double)price : double.Parse(node.Element("Price").Value));
+                return new ProductRepository(id, shopId, (name == null || name.Length == 0) ? node.Element("Name").Value.ToString() : name,
+                    (description == null || description.Length == 0) ? node.Element("Description").Value.ToString() : description,
+                    (pricetype == null || pricetype.Length == 0) ? StringToPricetype(node.Element("PriceType").Value) : StringToPricetype(pricetype),
+                    price == null ? double.Parse(node.Element("Price").Value) : (double)price);
             });
         }
 
