@@ -50,7 +50,7 @@ namespace MrLocal_Backend.Repositories
         }
 
         public ProductRepository(string id, string shopId, string name
-            , string description, PriceTypes priceType, double price)
+            , string description, PriceTypes priceType, double price, DateTime createdAt, DateTime updatedAt)
         {
             Id = id;
             ShopId = shopId;
@@ -58,6 +58,9 @@ namespace MrLocal_Backend.Repositories
             Description = description;
             PriceType = priceType;
             Price = price;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            DeletedAt = null;
         }
 
         public async Task<ProductRepository> Create(string shopId, string name
@@ -86,7 +89,7 @@ namespace MrLocal_Backend.Repositories
 
             doc.Save(fileName);
 
-            return new ProductRepository(id, shopId, name, description, StringToPricetype(pricetype), (double)price);
+            return new ProductRepository(id, shopId, name, description, StringToPricetype(pricetype), (double)price, DateTime.Parse(createdAtStr), DateTime.Parse(updatedAtStr));
         }
 
         public async Task<ProductRepository> Update(string id, string shopId, string name
@@ -123,7 +126,7 @@ namespace MrLocal_Backend.Repositories
                 return new ProductRepository(id, shopId, (name == null || name.Length == 0) ? node.Element("Name").Value.ToString() : name,
                     (description == null || description.Length == 0) ? node.Element("Description").Value.ToString() : description,
                     (pricetype == null || pricetype.Length == 0) ? StringToPricetype(node.Element("PriceType").Value) : StringToPricetype(pricetype),
-                    price == null ? double.Parse(node.Element("Price").Value) : (double)price);
+                    price == null ? double.Parse(node.Element("Price").Value) : (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(dateNow));
             });
         }
 
