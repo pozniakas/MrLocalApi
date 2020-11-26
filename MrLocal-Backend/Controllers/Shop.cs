@@ -29,7 +29,7 @@ namespace MrLocal_Backend.Controllers
 
             var getShop = await shopService.GetShop(id);
             
-            _logger.LogInfo("Returning products");
+            _logger.LogInfo("Returning shop");
 
             return Ok(getShop);
         }
