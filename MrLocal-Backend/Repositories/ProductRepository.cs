@@ -66,8 +66,8 @@ namespace MrLocal_Backend.Repositories
             var id = Guid.NewGuid().ToString();
             var doc = await LoadXml(fileName);
 
-            var updatedAtStr = DateTime.UtcNow.ToShortDateString();
-            var createdAtStr = DateTime.UtcNow.ToShortDateString();
+            var updatedAtStr = DateTime.UtcNow.ToString();
+            var createdAtStr = DateTime.UtcNow.ToString();
             var deletedAtStr = "";
 
             var product = doc.CreateElement("Product");
@@ -94,7 +94,7 @@ namespace MrLocal_Backend.Repositories
         {
             return await Task.Run(() =>
             {
-                var dateNow = DateTime.UtcNow.ToShortDateString();
+                var dateNow = DateTime.UtcNow.ToString();
                 var doc = XDocument.Load(fileName);
 
                 var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id && product.Element("ShopId").Value == shopId && product.Element("DeletedAt").Value == "");
@@ -134,7 +134,7 @@ namespace MrLocal_Backend.Repositories
                 var doc = XDocument.Load(fileName);
 
                 var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id);
-                node.SetElementValue("DeletedAt", DateTime.UtcNow.ToShortDateString());
+                node.SetElementValue("DeletedAt", DateTime.UtcNow.ToString());
 
                 doc.Save(fileName);
                 return id;
