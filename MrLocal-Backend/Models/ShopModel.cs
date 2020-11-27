@@ -4,6 +4,17 @@ namespace MrLocal_Backend.Models
 {
     public class ShopModel
     {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string Status { get; set; }
+        public string Description { get; set; }
+        public string TypeOfShop { get; set; }
+        public string City { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
+
+        public ShopModel() { }
         public ShopModel(string id, string name, string status, string description, string typeOfShop, string city, DateTime createdAt, DateTime updatedAt)
         {
             Id = id;
@@ -16,15 +27,5 @@ namespace MrLocal_Backend.Models
             UpdatedAt = updatedAt;
             DeletedAt = null;
         }
-
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Status { get; set; }
-        public string Description { get; set; }
-        public string TypeOfShop { get; set; }
-        public string City { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public DateTime? DeletedAt { get; set; }
     }
 }

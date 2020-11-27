@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace MrLocal_Backend.Models
 {
@@ -15,12 +17,15 @@ namespace MrLocal_Backend.Models
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
 
+        [JsonConverter(typeof(JsonStringEnumConverter))]
         public enum PriceTypes
         {
             UNIT,
             GRAMS,
             KILOGRAMS
         }
+
+        public ProductModel() { }
 
         public ProductModel(string id, string shopId, string name
     , string description, PriceTypes priceType, double price, DateTime createdAt, DateTime updatedAt)

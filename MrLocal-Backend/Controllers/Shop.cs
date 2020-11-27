@@ -4,7 +4,6 @@ using MrLocal_Backend.Models;
 using MrLocal_Backend.Services;
 using System;
 using System.Threading.Tasks;
-using static MrLocal_Backend.Models.Body;
 
 namespace MrLocal_Backend.Controllers
 {
@@ -26,7 +25,7 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ShopModel> Post([FromBody] ShopBody body)
+        public async Task<ShopModel> Post([FromBody] ShopModel body)
         {
             try
             {
@@ -40,7 +39,7 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpPut]
-        public async Task<ShopModel> Put([FromBody] ShopBody body)
+        public async Task<ShopModel> Put([FromBody] ShopModel body)
         {
             try
             {
