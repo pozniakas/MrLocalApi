@@ -10,9 +10,10 @@ using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
 {
-    public class ProductRepository : XmlRepository<ProductRepository>, IProductRepository
+    public class ProductRepository : IProductRepository
     {
         readonly string fileName;
+        private readonly Lazy<XmlRepository<ProductRepository>> xmlRepository = null;
 
         public string Id { get; set; }
         public string ShopId { get; set; }
@@ -34,6 +35,8 @@ namespace MrLocal_Backend.Repositories
         public ProductRepository()
         {
             fileName = ConfigurationManager.AppSettings.Get("PRODUCT_REPOSITORY_FILE_NAME");
+
+            xmlRepository = new Lazy<XmlRepository<ProductRepository>>();
 
             if (!Directory.Exists("Data"))
             {
@@ -67,7 +70,7 @@ namespace MrLocal_Backend.Repositories
             , string description, string pricetype, double? price)
         {
             var id = Guid.NewGuid().ToString();
-            var doc = await LoadXml(fileName);
+            var doc = await xmlRepository.Value.LoadXml(fileName);
 
             var updatedAtStr = DateTime.UtcNow.ToString();
             var createdAtStr = DateTime.UtcNow.ToString();
@@ -89,7 +92,7 @@ namespace MrLocal_Backend.Repositories
 
             doc.Save(fileName);
 
-            return new ProductRepository(id, shopId, name, description, StringToPricetype(pricetype), (double)price, DateTime.Parse(createdAtStr), DateTime.Parse(updatedAtStr));
+            return new ProductRepository(id, shopId, name, description, xmlRepository.Value.StringToPricetype(pricetype), (double)price, DateTime.Parse(createdAtStr), DateTime.Parse(updatedAtStr));
         }
 
         public async Task<ProductRepository> Update(string id, string shopId, string name
@@ -130,7 +133,7 @@ namespace MrLocal_Backend.Repositories
 
                 doc.Save(fileName);
 
-                return new ProductRepository(values[0], values[1], values[2], values[3], StringToPricetype(values[4]), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[5]));
+                return new ProductRepository(values[0], values[1], values[2], values[3], xmlRepository.Value.StringToPricetype(values[4]), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[5]));
             });
         }
 
@@ -150,13 +153,13 @@ namespace MrLocal_Backend.Repositories
 
         public async Task<ProductRepository> FindOne(string id)
         {
-            var listOfProducts = await ReadXml(fileName);
+            var listOfProducts = await xmlRepository.Value.ReadXml(fileName);
             return listOfProducts.First(i => i.Id == id && i.DeletedAt == null);
         }
 
         public async Task<List<ProductRepository>> FindAll(string shopId)
         {
-            var listOfProducts = await ReadXml(fileName);
+            var listOfProducts = await xmlRepository.Value.ReadXml(fileName);
             return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();
         }
     }
