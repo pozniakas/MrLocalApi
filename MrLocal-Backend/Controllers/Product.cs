@@ -17,7 +17,7 @@ namespace MrLocal_Backend.Controllers
         public Product(ILoggerManager logger)
         {
             _logger = logger;
-            productService = new ProductService(_logger);        
+            productService = new ProductService();
         }
 
         [HttpPost]

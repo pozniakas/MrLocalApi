@@ -19,7 +19,7 @@ namespace MrLocal_Backend.Controllers
         public Search(ILoggerManager logger)
         {
             _logger = logger;
-            searchService = new SearchService(_logger);    
+            searchService = new SearchService();    
         }
 
         [HttpGet]

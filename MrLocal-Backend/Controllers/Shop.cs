@@ -19,7 +19,7 @@ namespace MrLocal_Backend.Controllers
         public Shop(ILoggerManager logger)
         {
             _logger = logger;
-            shopService = new ShopService(_logger);
+            shopService = new ShopService();
         }
 
         [HttpGet("{id}")]
