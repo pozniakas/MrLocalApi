@@ -1,5 +1,5 @@
 
-﻿using MrLocal_Backend.Models;
+using MrLocal_Backend.Models;
 using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services.Helpers;
 using MrLocal_Backend.Services.Interfaces;
@@ -21,34 +21,23 @@ namespace MrLocal_Backend.Services
 
         public async Task<Shop> CreateShop(string name, string description, string typeOfShop, string city)
         {
-            var isValidated = await validateData.Value.ValidateShopData(name, null, description, typeOfShop, city, false);
-
-            if (isValidated)
-            {
-                var createdShop = await shopRepository.Create(name, description, typeOfShop, city);
-                return createdShop;
-            }
-            else
-            {
-                throw new ArgumentException("Invalid shop parameters for creation");
-            }
+            await validateData.Value.ValidateShopData(name, null, description, typeOfShop, city, false);
+            var createdShop = await shopRepository.Create(name, description, typeOfShop, city);
+            return createdShop;
         }
 
         public async Task<Shop> UpdateShop(string id, string name, string status, string description, string typeOfShop, string city)
         {
+            var shop = await shopRepository.FindOne(id);
 
-            var isValidated = await validateData.Value.ValidateShopData(name, status, description, typeOfShop, city, true);
-
-            if (isValidated)
-
+            if (shop == null)
             {
-                var updatedShop = await shopRepository.Update(id, name, status, description, typeOfShop, city);
-                return updatedShop;
+                throw new ArgumentException("Shop to update doesn't exist");
             }
-            else
-            {
-                throw new ArgumentException("Invalid shop parameters for update");
-            }
+
+            await validateData.Value.ValidateShopData(name, status, description, typeOfShop, city, true);
+            var updatedShop = await shopRepository.Update(id, name, status, description, typeOfShop, city);
+            return updatedShop;
         }
 
         public async Task<string> DeleteShop(string id)

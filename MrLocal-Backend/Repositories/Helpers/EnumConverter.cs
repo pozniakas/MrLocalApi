@@ -12,7 +12,7 @@ namespace MrLocal_Backend.Repositories.Helpers
                 "GRAMS" => PriceTypes.GRAMS,
                 "KILOGRAMS" => PriceTypes.KILOGRAMS,
                 "UNIT" => PriceTypes.UNIT,
-                _ => throw new NotImplementedException()
+                _ => throw new NotImplementedException("Unknown price type")
             };
         }
     }

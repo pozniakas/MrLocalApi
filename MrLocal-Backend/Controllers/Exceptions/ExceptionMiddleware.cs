@@ -26,7 +26,6 @@ namespace MrLocal_Backend.Controllers.Exceptions
             }
             catch (Exception ex)
             {
-                _logger.LogError($"Something went wrong: {ex}");
                 await HandleExceptionAsync(httpContext, ex);
             }
         }
@@ -37,6 +36,7 @@ namespace MrLocal_Backend.Controllers.Exceptions
 
             if (exception.GetType().IsAssignableFrom(typeof(ArgumentException)))
             {
+                _logger.LogWarn($"User-friendly error: {exception}");
                 return context.Response.WriteAsync(new ErrorDetails()
                 {
                     StatusCode = context.Response.StatusCode = 400,
@@ -45,10 +45,11 @@ namespace MrLocal_Backend.Controllers.Exceptions
             }
             else
             {
+                _logger.LogError($"Internal server error: {exception}");
                 return context.Response.WriteAsync(new ErrorDetails()
                 {
                     StatusCode = context.Response.StatusCode,
-                    Message = "Internal Server Error : " + exception.Message
+                    Message = "Internal Server Error"
                 }.ToString());
             }
 

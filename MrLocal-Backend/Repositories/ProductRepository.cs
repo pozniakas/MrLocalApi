@@ -124,8 +124,15 @@ namespace MrLocal_Backend.Repositories
 
         public async Task<Product> FindOne(string id)
         {
-            var listOfProducts = await xmlRepository.Value.ReadXml(fileName);
-            return listOfProducts.First(i => i.Id == id && i.DeletedAt == null);
+            try
+            {
+                var listOfProducts = await xmlRepository.Value.ReadXml(fileName);
+                return listOfProducts.First(i => i.Id == id && i.DeletedAt == null);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public async Task<List<Product>> FindAll(string shopId)

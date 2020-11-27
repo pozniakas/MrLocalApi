@@ -76,7 +76,7 @@ namespace MrLocal_Backend.Repositories.Helpers
             }
             else
             {
-                throw new TypeAccessException();
+                throw new TypeAccessException("Unknown type of node");
             }
         }
     }

@@ -20,28 +20,23 @@ namespace MrLocal_Backend.Services
 
         public async Task<Product> AddProductToShop(string shopId, string name, string description, string priceType, double? price)
         {
-            if (validateData.Value.ValidateProductData(shopId, name, description, price, false, priceType))
-            {
-                var createdProduct = await productRepository.Create(shopId, name, description, priceType, price);
-                return createdProduct;
-            }
-            else
-            {
-                throw new ArgumentException("Invalid products parameters for creation");
-            }
+            await validateData.Value.ValidateProductData(shopId, name, description, price, false, priceType);
+            var createdProduct = await productRepository.Create(shopId, name, description, priceType, price);
+            return createdProduct;
         }
 
         public async Task<Product> UpdateProduct(string id, string shopId, string name, string description, string priceType, double? price)
         {
-            if (validateData.Value.ValidateProductData(shopId, name, description, price, true, priceType, id))
+            var product = await productRepository.FindOne(id);
+
+            if (product == null)
             {
-                var updatedProduct = await productRepository.Update(id, shopId, name, description, priceType, price);
-                return updatedProduct;
+                throw new ArgumentException("Product to update doesn't exist");
             }
-            else
-            {
-                throw new ArgumentException("Invalid products parameters for creation");
-            }
+
+            await validateData.Value.ValidateProductData(shopId, name, description, price, true, priceType);
+            var updatedProduct = await productRepository.Update(id, shopId, name, description, priceType, price);
+            return updatedProduct;
         }
 
         public async Task<string> DeleteProduct(string id)

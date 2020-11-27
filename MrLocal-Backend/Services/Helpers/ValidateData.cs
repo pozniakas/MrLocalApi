@@ -11,30 +11,38 @@ namespace MrLocal_Backend.Services.Helpers
     public class ValidateData
     {
         private readonly ShopRepository shopRepository;
-        private readonly ProductRepository productRepository;
 
         public ValidateData()
         {
             shopRepository = new ShopRepository();
-            productRepository = new ProductRepository();
         }
-        public bool ValidateProductData(string shopId, string name, string description, double? price, bool isUpdate, string priceType, string id = null)
+        public async Task<bool> ValidateProductData(string shopId, string name, string description, double? price, bool isUpdate, string priceType)
         {
             static bool IsStringEmpty(string str) => str == null || str.Length == 0;
 
             var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
             var priceRegex = new Regex(@"\d+(?:\.\d+)?");
-            var shops = shopRepository.FindOne(shopId);
+            var shop = await shopRepository.FindOne(shopId);
             var priceTypes = new List<string> { "UNIT", "GRAMS", "KILOGRAMS" };
 
-            var doesProductExist = (id != null) && (productRepository.FindOne(id) != null) || id == null;
-            var isValidShop = shops != null;
+            var isValidShop = shop != null;
             var isValidName = (isUpdate && IsStringEmpty(name)) || (name.Length > 2 && nameRegex.IsMatch(name));
             var isValidDescription = (isUpdate && IsStringEmpty(description)) || (description.Length > 2);
             var isValidPrice = priceRegex.IsMatch(price.ToString()) || (isUpdate && price == null);
             var isValidPriceType = priceTypes.Contains(priceType) || (isUpdate && IsStringEmpty(priceType));
 
-            return isValidName && isValidDescription && isValidPrice && isValidShop && doesProductExist && isValidPriceType;
+            bool[] validators = { isValidShop, isValidName, isValidDescription, isValidPrice, isValidPriceType };
+            string[] namesOfParams = { "shop", "name", "description", "price", "price type" };
+
+            for (var i = 0; i < validators.Length; i++)
+            {
+                if (!validators[i])
+                {
+                    throw new ArgumentException($"Not valid {namesOfParams[i]}");
+                }
+            }
+
+            return true;
         }
 
         public async Task<bool> ValidateShopData(string name, string status, string description, string typeOfShop, string city, bool isUpdate)
@@ -44,7 +52,6 @@ namespace MrLocal_Backend.Services.Helpers
             string[] arrayOfShopTypes = { "Berries", "Seafood", "Forest food", "Handmade", "Other" };
             string[] arrayOfCities = { "Vilnius", "Kaunas", "Klaipėda", "Šiauliai", "Panevėžys" };
             string[] arrayOfStatusTypes = { "Active", "Not Active", "Paused" };
-
             var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
             var shops = await shopRepository.FindAll();
 
@@ -53,8 +60,19 @@ namespace MrLocal_Backend.Services.Helpers
             var isValidDescription = (isUpdate && IsStringEmpty(description)) || (description.Length > 2);
             var isValidTypeOfShop = (isUpdate && IsStringEmpty(description)) || Array.Exists(arrayOfShopTypes, i => i == typeOfShop);
             var isValidCity = (isUpdate && IsStringEmpty(city)) || Array.Exists(arrayOfCities, i => i == city);
+            
+            bool[] validators = { isValidName, isValidStatus, isValidDescription, isValidTypeOfShop, isValidCity };
+            string[] namesOfParams = { "name", "status", "description", "typeOfShop", "city" };
 
-            return isValidName && isValidStatus && isValidTypeOfShop && isValidCity && isValidDescription;
+            for (var i = 0; i < validators.Length; i++)
+            {
+                if (!validators[i])
+                {
+                    throw new ArgumentException($"Not valid {namesOfParams[i]}");
+                }
+            }
+
+            return true;
         }
 
         public bool ValidateFilters(Shop shop, string city, string typeOfShop)

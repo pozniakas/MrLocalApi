@@ -1,3 +1,87 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Products>
+  <Product>
+    <Id>6875763b-580e-40a9-a58e-d03698e77c6f</Id>
+    <ShopId>68a4edce-169c-458d-ba77-38b87466bc25</ShopId>
+    <Name>Braskes</Name>
+    <Description>Skanios</Description>
+    <Pricetype>KILOGRAMS</Pricetype>
+    <Price>1.05</Price>
+    <CreatedAt>11/27/2020 6:30:13 PM</CreatedAt>
+    <UpdatedAt>11/27/2020 6:30:13 PM</UpdatedAt>
+    <DeletedAt>
+    </DeletedAt>
+  </Product>
+  <Product>
+    <Id>7086d1ba-613b-4369-b1f0-a2ad8540f9be</Id>
+    <ShopId>68ad4edce-169c-458d-ba77-38b87466bc25</ShopId>
+    <Name>Braskes</Name>
+    <Description>Skanios</Description>
+    <Pricetype>KILOGRAMS</Pricetype>
+    <Price>1.05</Price>
+    <CreatedAt>11/27/2020 6:30:21 PM</CreatedAt>
+    <UpdatedAt>11/27/2020 6:30:21 PM</UpdatedAt>
+    <DeletedAt>
+    </DeletedAt>
+  </Product>
+  <Product>
+    <Id>cd9fd90c-74b5-4958-a73f-cf0f16c1a40b</Id>
+    <ShopId>68asdadsasdasdsad4edce-169c-458d-ba77-38b87466bc25</ShopId>
+    <Name>Braskes</Name>
+    <Description>Skanios</Description>
+    <Pricetype>KILOGRAMS</Pricetype>
+    <Price>1.05</Price>
+    <CreatedAt>11/27/2020 6:30:25 PM</CreatedAt>
+    <UpdatedAt>11/27/2020 6:30:25 PM</UpdatedAt>
+    <DeletedAt>
+    </DeletedAt>
+  </Product>
+  <Product>
+    <Id>50bc406f-962c-4468-8384-9614a37bf42c</Id>
+    <ShopId>68asdadsasdasdsad4edce-169c-458d-ba77-38b87466bc25</ShopId>
+    <Name>Braskes</Name>
+    <Description>Skanios</Description>
+    <Pricetype>KILOGRAMS</Pricetype>
+    <Price>1.05</Price>
+    <CreatedAt>11/27/2020 6:30:27 PM</CreatedAt>
+    <UpdatedAt>11/27/2020 6:30:27 PM</UpdatedAt>
+    <DeletedAt>
+    </DeletedAt>
+  </Product>
+  <Product>
+    <Id>28aa629c-2309-49da-8d29-0ae1f5ed5244</Id>
+    <ShopId>68asdadsasdasdsad4edce-169c-458d-ba77-38b87466bc25</ShopId>
+    <Name>Braskes</Name>
+    <Description>Skanios</Description>
+    <Pricetype>KILOGRAMS</Pricetype>
+    <Price>1.05</Price>
+    <CreatedAt>11/27/2020 6:30:28 PM</CreatedAt>
+    <UpdatedAt>11/27/2020 6:30:28 PM</UpdatedAt>
+    <DeletedAt>
+    </DeletedAt>
+  </Product>
+  <Product>
+    <Id>a77208f7-117d-480e-9774-1daea464b704</Id>
+    <ShopId>68asdadsasdasdsad4edce-169c-458d-ba77-38b87466bc25</ShopId>
+    <Name>Braskes</Name>
+    <Description>Skanios</Description>
+    <Pricetype>KILOGRAMS</Pricetype>
+    <Price>1.05</Price>
+    <CreatedAt>11/27/2020 6:30:29 PM</CreatedAt>
+    <UpdatedAt>11/27/2020 6:30:29 PM</UpdatedAt>
+    <DeletedAt>
+    </DeletedAt>
+  </Product>
+  <Product>
+    <Id>58c3f068-c497-4e08-9d31-b5f36d99cf5a</Id>
+    <ShopId>68asdadsasdasdsad4edce-169c-458d-ba77-38b87466bc25</ShopId>
+    <Name>Braskes</Name>
+    <Description>Skanios</Description>
+    <Pricetype>KILOGRAMS</Pricetype>
+    <Price>1.05</Price>
+    <CreatedAt>11/27/2020 6:30:29 PM</CreatedAt>
+    <UpdatedAt>11/27/2020 6:30:29 PM</UpdatedAt>
+    <DeletedAt>
+    </DeletedAt>
+  </Product>
 </Products>
