@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrLocal_Backend.Controllers.Interfaces;
+using MrLocal_Backend.LoggerService;
 using MrLocal_Backend.Services;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using static MrLocal_Backend.Models.Body;
 
@@ -12,13 +12,24 @@ namespace MrLocal_Backend.Controllers
     public class Search : ControllerBase, ISearch
     {
         private readonly SearchService searchService;
+        private readonly ILoggerManager _logger;
 
-        public Search()
+        public Search(ILoggerManager logger)
         {
+            _logger = logger;
             searchService = new SearchService();
         }
 
         [HttpGet]
-        public async Task<List<Models.Shop>> Get([FromBody] SearchBody body) => await searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);
+        public async Task<IActionResult> Get([FromBody] SearchBody body)
+        {
+            _logger.LogInfo("Searching for shop");
+
+            var search = await searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);
+
+            _logger.LogInfo("Returning shops");
+
+            return Ok(search);
+        }
     }
 }

@@ -70,8 +70,8 @@ namespace MrLocal_Backend.Repositories
 
                 var node = doc.Descendants("Shop").FirstOrDefault(shop => shop.Element("Id").Value == id && shop.Element("DeletedAt").Value == "");
 
-                string[] titles = { "Id", "Name", "Status", "Description", "TypeOfShop", "City", "UpdatedAt" };
-                string[] values = { id, name, status, description, typeOfShop, city, dateNow };
+                string[] titles = { "Name", "Status", "Description", "TypeOfShop", "City", "UpdatedAt" };
+                string[] values = { name, status, description, typeOfShop, city, dateNow };
 
                 for (var i = 0; i < titles.Length; i++)
                 {
@@ -87,7 +87,7 @@ namespace MrLocal_Backend.Repositories
 
                 doc.Save(fileName);
 
-                return new Shop(values[0], values[1], values[2], values[3], values[4], values[5], DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[6]));
+                return new Shop(id, values[0], values[1], values[2], values[3], values[4], DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[5]));
             });
         }
 

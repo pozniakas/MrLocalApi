@@ -7,6 +7,6 @@ namespace MrLocal_Backend.Controllers.Interfaces
 {
     interface ISearch
     {
-        public Task<List<Models.Shop>> Get([FromBody] SearchBody body);
+        public Task<IActionResult> Get([FromBody] SearchBody body);
     }
 }

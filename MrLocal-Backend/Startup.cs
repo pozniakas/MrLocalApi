@@ -3,6 +3,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MrLocal_Backend.Exceptions;
+using MrLocal_Backend.LoggerService;
+using NLog;
+using System.IO;
 
 namespace MrLocal_Backend
 {
@@ -10,6 +14,7 @@ namespace MrLocal_Backend
     {
         public Startup(IConfiguration configuration)
         {
+            LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/Configs/nlog.config"));
             Configuration = configuration;
         }
 
@@ -18,6 +23,7 @@ namespace MrLocal_Backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<ILoggerManager, LoggerManager>();
             services.AddControllers();
         }
 
@@ -28,6 +34,8 @@ namespace MrLocal_Backend
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.ConfigureCustomExceptionMiddleware();
 
             app.UseHttpsRedirection();
 
