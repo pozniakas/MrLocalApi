@@ -90,51 +90,24 @@ namespace MrLocal_Backend.Repositories
 
                 var node = doc.Descendants("Shop").FirstOrDefault(shop => shop.Element("Id").Value == id && shop.Element("DeletedAt").Value == "");
 
-                if (!IsStringEmpty(name))
+                string[] titles = { "Id", "Name", "Status", "Description", "TypeOfShop", "City","UpdatedAt" };
+                string[] values = { id, name, status, description, typeOfShop, city, dateNow };
+
+                for (var i = 0; i < titles.Length; i++)
                 {
-                    node.SetElementValue("Name", name);
+                    if (!IsStringEmpty(values[i]))
+                    {
+                        node.SetElementValue(titles[i], values[i]);
+                    }
+                    else
+                    {
+                        values[i] = node.Element(titles[i]).Value.ToString();
+                    }
                 }
-                else
-                {
-                    name = node.Element("Name").Value.ToString();
-                }
-                if (!IsStringEmpty(status))
-                {
-                    node.SetElementValue("Status", status);
-                }
-                else
-                {
-                    status = node.Element("Status").Value.ToString();
-                }
-                if (!IsStringEmpty(description))
-                {
-                    node.SetElementValue("Description", description);
-                }
-                else
-                {
-                    description = node.Element("Description").Value.ToString();
-                }
-                if (!IsStringEmpty(typeOfShop))
-                {
-                    node.SetElementValue("TypeOfShop", typeOfShop);
-                }
-                else
-                {
-                    typeOfShop = node.Element("TypeOfShop").Value.ToString();
-                }
-                if (!IsStringEmpty(city))
-                {
-                    node.SetElementValue("City", city);
-                }
-                else
-                {
-                    city = node.Element("City").Value.ToString();
-                }
-                node.SetElementValue("UpdatedAt", dateNow);
 
                 doc.Save(fileName);
 
-                return new ShopRepository(id, name, status, description, typeOfShop, city, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(dateNow));
+                return new ShopRepository(values[0], values[1], values[2], values[3], values[4], values[5], DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[6]));
             });
         }
 

@@ -104,30 +104,21 @@ namespace MrLocal_Backend.Repositories
 
                 var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id && product.Element("ShopId").Value == shopId && product.Element("DeletedAt").Value == "");
 
-                if (!IsStringEmpty(name))
+                string[] titles = { "Id", "ShopId", "Name", "Description", "Pricetype", "UpdatedAt" };
+                string[] values = { id, shopId, name, description, pricetype, dateNow };
+
+                for (var i = 0; i < titles.Length; i++)
                 {
-                    node.SetElementValue("Name", name);
+                    if (!IsStringEmpty(values[i]))
+                    {
+                        node.SetElementValue(titles[i], values[i]);
+                    }
+                    else
+                    {
+                        values[i] = node.Element(titles[i]).Value.ToString();
+                    }
                 }
-                else
-                {
-                    name = node.Element("Name").Value.ToString();
-                }
-                if (!IsStringEmpty(description))
-                {
-                    node.SetElementValue("Description", description);
-                }
-                else
-                {
-                    description = node.Element("Description").Value.ToString();
-                }
-                if (!IsStringEmpty(pricetype))
-                {
-                    node.SetElementValue("Pricetype", pricetype);
-                }
-                else
-                {
-                    pricetype = node.Element("Pricetype").Value.ToString();
-                }
+
                 if (price != null)
                 {
                     node.SetElementValue("Price", price.ToString());
@@ -136,11 +127,10 @@ namespace MrLocal_Backend.Repositories
                 {
                     price = double.Parse(node.Element("Price").Value);
                 }
-                node.SetElementValue("UpdatedAt", dateNow);
 
                 doc.Save(fileName);
 
-                return new ProductRepository(id, shopId, name, description, StringToPricetype(pricetype), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(dateNow));
+                return new ProductRepository(values[0], values[1], values[2], values[3], StringToPricetype(values[4]), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[5]));
             });
         }
 
