@@ -1,70 +1,56 @@
-﻿using System;
+﻿using MrLocal_Backend.Models;
+using MrLocal_Backend.Repositories.Helpers;
+using MrLocal_Backend.Repositories.Interfaces;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Xml;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
 {
-    public class ProductRepository
+    public class ProductRepository : IProductRepository
     {
-        public string Id { get; private set; }
-        public string ShopId { get; private set; }
-        public string Name { get; private set; }
-        public string Description { get; private set; }
-        public double Price { get; private set; }
-        public PriceTypes PriceType { get; private set; }
-        public DateTime CreatedAt { get; private set; }
-        public DateTime UpdatedAt { get; private set; }
-        public DateTime? DeletedAt { get; private set; }
+        readonly string fileName;
+        private readonly Lazy<XmlRepository<Product>> xmlRepository = null;
+        private readonly Lazy<EnumConverter> enumConverter = null;
 
-        public enum PriceTypes
-        {
-            UNIT,
-            GRAMS,
-            KILOGRAMS
-        }
         public ProductRepository()
         {
+            fileName = ConfigurationManager.AppSettings.Get("PRODUCT_REPOSITORY_FILE_NAME");
+            xmlRepository = new Lazy<XmlRepository<Product>>();
+            enumConverter = new Lazy<EnumConverter>();
+
             if (!Directory.Exists("Data"))
             {
                 Directory.CreateDirectory("Data");
             }
 
-            if (!File.Exists("Data/Product.xml"))
+            if (!File.Exists(fileName))
             {
-                var xElement = new XElement("root");
+                var xElement = new XElement("Products");
                 var xDocument = new XDocument(xElement);
-                xDocument.Save("Data/Product.xml");
+                xDocument.Save(fileName);
             }
+
         }
 
-        public ProductRepository(string id, string shopId, string name
-            , string description, PriceTypes priceType, double price)
-        {
-            Id = id;
-            ShopId = shopId;
-            Name = name;
-            Description = description;
-            PriceType = priceType;
-            Price = price;
-        }
-
-        public void Create(string shopId, string name
-            , string description, PriceTypes pricetype, double price)
+        public async Task<Product> Create(string shopId, string name
+            , string description, string pricetype, double? price)
         {
             var id = Guid.NewGuid().ToString();
-            var doc = LoadProductXml();
+            var doc = await xmlRepository.Value.LoadXml(fileName);
 
-            var updatedAtStr = DateTime.Now.ToShortDateString();
-            var createdAtStr = DateTime.Now.ToShortDateString();
+            var updatedAtStr = DateTime.UtcNow.ToString();
+            var createdAtStr = DateTime.UtcNow.ToString();
             var deletedAtStr = "";
 
             var product = doc.CreateElement("Product");
 
             string[] titles = { "Id", "ShopId", "Name", "Description", "Pricetype", "Price", "CreatedAt", "UpdatedAt", "DeletedAt" };
-            string[] values = { id, shopId, name, description, PricetypeToString(pricetype), price.ToString("#.##"), createdAtStr, updatedAtStr, deletedAtStr };
+            string[] values = { id, shopId, name, description, pricetype, price?.ToString("#.##"), createdAtStr, updatedAtStr, deletedAtStr };
 
             for (var i = 0; i < titles.Length; i++)
             {
@@ -75,126 +61,84 @@ namespace MrLocal_Backend.Repositories
 
             doc.DocumentElement.AppendChild(product);
 
-            doc.Save("Data/Product.xml");
+            doc.Save(fileName);
+
+            return new Product(id, shopId, name, description, enumConverter.Value.StringToPricetype(pricetype), (double)price, DateTime.Parse(createdAtStr), DateTime.Parse(updatedAtStr));
         }
 
-        public void Update(string id, string shopId, string name
-            , string description, PriceTypes? pricetype, double? price)
+        public async Task<Product> Update(string id, string shopId, string name
+            , string description, string pricetype, double? price)
         {
-            var doc = XDocument.Load("Data/Product.xml");
+            return await Task.Run(() =>
+            {
+                static bool IsStringEmpty(string str) => str == null || str.Length == 0;
 
-            var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id && product.Element("ShopId").Value == shopId
-            && product.Element("DeletedAt").Value == "");
+                var dateNow = DateTime.UtcNow.ToString();
+                var doc = XDocument.Load(fileName);
 
-            if (name != "")
-            {
-                node.SetElementValue("Name", name);
-            }
-            if (description != "")
-            {
-                node.SetElementValue("Description", description);
-            }
-            if (pricetype != null)
-            {
-                node.SetElementValue("Pricetype", PricetypeToString(pricetype));
-            }
-            if (price != null)
-            {
-                node.SetElementValue("Price", price.ToString());
-            }
+                var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id && product.Element("ShopId").Value == shopId && product.Element("DeletedAt").Value == "");
 
-            doc.Save("Data/Product.xml");
+                string[] titles = { "ShopId", "Name", "Description", "Pricetype", "UpdatedAt" };
+                string[] values = { shopId, name, description, pricetype, dateNow };
+
+                for (var i = 0; i < titles.Length; i++)
+                {
+                    if (!IsStringEmpty(values[i]))
+                    {
+                        node.SetElementValue(titles[i], values[i]);
+                    }
+                    else
+                    {
+                        values[i] = node.Element(titles[i]).Value.ToString();
+                    }
+                }
+
+                if (price != null)
+                {
+                    node.SetElementValue("Price", price.ToString());
+                }
+                else
+                {
+                    price = double.Parse(node.Element("Price").Value.ToString());
+                }
+
+                doc.Save(fileName);
+
+                return new Product(id, values[0], values[1], values[2], enumConverter.Value.StringToPricetype(values[3]), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[4]));
+            });
         }
 
-        public void Delete(string id)
+        public async Task<string> Delete(string id)
         {
-            var doc = XDocument.Load("Data/Product.xml");
+            return await Task.Run(() =>
+            {
+                var doc = XDocument.Load(fileName);
 
-            var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id);
-            node.SetElementValue("DeletedAt", DateTime.Now.ToShortDateString());
+                var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id);
+                node.SetElementValue("DeletedAt", DateTime.UtcNow.ToString());
 
-            doc.Save("Data/Product.xml");
+                doc.Save(fileName);
+                return id;
+            });
         }
 
-        public ProductRepository FindOne(string id)
+        public async Task<Product> FindOne(string id)
         {
-            var listOfProducts = ReadXml();
-            return listOfProducts.First(i => i.Id == id && i.DeletedAt == null);
+            try
+            {
+                var listOfProducts = await xmlRepository.Value.ReadXml(fileName);
+                return listOfProducts.First(i => i.Id == id && i.DeletedAt == null);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
-        public List<ProductRepository> FindAll(string shopId)
+        public async Task<List<Product>> FindAll(string shopId)
         {
-            var listOfProducts = ReadXml();
+            var listOfProducts = await xmlRepository.Value.ReadXml(fileName);
             return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();
         }
-
-        private string PricetypeToString(PriceTypes? type)
-        {
-            return type switch
-            {
-                PriceTypes.GRAMS => "GRAMS",
-                PriceTypes.KILOGRAMS => "KILOGRAMS",
-                PriceTypes.UNIT => "UNIT",
-                _ => throw new NotImplementedException()
-            };
-        }
-
-        private PriceTypes StringToPricetype(string pricetype)
-        {
-            return pricetype switch
-            {
-                "GRAMS" => PriceTypes.GRAMS,
-                "KILOGRAMS" => PriceTypes.KILOGRAMS,
-                "UNIT" => PriceTypes.UNIT,
-                _ => throw new NotImplementedException()
-            };
-        }
-
-        private XmlDocument LoadProductXml()
-        {
-            var doc = new XmlDocument();
-            doc.Load("Data/Product.xml");
-
-            return doc;
-        }
-
-        private List<ProductRepository> ReadXml()
-        {
-            var doc = LoadProductXml();
-
-            var allProducts = new List<ProductRepository>();
-
-            foreach (XmlNode nodes in doc.DocumentElement)
-            {
-                allProducts.Add(NodeToProduct(nodes));
-            }
-
-            return allProducts;
-        }
-
-        private ProductRepository NodeToProduct(XmlNode node)
-        {
-            var shopId = node["ShopId"].InnerText;
-            var id = node["Id"].InnerText;
-            var name = node["Name"].InnerText;
-            var description = node["Description"].InnerText;
-            var price = double.Parse(node["Price"].InnerText);
-            var priceType = node["Pricetype"].InnerText;
-            var createdAt = node["CreatedAt"].InnerText;
-            var updatedAt = node["UpdatedAt"].InnerText;
-            var deletedAt = node["DeletedAt"].InnerText;
-            var deletedAtValue = deletedAt != "" ? DateTime.Parse(deletedAt) : (DateTime?)null;
-
-            var product = new ProductRepository(id, shopId, name, description, StringToPricetype(priceType), price)
-            {
-                UpdatedAt = DateTime.Parse(updatedAt),
-                CreatedAt = DateTime.Parse(createdAt),
-                DeletedAt = deletedAtValue
-            };
-
-            return product;
-        }
-
-
     }
 }

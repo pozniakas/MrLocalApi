@@ -1,71 +1,57 @@
-﻿using MrLocal_Backend.Repositories;
+﻿using MrLocal_Backend.Models;
+using MrLocal_Backend.Repositories;
+using MrLocal_Backend.Services.Helpers;
+using MrLocal_Backend.Services.Interfaces;
 using System;
-using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace MrLocal_Backend.Services
 {
-    class ProductService
+    class ProductService : IProductService
     {
-        private readonly ShopRepository shopRepository;
         private readonly ProductRepository productRepository;
+        private readonly Lazy<ValidateData> validateData = null;
 
         public ProductService()
         {
-            shopRepository = new ShopRepository();
             productRepository = new ProductRepository();
+            validateData = new Lazy<ValidateData>();
         }
 
-        public void AddProductToShop(string shopId, string name, string description, ProductRepository.PriceTypes priceType, double price)
+        public async Task<Product> AddProductToShop(string shopId, string name, string description, string priceType, double? price)
         {
-            if (ValidateProductData(shopId, name, description, price, false))
-            {
-                productRepository.Create(shopId, name, description, priceType, price);
-            }
-            else
-            {
-                throw new ArgumentException("Invalid products parameters for creation");
-            }
+            await validateData.Value.ValidateProductData(shopId, name, description, price, false, priceType);
+            var createdProduct = await productRepository.Create(shopId, name, description, priceType, price);
+            return createdProduct;
         }
 
-        public void UpdateProduct(string id, string shopId, string name, string description, ProductRepository.PriceTypes priceType, double price)
+        public async Task<Product> UpdateProduct(string id, string shopId, string name, string description, string priceType, double? price)
         {
-            if (ValidateProductData(shopId, name, description, price, true, id))
+            var product = await productRepository.FindOne(id);
+
+            if (product == null)
             {
-                productRepository.Update(id, shopId, name, description, priceType, price);
+                throw new ArgumentException("Product to update doesn't exist");
             }
-            else
-            {
-                throw new ArgumentException("Invalid products parameters for creation");
-            }
+
+            await validateData.Value.ValidateProductData(shopId, name, description, price, true, priceType);
+            var updatedProduct = await productRepository.Update(id, shopId, name, description, priceType, price);
+            return updatedProduct;
         }
 
-        public void DeleteProduct(string id)
+        public async Task<string> DeleteProduct(string id)
         {
-            var products = productRepository.FindOne(id);
+            var products = await productRepository.FindOne(id);
 
             if (products != null)
             {
-                productRepository.Delete(id);
+                var deletedProduct = await productRepository.Delete(id);
+                return deletedProduct;
             }
             else
             {
                 throw new ArgumentException("Invalid products parameters for creation");
             }
-        }
-
-        private bool ValidateProductData(string shopId, string name, string description, double price, bool isUpdate, string id = null)
-        {
-            var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
-            var priceRegex = new Regex(@"-?\d+(?:\.\d+)?");
-            var shops = shopRepository.FindOne(shopId);
-
-            var doesProductExist = (id != null) && (productRepository.FindOne(id) != null) || id == null;
-            var isValidShop = shops != null;
-            var isValidName = (isUpdate && name == "") || (name.Length > 2 && nameRegex.IsMatch(name));
-            var isValidDescription = (isUpdate && description == "") || (description.Length > 2);
-            var isValidPrice = priceRegex.IsMatch(price.ToString());
-
-            return isValidName && isValidDescription && isValidPrice && isValidShop && doesProductExist;
         }
     }
 }

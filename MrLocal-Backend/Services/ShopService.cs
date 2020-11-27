@@ -1,47 +1,53 @@
-﻿using MrLocal_Backend.Repositories;
+
+using MrLocal_Backend.Models;
+using MrLocal_Backend.Repositories;
+using MrLocal_Backend.Services.Helpers;
+using MrLocal_Backend.Services.Interfaces;
 using System;
-using System.Linq;
-using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace MrLocal_Backend.Services
 {
-    public class ShopService
+    public class ShopService : IShopService
     {
         private readonly ShopRepository shopRepository;
+        private readonly Lazy<ValidateData> validateData = null;
+
         public ShopService()
         {
+            validateData = new Lazy<ValidateData>();
             shopRepository = new ShopRepository();
         }
 
-        public void CreateShop(string name, string description, string typeOfShop, string city)
+        public async Task<Shop> CreateShop(string name, string description, string typeOfShop, string city)
         {
-            if (ValidateShopData(name, null, description, typeOfShop, city, false))
-            {
-                shopRepository.Create(name, description, typeOfShop, city);
-            }
-            else
-            {
-                throw new ArgumentException("Invalid shop parameters for creation");
-            }
+            await validateData.Value.ValidateShopData(name, null, description, typeOfShop, city, false);
+            var createdShop = await shopRepository.Create(name, description, typeOfShop, city);
+            return createdShop;
         }
 
-        public void UpdateShop(string id, string name, string status, string description, string typeOfShop, string city)
+        public async Task<Shop> UpdateShop(string id, string name, string status, string description, string typeOfShop, string city)
         {
-            if (!ValidateShopData(name, status, description, typeOfShop, city, true))
+            var shop = await shopRepository.FindOne(id);
+
+            if (shop == null)
             {
-                throw new ArgumentException("Invalid shop parameters for update");
+                throw new ArgumentException("Shop to update doesn't exist");
             }
 
-            shopRepository.Update(id, name, status, description, typeOfShop, city);
+            await validateData.Value.ValidateShopData(name, status, description, typeOfShop, city, true);
+            var updatedShop = await shopRepository.Update(id, name, status, description, typeOfShop, city);
+            return updatedShop;
         }
 
-        public void DeleteShop(string id)
+        public async Task<string> DeleteShop(string id)
         {
-            var shop = shopRepository.FindOne(id);
+            var shop = await shopRepository.FindOne(id);
 
             if (shop != null)
             {
-                shopRepository.Delete(id);
+                var deletedShop = await shopRepository.Delete(id);
+                return deletedShop;
             }
             else
             {
@@ -49,9 +55,9 @@ namespace MrLocal_Backend.Services
             }
         }
 
-        public ShopRepository GetShop(string id)
+        public async Task<Shop> GetShop(string id)
         {
-            var shop = shopRepository.FindOne(id);
+            var shop = await shopRepository.FindOne(id);
 
             if (shop == null)
             {
@@ -59,24 +65,6 @@ namespace MrLocal_Backend.Services
             }
 
             return shop;
-        }
-
-        private bool ValidateShopData(string name, string status, string description, string typeOfShop, string city, bool isUpdate)
-        {
-            string[] arrayOfShopTypes = { "Berries", "Seafood", "Forest food", "Handmade", "Other" };
-            string[] arrayOfCities = { "Vilnius", "Kaunas", "Klaipėda", "Šiauliai", "Panevėžys" };
-            string[] arrayOfStatusTypes = { "Active", "Not Active", "Paused" };
-
-            var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
-            var shops = shopRepository.FindAll();
-
-            var isValidName = (isUpdate && name == "") || (name.Length > 2 && nameRegex.IsMatch(name) && shops.Where(i => i.Name == name).Count() == 0);
-            var isValidStatus = (isUpdate && status == "") || Array.Exists(arrayOfStatusTypes, i => i == status) || (!isUpdate && status == null);
-            var isValidDescription = (isUpdate && description == "") || (description.Length > 2);
-            var isValidTypeOfShop = (isUpdate && typeOfShop == "") || Array.Exists(arrayOfShopTypes, i => i == typeOfShop);
-            var isValidCity = (isUpdate && city == "") || Array.Exists(arrayOfCities, i => i == city);
-
-            return isValidName && isValidStatus && isValidTypeOfShop && isValidCity && isValidDescription;
         }
     }
 }

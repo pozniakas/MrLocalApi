@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Shops>
+  <Shop>
+    <Id>68a4edce-169c-458d-ba77-38b87466bc25</Id>
+    <Name>Testsss</Name>
+    <Status>Not Active</Status>
+    <Description>asdsd</Description>
+    <TypeOfShop>Berries</TypeOfShop>
+    <City>Vilnius</City>
+    <CreatedAt>11/27/2020 6:29:23 PM</CreatedAt>
+    <UpdatedAt>11/27/2020 6:29:23 PM</UpdatedAt>
+    <DeletedAt>
+    </DeletedAt>
+  </Shop>
+</Shops>

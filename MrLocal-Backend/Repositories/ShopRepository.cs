@@ -1,60 +1,47 @@
-﻿using System;
+﻿using MrLocal_Backend.Models;
+using MrLocal_Backend.Repositories.Helpers;
+using MrLocal_Backend.Repositories.Interfaces;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Xml;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace MrLocal_Backend.Repositories
 {
-    public class ShopRepository
+    public class ShopRepository : IShopRepository
     {
-        public string Id { get; private set; }
-        public string Name { get; private set; }
-        public string Status { get; private set; }
-        public string Description { get; private set; }
-        public string TypeOfShop { get; private set; }
-        public string City { get; private set; }
-        public DateTime CreatedAt { get; private set; }
-        public DateTime UpdatedAt { get; private set; }
-        public DateTime? DeletedAt { get; private set; }
+        readonly string fileName;
+        private readonly Lazy<XmlRepository<Shop>> xmlRepository = null;
 
         public ShopRepository()
         {
+            fileName = ConfigurationManager.AppSettings.Get("SHOP_REPOSITORY_FILE_NAME");
+            xmlRepository = new Lazy<XmlRepository<Shop>>();
+
             if (!Directory.Exists("Data"))
             {
                 Directory.CreateDirectory("Data");
             }
 
-            if (!File.Exists("Data/shops.xml"))
+            if (!File.Exists(fileName))
             {
                 var XmlElement = new XElement("Shops");
                 var XmlDocument = new XDocument(XmlElement);
-                XmlDocument.Save("Data/shops.xml");
+                XmlDocument.Save(fileName);
             }
         }
 
-        public ShopRepository(string id, string name, string status, string description, string typeOfShop, string city, DateTime createdAt, DateTime updatedAt)
+        public async Task<Shop> Create(string name, string description, string typeOfShop, string city)
         {
-            Id = id;
-            Name = name;
-            Status = status;
-            Description = description;
-            TypeOfShop = typeOfShop;
-            City = city;
-            CreatedAt = createdAt;
-            UpdatedAt = updatedAt;
-            DeletedAt = null;
-        }
-
-        public void Create(string name, string description, string typeOfShop, string city)
-        {
-            var doc = LoadShopXml();
+            var doc = await xmlRepository.Value.LoadXml(fileName);
 
             var shop = doc.CreateElement("Shop");
 
             var id = Guid.NewGuid().ToString();
-            var dateNow = DateTime.Now.ToShortDateString();
+            var dateNow = DateTime.UtcNow.ToString();
 
             string[] titles = { "Id", "Name", "Status", "Description", "TypeOfShop", "City", "CreatedAt", "UpdatedAt", "DeletedAt" };
             string[] values = { id, name, "Not Active", description, typeOfShop, city, dateNow, dateNow, "" };
@@ -67,100 +54,77 @@ namespace MrLocal_Backend.Repositories
             }
 
             doc.DocumentElement.AppendChild(shop);
-            doc.Save("Data/shops.xml");
+            doc.Save(fileName);
+
+            return new Shop(id, name, "Not Active", description, typeOfShop, city, DateTime.Parse(dateNow), DateTime.Parse(dateNow));
         }
 
-        public void Update(string id, string name, string status, string description, string typeOfShop, string city)
+        public async Task<Shop> Update(string id, string name, string status, string description, string typeOfShop, string city)
         {
-            var dateNow = DateTime.Now.ToShortDateString();
-            var doc = XDocument.Load("Data/shops.xml");
+            return await Task.Run(() =>
+            {
+                static bool IsStringEmpty(string str) => str == null || str.Length == 0;
 
-            var node = doc.Descendants("Shop").FirstOrDefault(shop => shop.Element("Id").Value == id && shop.Element("DeletedAt").Value == "");
+                var dateNow = DateTime.UtcNow.ToString();
+                var doc = XDocument.Load(fileName);
 
-            node.SetElementValue("Name", name);
-            node.SetElementValue("Status", status);
-            node.SetElementValue("Description", description);
-            node.SetElementValue("TypeOfShop", typeOfShop);
-            node.SetElementValue("City", city);
-            node.SetElementValue("UpdatedAt", dateNow);
+                var node = doc.Descendants("Shop").FirstOrDefault(shop => shop.Element("Id").Value == id && shop.Element("DeletedAt").Value == "");
 
-            doc.Save("Data/shops.xml");
+                string[] titles = { "Name", "Status", "Description", "TypeOfShop", "City", "UpdatedAt" };
+                string[] values = { name, status, description, typeOfShop, city, dateNow };
+
+                for (var i = 0; i < titles.Length; i++)
+                {
+                    if (!IsStringEmpty(values[i]))
+                    {
+                        node.SetElementValue(titles[i], values[i]);
+                    }
+                    else
+                    {
+                        values[i] = node.Element(titles[i]).Value.ToString();
+                    }
+                }
+
+                doc.Save(fileName);
+
+                return new Shop(id, values[0], values[1], values[2], values[3], values[4], DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[5]));
+            });
         }
 
-        public void Delete(string id)
+        public async Task<string> Delete(string id)
         {
-            var dateNow = DateTime.Now.ToShortDateString();
-            var doc = XDocument.Load("Data/shops.xml");
+            return await Task.Run(() =>
+            {
+                var dateNow = DateTime.UtcNow.ToString();
+                var doc = XDocument.Load(fileName);
 
-            var node = doc.Descendants("Shops").Descendants("Shop").FirstOrDefault(cd => cd.Element("Id").Value == id);
+                var node = doc.Descendants("Shop").FirstOrDefault(cd => cd.Element("Id").Value == id);
 
-            node.SetElementValue("DeletedAt", dateNow);
-            node.SetElementValue("Status", "Not Active");
+                node.SetElementValue("DeletedAt", dateNow);
+                node.SetElementValue("Status", "Not Active");
 
-            doc.Save("Data/shops.xml");
+                doc.Save(fileName);
+                return id;
+            });
         }
 
-        public ShopRepository FindOne(string id)
+        public async Task<Shop> FindOne(string id)
         {
-            var listOfShop = ReadXml();
-            return listOfShop.First(i => i.Id == id && i.DeletedAt == null);
+            try
+            {
+                var listOfShop = await xmlRepository.Value.ReadXml(fileName);
+                return listOfShop.First(i => i.Id == id && i.DeletedAt == null);
+            }
+            catch
+            {
+                return null;
+            }
         }
 
-        public List<ShopRepository> FindAll()
+        public async Task<List<Shop>> FindAll()
         {
-            var listOfShop = ReadXml();
+            var listOfShop = await xmlRepository.Value.ReadXml(fileName);
             return listOfShop.Where(i => i.DeletedAt == null).ToList();
-        }
-
-
-        private XmlDocument LoadShopXml()
-        {
-            var doc = new XmlDocument();
-            doc.Load("Data/shops.xml");
-
-            return doc;
-        }
-
-        private List<ShopRepository> ReadXml()
-        {
-            var doc = LoadShopXml();
-            var allShops = new List<ShopRepository>();
-
-            foreach (XmlNode nodes in doc.DocumentElement)
-            {
-                allShops.Add(NodeToShop(nodes));
-            }
-
-            return allShops;
-        }
-
-        private ShopRepository NodeToShop(XmlNode node)
-        {
-            var _id = node["Id"].InnerText;
-            var _name = node["Name"].InnerText;
-            var _status = node["Status"].InnerText;
-            var _description = node["Description"].InnerText;
-            var _typeofShop = node["TypeOfShop"].InnerText;
-            var _city = node["City"].InnerText;
-            var _createdAt = node["CreatedAt"].InnerText;
-            var _updatedAt = node["UpdatedAt"].InnerText;
-            var _deletedAt = node["DeletedAt"].InnerText;
-
-            var formattedCreatedAt = DateTime.Parse(_createdAt);
-            var formattedUpdatedAt = DateTime.Parse(_updatedAt);
-            DateTime? formattedDeletedAt = null;
-
-            if (_deletedAt.Length > 0)
-            {
-                formattedDeletedAt = DateTime.Parse(_deletedAt);
-            }
-
-            var shop = new ShopRepository(_id, _name, _status, _description, _typeofShop, _city, formattedCreatedAt, formattedUpdatedAt)
-            {
-                DeletedAt = formattedDeletedAt
-            };
-
-            return shop;
         }
     }
 }
