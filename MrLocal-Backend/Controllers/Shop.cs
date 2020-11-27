@@ -18,30 +18,25 @@ namespace MrLocal_Backend.Controllers
 
         public Shop(ILoggerManager logger)
         {
-            shopService = new ShopService();
             _logger = logger;
+            shopService = new ShopService(_logger);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            _logger.LogInfo("Fetching all the Shops from the storage");
-
+            _logger.LogInfo($"Getting shop with id: {id}");
             var getShop = await shopService.GetShop(id);
-            
-            _logger.LogInfo("Returning shop");
-
+            _logger.LogInfo($"Returning shop with id: {id}");
             return Ok(getShop);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ShopBody body)
         {
-            _logger.LogInfo("Fetching all the Shops from the storage");
-
+            _logger.LogInfo("Creating shop");
             var createdShop = await shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.City);
-
-            _logger.LogInfo("Returning shops");
+            _logger.LogInfo("Shop created");
 
             return Ok(createdShop);     
         }
@@ -49,11 +44,11 @@ namespace MrLocal_Backend.Controllers
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] ShopBody body)
         {
-            _logger.LogInfo("Fetching all the Shops from the storage");
+            _logger.LogInfo("Updating shop");
 
             var updatedShop = await shopService.UpdateShop(body.Id, body.Name, body.Status, body.Description, body.TypeOfShop, body.City);
 
-            _logger.LogInfo("Returning shops");
+            _logger.LogInfo("Shop updated");
 
             return Ok(updatedShop);     
         }
@@ -61,11 +56,11 @@ namespace MrLocal_Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            _logger.LogInfo("Fetching all the Shops from the storage");
+            _logger.LogInfo("Deleting shop");
 
             await shopService.DeleteShop(id);
 
-            _logger.LogInfo("Deleting shop");
+            _logger.LogInfo("Shop deleted");
 
             return Ok();   
         }

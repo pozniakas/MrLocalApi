@@ -16,18 +16,18 @@ namespace MrLocal_Backend.Controllers
 
         public Product(ILoggerManager logger)
         {
-            productService = new ProductService();
             _logger = logger;
+            productService = new ProductService(_logger);        
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ProductBody body)
         {
-            _logger.LogInfo("Fetching all the Products from the storage");
+            _logger.LogInfo("Creating product");
 
             var createdProduct = await productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
 
-            _logger.LogInfo("Returning products");
+            _logger.LogInfo("Product created");
 
             return Ok(createdProduct);
 
@@ -36,11 +36,11 @@ namespace MrLocal_Backend.Controllers
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] ProductBody body)
         {
-            _logger.LogInfo("Fetching all the Products from the storage");
+            _logger.LogInfo("Updating product");
 
             var updatedProduct = await productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
 
-            _logger.LogInfo("Returning products");
+            _logger.LogInfo("Product updated");
 
             return Ok(updatedProduct);
         }
@@ -48,11 +48,11 @@ namespace MrLocal_Backend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            _logger.LogInfo("Fetching all the Products from the storage");
+            _logger.LogInfo("Deleting shop");
 
             await productService.DeleteProduct(id);
 
-            _logger.LogInfo("Deleting product");
+            _logger.LogInfo("Product deleted");
 
             return Ok();
         }

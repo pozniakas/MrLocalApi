@@ -18,14 +18,14 @@ namespace MrLocal_Backend.Controllers
 
         public Search(ILoggerManager logger)
         {
-            searchService = new SearchService();
             _logger = logger;
+            searchService = new SearchService(_logger);    
         }
 
         [HttpGet]
         public async Task<IActionResult> Get([FromBody] SearchBody body)
         {
-            _logger.LogInfo("Fetching all shops from the storage");
+            _logger.LogInfo("Searching for shop");
 
             var search = await searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);
 
