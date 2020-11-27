@@ -64,10 +64,8 @@ namespace MrLocal_Backend.Repositories.Helpers
                 var priceType = node["Pricetype"].InnerText;
                 var shopId = node["ShopId"].InnerText;
 
-                var product = new ProductRepository(_id, shopId, _name, _description, StringToPricetype(priceType), price)
+                var product = new ProductRepository(_id, shopId, _name, _description, StringToPricetype(priceType), price, formattedCreatedAt, formattedUpdatedAt)
                 {
-                    UpdatedAt = formattedUpdatedAt,
-                    CreatedAt = formattedCreatedAt,
                     DeletedAt = formattedDeletedAt
                 };
 

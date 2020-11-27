@@ -50,7 +50,7 @@ namespace MrLocal_Backend.Repositories
         }
 
         public ProductRepository(string id, string shopId, string name
-            , string description, PriceTypes priceType, double price)
+            , string description, PriceTypes priceType, double price, DateTime createdAt, DateTime updatedAt)
         {
             Id = id;
             ShopId = shopId;
@@ -58,6 +58,9 @@ namespace MrLocal_Backend.Repositories
             Description = description;
             PriceType = priceType;
             Price = price;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            DeletedAt = null;
         }
 
         public async Task<ProductRepository> Create(string shopId, string name
@@ -66,8 +69,8 @@ namespace MrLocal_Backend.Repositories
             var id = Guid.NewGuid().ToString();
             var doc = await LoadXml(fileName);
 
-            var updatedAtStr = DateTime.Now.ToShortDateString();
-            var createdAtStr = DateTime.Now.ToShortDateString();
+            var updatedAtStr = DateTime.UtcNow.ToString();
+            var createdAtStr = DateTime.UtcNow.ToString();
             var deletedAtStr = "";
 
             var product = doc.CreateElement("Product");
@@ -86,7 +89,7 @@ namespace MrLocal_Backend.Repositories
 
             doc.Save(fileName);
 
-            return new ProductRepository(id, shopId, name, description, StringToPricetype(pricetype), (double)price);
+            return new ProductRepository(id, shopId, name, description, StringToPricetype(pricetype), (double)price, DateTime.Parse(createdAtStr), DateTime.Parse(updatedAtStr));
         }
 
         public async Task<ProductRepository> Update(string id, string shopId, string name
@@ -94,33 +97,40 @@ namespace MrLocal_Backend.Repositories
         {
             return await Task.Run(() =>
             {
-                var dateNow = DateTime.Now.ToShortDateString();
+                static bool IsStringEmpty(string str) => str == null || str.Length == 0;
+
+                var dateNow = DateTime.UtcNow.ToString();
                 var doc = XDocument.Load(fileName);
 
                 var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id && product.Element("ShopId").Value == shopId && product.Element("DeletedAt").Value == "");
 
-                if (name != null)
+                string[] titles = { "Id", "ShopId", "Name", "Description", "Pricetype", "UpdatedAt" };
+                string[] values = { id, shopId, name, description, pricetype, dateNow };
+
+                for (var i = 0; i < titles.Length; i++)
                 {
-                    node.SetElementValue("Name", name);
+                    if (!IsStringEmpty(values[i]))
+                    {
+                        node.SetElementValue(titles[i], values[i]);
+                    }
+                    else
+                    {
+                        values[i] = node.Element(titles[i]).Value.ToString();
+                    }
                 }
-                if (description != null)
-                {
-                    node.SetElementValue("Description", description);
-                }
-                if (pricetype != null)
-                {
-                    node.SetElementValue("Pricetype", pricetype);
-                }
+
                 if (price != null)
                 {
                     node.SetElementValue("Price", price.ToString());
                 }
-                node.SetElementValue("UpdatedAt", dateNow);
+                else
+                {
+                    price = double.Parse(node.Element("Price").Value.ToString());
+                }
 
                 doc.Save(fileName);
 
-
-                return new ProductRepository(id, shopId, name, description, StringToPricetype(pricetype), (double)price);
+                return new ProductRepository(values[0], values[1], values[2], values[3], StringToPricetype(values[4]), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[5]));
             });
         }
 
@@ -131,7 +141,7 @@ namespace MrLocal_Backend.Repositories
                 var doc = XDocument.Load(fileName);
 
                 var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id);
-                node.SetElementValue("DeletedAt", DateTime.Now.ToShortDateString());
+                node.SetElementValue("DeletedAt", DateTime.UtcNow.ToString());
 
                 doc.Save(fileName);
                 return id;

@@ -61,7 +61,7 @@ namespace MrLocal_Backend.Repositories
             var shop = doc.CreateElement("Shop");
 
             var id = Guid.NewGuid().ToString();
-            var dateNow = DateTime.Now.ToShortDateString();
+            var dateNow = DateTime.UtcNow.ToString();
 
             string[] titles = { "Id", "Name", "Status", "Description", "TypeOfShop", "City", "CreatedAt", "UpdatedAt", "DeletedAt" };
             string[] values = { id, name, "Not Active", description, typeOfShop, city, dateNow, dateNow, "" };
@@ -83,36 +83,31 @@ namespace MrLocal_Backend.Repositories
         {
             return await Task.Run(() =>
             {
-                var dateNow = DateTime.Now.ToShortDateString();
+                static bool IsStringEmpty(string str) => str == null || str.Length == 0;
+
+                var dateNow = DateTime.UtcNow.ToString();
                 var doc = XDocument.Load(fileName);
 
                 var node = doc.Descendants("Shop").FirstOrDefault(shop => shop.Element("Id").Value == id && shop.Element("DeletedAt").Value == "");
 
-                if (name != null)
+                string[] titles = { "Id", "Name", "Status", "Description", "TypeOfShop", "City","UpdatedAt" };
+                string[] values = { id, name, status, description, typeOfShop, city, dateNow };
+
+                for (var i = 0; i < titles.Length; i++)
                 {
-                    node.SetElementValue("Name", name);
+                    if (!IsStringEmpty(values[i]))
+                    {
+                        node.SetElementValue(titles[i], values[i]);
+                    }
+                    else
+                    {
+                        values[i] = node.Element(titles[i]).Value.ToString();
+                    }
                 }
-                if (status != null)
-                {
-                    node.SetElementValue("Status", status);
-                }
-                if (description != null)
-                {
-                    node.SetElementValue("Description", description);
-                }
-                if (typeOfShop != null)
-                {
-                    node.SetElementValue("TypeOfShop", typeOfShop);
-                }
-                if (city != null)
-                {
-                    node.SetElementValue("City", city);
-                }
-                node.SetElementValue("UpdatedAt", dateNow);
 
                 doc.Save(fileName);
 
-                return new ShopRepository(id, name, status, description, typeOfShop, city, DateTime.Parse(dateNow), DateTime.Parse(dateNow));
+                return new ShopRepository(values[0], values[1], values[2], values[3], values[4], values[5], DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[6]));
             });
         }
 
@@ -120,7 +115,7 @@ namespace MrLocal_Backend.Repositories
         {
             return await Task.Run(() =>
             {
-                var dateNow = DateTime.Now.ToShortDateString();
+                var dateNow = DateTime.UtcNow.ToString();
                 var doc = XDocument.Load(fileName);
 
                 var node = doc.Descendants("Shop").FirstOrDefault(cd => cd.Element("Id").Value == id);
