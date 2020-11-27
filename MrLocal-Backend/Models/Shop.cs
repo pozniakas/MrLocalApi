@@ -1,8 +1,9 @@
-﻿using System;
+﻿using MrLocal_Backend.Models.Interfaces;
+using System;
 
 namespace MrLocal_Backend.Models
 {
-    public class Shop
+    public class Shop : IModels
     {
         public string Id { get; set; }
         public string Name { get; set; }

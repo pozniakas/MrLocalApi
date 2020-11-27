@@ -1,4 +1,5 @@
 ﻿using MrLocal_Backend.Models;
+using MrLocal_Backend.Models.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -6,7 +7,7 @@ using System.Xml;
 
 namespace MrLocal_Backend.Repositories.Helpers
 {
-    public class XmlRepository<T>
+    public class XmlRepository<T> where T : IModels
     {
         private readonly Lazy<EnumConverter> enumConverter = new Lazy<EnumConverter>();
         public async Task<XmlDocument> LoadXml(string FileName)

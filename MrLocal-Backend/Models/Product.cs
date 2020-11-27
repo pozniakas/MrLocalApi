@@ -1,9 +1,10 @@
-﻿using System;
+﻿using MrLocal_Backend.Models.Interfaces;
+using System;
 using System.Text.Json.Serialization;
 
 namespace MrLocal_Backend.Models
 {
-    public class Product
+    public class Product : IModels
     {
 
         public string Id { get; set; }
