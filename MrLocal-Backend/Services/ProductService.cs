@@ -13,8 +13,8 @@ namespace MrLocal_Backend.Services
 
         public ProductService()
         {
-            validateData = new Lazy<ValidateData>();
             productRepository = new ProductRepository();
+            validateData = new Lazy<ValidateData>();
         }
 
         public async Task<ProductRepository> AddProductToShop(string shopId, string name, string description, string priceType, double? price)

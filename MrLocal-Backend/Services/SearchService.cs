@@ -1,4 +1,5 @@
-﻿using MrLocal_Backend.Repositories;
+﻿using MrLocal_Backend.LoggerService;
+using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services.Helpers;
 using MrLocal_Backend.Services.Interfaces;
 using System;
@@ -17,8 +18,8 @@ namespace MrLocal_Backend.Services
 
         public SearchService()
         {
-            validateData = new Lazy<ValidateData>();
             shopRepository = new ShopRepository();
+            validateData = new Lazy<ValidateData>();
         }
 
         public async Task<List<ShopRepository>> SearchForShops(string searchQuery, string city = "All cities", string typeOfShop = "All types")

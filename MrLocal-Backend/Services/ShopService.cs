@@ -1,4 +1,5 @@
-﻿using MrLocal_Backend.Repositories;
+﻿using MrLocal_Backend.LoggerService;
+using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services.Helpers;
 using MrLocal_Backend.Services.Interfaces;
 using System;
@@ -34,15 +35,19 @@ namespace MrLocal_Backend.Services
 
         public async Task<ShopRepository> UpdateShop(string id, string name, string status, string description, string typeOfShop, string city)
         {
+
             var isValidated = await validateData.Value.ValidateShopData(name, status, description, typeOfShop, city, true);
-            
-            if (!isValidated)
+
+            if (isValidated)
+
+            {
+                var updatedShop = await shopRepository.Update(id, name, status, description, typeOfShop, city);
+                return updatedShop;
+            }
+            else
             {
                 throw new ArgumentException("Invalid shop parameters for update");
             }
-
-            var updatedShop = await shopRepository.Update(id, name, status, description, typeOfShop, city);
-            return updatedShop;
         }
 
         public async Task<string> DeleteShop(string id)
