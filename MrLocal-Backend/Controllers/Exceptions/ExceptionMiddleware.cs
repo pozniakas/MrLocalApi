@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
-using MrLocal_Backend.LoggerService;
+using MrLocal_Backend.Controllers.LoggerService.Interfaces;
 using MrLocal_Backend.Models;
 using System;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace MrLocal_Backend.Exceptions
+namespace MrLocal_Backend.Controllers.Exceptions
 {
     public class ExceptionMiddleware
     {

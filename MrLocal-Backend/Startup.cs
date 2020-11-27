@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MrLocal_Backend.Exceptions;
-using MrLocal_Backend.LoggerService;
+using MrLocal_Backend.Controllers.Exceptions;
+using MrLocal_Backend.Controllers.LoggerService;
+using MrLocal_Backend.Controllers.LoggerService.Interfaces;
 using NLog;
 using System.IO;
 

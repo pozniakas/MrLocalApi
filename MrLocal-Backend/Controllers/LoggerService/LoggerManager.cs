@@ -1,6 +1,7 @@
-﻿using NLog;
+﻿using MrLocal_Backend.Controllers.LoggerService.Interfaces;
+using NLog;
 
-namespace MrLocal_Backend.LoggerService
+namespace MrLocal_Backend.Controllers.LoggerService
 {
     public class LoggerManager : ILoggerManager
     {

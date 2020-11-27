@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrLocal_Backend.Controllers.Interfaces;
-using MrLocal_Backend.LoggerService;
+using MrLocal_Backend.Controllers.LoggerService.Interfaces;
 using MrLocal_Backend.Services;
 using System.Threading.Tasks;
 
