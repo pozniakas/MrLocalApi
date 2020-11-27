@@ -1,10 +1,9 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Text.Json.Serialization;
 
 namespace MrLocal_Backend.Models
 {
-    public class ProductModel
+    public class Product
     {
 
         public string Id { get; set; }
@@ -25,9 +24,9 @@ namespace MrLocal_Backend.Models
             KILOGRAMS
         }
 
-        public ProductModel() { }
+        public Product() { }
 
-        public ProductModel(string id, string shopId, string name
+        public Product(string id, string shopId, string name
     , string description, PriceTypes priceType, double price, DateTime createdAt, DateTime updatedAt)
         {
             Id = id;

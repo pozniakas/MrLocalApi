@@ -14,12 +14,12 @@ namespace MrLocal_Backend.Repositories
     public class ShopRepository : IShopRepository
     {
         readonly string fileName;
-        private readonly Lazy<XmlRepository<ShopModel>> xmlRepository = null;
+        private readonly Lazy<XmlRepository<Shop>> xmlRepository = null;
 
         public ShopRepository()
         {
             fileName = ConfigurationManager.AppSettings.Get("SHOP_REPOSITORY_FILE_NAME");
-            xmlRepository = new Lazy<XmlRepository<ShopModel>>();
+            xmlRepository = new Lazy<XmlRepository<Shop>>();
 
             if (!Directory.Exists("Data"))
             {
@@ -34,7 +34,7 @@ namespace MrLocal_Backend.Repositories
             }
         }
 
-        public async Task<ShopModel> Create(string name, string description, string typeOfShop, string city)
+        public async Task<Shop> Create(string name, string description, string typeOfShop, string city)
         {
             var doc = await xmlRepository.Value.LoadXml(fileName);
 
@@ -56,10 +56,10 @@ namespace MrLocal_Backend.Repositories
             doc.DocumentElement.AppendChild(shop);
             doc.Save(fileName);
 
-            return new ShopModel(id, name, "Not Active", description, typeOfShop, city, DateTime.Parse(dateNow), DateTime.Parse(dateNow));
+            return new Shop(id, name, "Not Active", description, typeOfShop, city, DateTime.Parse(dateNow), DateTime.Parse(dateNow));
         }
 
-        public async Task<ShopModel> Update(string id, string name, string status, string description, string typeOfShop, string city)
+        public async Task<Shop> Update(string id, string name, string status, string description, string typeOfShop, string city)
         {
             return await Task.Run(() =>
             {
@@ -87,7 +87,7 @@ namespace MrLocal_Backend.Repositories
 
                 doc.Save(fileName);
 
-                return new ShopModel(values[0], values[1], values[2], values[3], values[4], values[5], DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[6]));
+                return new Shop(values[0], values[1], values[2], values[3], values[4], values[5], DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[6]));
             });
         }
 
@@ -108,13 +108,13 @@ namespace MrLocal_Backend.Repositories
             });
         }
 
-        public async Task<ShopModel> FindOne(string id)
+        public async Task<Shop> FindOne(string id)
         {
             var listOfShop = await xmlRepository.Value.ReadXml(fileName);
             return listOfShop.First(i => i.Id == id && i.DeletedAt == null);
         }
 
-        public async Task<List<ShopModel>> FindAll()
+        public async Task<List<Shop>> FindAll()
         {
             var listOfShop = await xmlRepository.Value.ReadXml(fileName);
             return listOfShop.Where(i => i.DeletedAt == null).ToList();

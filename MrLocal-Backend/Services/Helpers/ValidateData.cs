@@ -57,7 +57,7 @@ namespace MrLocal_Backend.Services.Helpers
             return isValidName && isValidStatus && isValidTypeOfShop && isValidCity && isValidDescription;
         }
 
-        public bool ValidateFilters(ShopModel shop, string city, string typeOfShop)
+        public bool ValidateFilters(Shop shop, string city, string typeOfShop)
         {
             return (city != "All cities" && typeOfShop != "All types" && shop.City == city && shop.TypeOfShop == typeOfShop)
                 || (city != "All cities" && typeOfShop == "All types" && shop.City == city)

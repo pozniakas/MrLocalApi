@@ -2,7 +2,7 @@
 
 namespace MrLocal_Backend.Models
 {
-    public class ShopModel
+    public class Shop
     {
         public string Id { get; set; }
         public string Name { get; set; }
@@ -14,8 +14,8 @@ namespace MrLocal_Backend.Models
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
 
-        public ShopModel() { }
-        public ShopModel(string id, string name, string status, string description, string typeOfShop, string city, DateTime createdAt, DateTime updatedAt)
+        public Shop() { }
+        public Shop(string id, string name, string status, string description, string typeOfShop, string city, DateTime createdAt, DateTime updatedAt)
         {
             Id = id;
             Name = name;

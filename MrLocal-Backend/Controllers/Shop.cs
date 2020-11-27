@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrLocal_Backend.Controllers.Interfaces;
-using MrLocal_Backend.Models;
 using MrLocal_Backend.Services;
 using System;
 using System.Threading.Tasks;
@@ -19,13 +18,13 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ShopModel> Get(string id)
+        public async Task<Models.Shop> Get(string id)
         {
             return await shopService.GetShop(id);
         }
 
         [HttpPost]
-        public async Task<ShopModel> Post([FromBody] ShopModel body)
+        public async Task<Models.Shop> Post([FromBody] Models.Shop body)
         {
             try
             {
@@ -39,7 +38,7 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpPut]
-        public async Task<ShopModel> Put([FromBody] ShopModel body)
+        public async Task<Models.Shop> Put([FromBody] Models.Shop body)
         {
             try
             {

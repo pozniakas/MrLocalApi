@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrLocal_Backend.Controllers.Interfaces;
-using MrLocal_Backend.Models;
 using MrLocal_Backend.Services;
 using System;
 using System.Threading.Tasks;
-using static MrLocal_Backend.Models.Body;
 
 namespace MrLocal_Backend.Controllers
 {
@@ -20,7 +18,7 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<ProductModel> Post([FromBody] ProductModel body)
+        public async Task<Models.Product> Post([FromBody] Models.Product body)
         {
             try
             {
@@ -34,7 +32,7 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpPut]
-        public async Task<ProductModel> Put([FromBody] ProductModel body)
+        public async Task<Models.Product> Put([FromBody] Models.Product body)
         {
             try
             {

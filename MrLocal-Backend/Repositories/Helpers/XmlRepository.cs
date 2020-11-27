@@ -46,13 +46,13 @@ namespace MrLocal_Backend.Repositories.Helpers
             var formattedUpdatedAt = DateTime.Parse(_updatedAt);
             var formattedDeletedAt = _deletedAt != "" ? DateTime.Parse(_deletedAt) : (DateTime?)null;
 
-            if (typeof(T) == typeof(ShopModel))
+            if (typeof(T) == typeof(Shop))
             {
                 var _city = node["City"].InnerText;
                 var _status = node["Status"].InnerText;
                 var _typeofShop = node["TypeOfShop"].InnerText;
 
-                var shop = new ShopModel(_id, _name, _status, _description, _typeofShop, _city, formattedCreatedAt, formattedUpdatedAt)
+                var shop = new Shop(_id, _name, _status, _description, _typeofShop, _city, formattedCreatedAt, formattedUpdatedAt)
                 {
                     DeletedAt = formattedDeletedAt
                 };
@@ -60,13 +60,13 @@ namespace MrLocal_Backend.Repositories.Helpers
                 return (T)(object)shop;
             }
 
-            else if (typeof(T) == typeof(ProductModel))
+            else if (typeof(T) == typeof(Product))
             {
                 var price = double.Parse(node["Price"].InnerText);
                 var priceType = node["Pricetype"].InnerText;
                 var shopId = node["ShopId"].InnerText;
 
-                var product = new ProductModel(_id, shopId, _name, _description, enumConverter.Value.StringToPricetype(priceType), price, formattedCreatedAt, formattedUpdatedAt)
+                var product = new Product(_id, shopId, _name, _description, enumConverter.Value.StringToPricetype(priceType), price, formattedCreatedAt, formattedUpdatedAt)
                 {
                     DeletedAt = formattedDeletedAt
                 };
