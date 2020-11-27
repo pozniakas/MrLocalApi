@@ -11,7 +11,7 @@ namespace MrLocal_Backend.Models
         public string ShopId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public double Price { get; set; }
+        public double? Price { get; set; }
         public PriceTypes PriceType { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
