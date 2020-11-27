@@ -107,8 +107,8 @@ namespace MrLocal_Backend.Repositories
 
                 var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id && product.Element("ShopId").Value == shopId && product.Element("DeletedAt").Value == "");
 
-                string[] titles = { "Id", "ShopId", "Name", "Description", "Pricetype", "UpdatedAt" };
-                string[] values = { id, shopId, name, description, pricetype, dateNow };
+                string[] titles = { "ShopId", "Name", "Description", "Pricetype", "UpdatedAt" };
+                string[] values = { shopId, name, description, pricetype, dateNow };
 
                 for (var i = 0; i < titles.Length; i++)
                 {
@@ -133,7 +133,8 @@ namespace MrLocal_Backend.Repositories
 
                 doc.Save(fileName);
 
-                return new ProductRepository(values[0], values[1], values[2], values[3], enumConverter.Value.StringToPricetype(values[4]), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[5]));
+                return new ProductRepository(id, values[0], values[1], values[2], enumConverter.Value.StringToPricetype(values[3]), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[4]));
+
             });
         }
 
