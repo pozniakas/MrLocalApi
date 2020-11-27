@@ -13,8 +13,8 @@ namespace MrLocal_Backend.Repositories
     public class ProductRepository : IProductRepository
     {
         readonly string fileName;
-        private readonly Lazy<XmlRepository<ProductRepository>> xmlRepository = null;
-
+        private readonly Lazy<XmlRepository<ProductRepository>> xmlRepository = new Lazy<XmlRepository<ProductRepository>>();
+        private readonly Lazy<EnumConverter> enumConverter = new Lazy<EnumConverter>();
         public string Id { get; set; }
         public string ShopId { get; set; }
         public string Name { get; set; }
@@ -35,8 +35,6 @@ namespace MrLocal_Backend.Repositories
         public ProductRepository()
         {
             fileName = ConfigurationManager.AppSettings.Get("PRODUCT_REPOSITORY_FILE_NAME");
-
-            xmlRepository = new Lazy<XmlRepository<ProductRepository>>();
 
             if (!Directory.Exists("Data"))
             {
@@ -92,7 +90,7 @@ namespace MrLocal_Backend.Repositories
 
             doc.Save(fileName);
 
-            return new ProductRepository(id, shopId, name, description, xmlRepository.Value.StringToPricetype(pricetype), (double)price, DateTime.Parse(createdAtStr), DateTime.Parse(updatedAtStr));
+            return new ProductRepository(id, shopId, name, description, enumConverter.Value.StringToPricetype(pricetype), (double)price, DateTime.Parse(createdAtStr), DateTime.Parse(updatedAtStr));
         }
 
         public async Task<ProductRepository> Update(string id, string shopId, string name
@@ -133,7 +131,7 @@ namespace MrLocal_Backend.Repositories
 
                 doc.Save(fileName);
 
-                return new ProductRepository(values[0], values[1], values[2], values[3], xmlRepository.Value.StringToPricetype(values[4]), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[5]));
+                return new ProductRepository(values[0], values[1], values[2], values[3], enumConverter.Value.StringToPricetype(values[4]), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[5]));
             });
         }
 
