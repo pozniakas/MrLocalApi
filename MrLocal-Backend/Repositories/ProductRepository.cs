@@ -13,8 +13,8 @@ namespace MrLocal_Backend.Repositories
     public class ProductRepository : IProductRepository
     {
         readonly string fileName;
-        private readonly Lazy<XmlRepository<ProductRepository>> xmlRepository = new Lazy<XmlRepository<ProductRepository>>();
-        private readonly Lazy<EnumConverter> enumConverter = new Lazy<EnumConverter>();
+        private readonly Lazy<XmlRepository<ProductRepository>> xmlRepository = null;
+        private readonly Lazy<EnumConverter> enumConverter = null;
         public string Id { get; set; }
         public string ShopId { get; set; }
         public string Name { get; set; }
@@ -35,6 +35,8 @@ namespace MrLocal_Backend.Repositories
         public ProductRepository()
         {
             fileName = ConfigurationManager.AppSettings.Get("PRODUCT_REPOSITORY_FILE_NAME");
+            xmlRepository = new Lazy<XmlRepository<ProductRepository>>();
+            enumConverter = new Lazy<EnumConverter>();
 
             if (!Directory.Exists("Data"))
             {
