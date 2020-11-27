@@ -6,6 +6,6 @@ namespace MrLocal_Backend.Services.Interfaces
 {
     interface ISearchService
     {
-        public Task<List<ShopModel>> SearchForShops(string searchQuery, string city = "All cities", string typeOfShop = "All types");
+        public Task<List<Shop>> SearchForShops(string searchQuery, string city = "All cities", string typeOfShop = "All types");
     }
 }

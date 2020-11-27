@@ -22,7 +22,7 @@ namespace MrLocal_Backend.Services
             shopRepository = new ShopRepository();
         }
 
-        public async Task<List<ShopModel>> SearchForShops(string searchQuery, string city = "All cities", string typeOfShop = "All types")
+        public async Task<List<Shop>> SearchForShops(string searchQuery, string city = "All cities", string typeOfShop = "All types")
         {
             var shopList = (await shopRepository.FindAll()).Where(i => validateData.Value.ValidateFilters(i, city, typeOfShop));
             var trimmedSearchQuery = searchQuery.Trim();

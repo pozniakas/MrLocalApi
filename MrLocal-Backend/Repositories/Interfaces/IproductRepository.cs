@@ -6,10 +6,10 @@ namespace MrLocal_Backend.Repositories.Interfaces
 {
     interface IProductRepository
     {
-        public Task<ProductModel> Create(string shopId, string name, string description, string pricetype, double? price);
-        public Task<ProductModel> Update(string id, string shopId, string name, string description, string pricetype, double? price);
+        public Task<Product> Create(string shopId, string name, string description, string pricetype, double? price);
+        public Task<Product> Update(string id, string shopId, string name, string description, string pricetype, double? price);
         public Task<string> Delete(string id);
-        public Task<ProductModel> FindOne(string id);
-        public Task<List<ProductModel>> FindAll(string shopId);
+        public Task<Product> FindOne(string id);
+        public Task<List<Product>> FindAll(string shopId);
     }
 }
