@@ -1,3 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Shops>
+  <Shop>
+    <Id>8819398c-6b53-41c6-b615-a22c4fd44bbd</Id>
+    <Name>Braskes</Name>
+    <Status>Not Active</Status>
+    <Description>Test</Description>
+    <TypeOfShop>Berries</TypeOfShop>
+    <City>Vilnius</City>
+    <CreatedAt>2020-11-27 09:45:09</CreatedAt>
+    <UpdatedAt>2020-11-27 09:45:09</UpdatedAt>
+    <DeletedAt>
+    </DeletedAt>
+  </Shop>
 </Shops>

@@ -125,7 +125,7 @@ namespace MrLocal_Backend.Repositories
                 }
                 else
                 {
-                    price = double.Parse(node.Element("Price").Value);
+                    price = double.Parse(node.Element("Price").Value.ToString());
                 }
 
                 doc.Save(fileName);
