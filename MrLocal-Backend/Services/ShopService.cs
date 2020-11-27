@@ -1,4 +1,5 @@
-﻿using MrLocal_Backend.Repositories;
+﻿using MrLocal_Backend.Models;
+using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services.Helpers;
 using MrLocal_Backend.Services.Interfaces;
 using System;
@@ -17,7 +18,7 @@ namespace MrLocal_Backend.Services
             shopRepository = new ShopRepository();
         }
 
-        public async Task<ShopRepository> CreateShop(string name, string description, string typeOfShop, string city)
+        public async Task<ShopModel> CreateShop(string name, string description, string typeOfShop, string city)
         {
             var isValidated = await validateData.Value.ValidateShopData(name, null, description, typeOfShop, city, false);
 
@@ -32,7 +33,7 @@ namespace MrLocal_Backend.Services
             }
         }
 
-        public async Task<ShopRepository> UpdateShop(string id, string name, string status, string description, string typeOfShop, string city)
+        public async Task<ShopModel> UpdateShop(string id, string name, string status, string description, string typeOfShop, string city)
         {
             var isValidated = await validateData.Value.ValidateShopData(name, status, description, typeOfShop, city, true);
             
@@ -60,7 +61,7 @@ namespace MrLocal_Backend.Services
             }
         }
 
-        public async Task<ShopRepository> GetShop(string id)
+        public async Task<ShopModel> GetShop(string id)
         {
             var shop = await shopRepository.FindOne(id);
 

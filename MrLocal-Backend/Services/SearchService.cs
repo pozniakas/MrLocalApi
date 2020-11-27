@@ -1,4 +1,5 @@
-﻿using MrLocal_Backend.Repositories;
+﻿using MrLocal_Backend.Models;
+using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services.Helpers;
 using MrLocal_Backend.Services.Interfaces;
 using System;
@@ -21,7 +22,7 @@ namespace MrLocal_Backend.Services
             shopRepository = new ShopRepository();
         }
 
-        public async Task<List<ShopRepository>> SearchForShops(string searchQuery, string city = "All cities", string typeOfShop = "All types")
+        public async Task<List<ShopModel>> SearchForShops(string searchQuery, string city = "All cities", string typeOfShop = "All types")
         {
             var shopList = (await shopRepository.FindAll()).Where(i => validateData.Value.ValidateFilters(i, city, typeOfShop));
             var trimmedSearchQuery = searchQuery.Trim();

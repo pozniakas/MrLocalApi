@@ -1,4 +1,5 @@
-﻿using MrLocal_Backend.Repositories;
+﻿using MrLocal_Backend.Models;
+using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services.Helpers;
 using MrLocal_Backend.Services.Interfaces;
 using System;
@@ -17,7 +18,7 @@ namespace MrLocal_Backend.Services
             productRepository = new ProductRepository();
         }
 
-        public async Task<ProductRepository> AddProductToShop(string shopId, string name, string description, string priceType, double? price)
+        public async Task<ProductModel> AddProductToShop(string shopId, string name, string description, string priceType, double? price)
         {
             if (validateData.Value.ValidateProductData(shopId, name, description, price, false, priceType))
             {
@@ -30,7 +31,7 @@ namespace MrLocal_Backend.Services
             }
         }
 
-        public async Task<ProductRepository> UpdateProduct(string id, string shopId, string name, string description, string priceType, double? price)
+        public async Task<ProductModel> UpdateProduct(string id, string shopId, string name, string description, string priceType, double? price)
         {
             if (validateData.Value.ValidateProductData(shopId, name, description, price, true, priceType, id))
             {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MrLocal_Backend.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Xml;
@@ -45,13 +46,13 @@ namespace MrLocal_Backend.Repositories.Helpers
             var formattedUpdatedAt = DateTime.Parse(_updatedAt);
             var formattedDeletedAt = _deletedAt != "" ? DateTime.Parse(_deletedAt) : (DateTime?)null;
 
-            if (typeof(T) == typeof(ShopRepository))
+            if (typeof(T) == typeof(ShopModel))
             {
                 var _city = node["City"].InnerText;
                 var _status = node["Status"].InnerText;
                 var _typeofShop = node["TypeOfShop"].InnerText;
 
-                var shop = new ShopRepository(_id, _name, _status, _description, _typeofShop, _city, formattedCreatedAt, formattedUpdatedAt)
+                var shop = new ShopModel(_id, _name, _status, _description, _typeofShop, _city, formattedCreatedAt, formattedUpdatedAt)
                 {
                     DeletedAt = formattedDeletedAt
                 };
@@ -59,13 +60,13 @@ namespace MrLocal_Backend.Repositories.Helpers
                 return (T)(object)shop;
             }
 
-            else if (typeof(T) == typeof(ProductRepository))
+            else if (typeof(T) == typeof(ProductModel))
             {
                 var price = double.Parse(node["Price"].InnerText);
                 var priceType = node["Pricetype"].InnerText;
                 var shopId = node["ShopId"].InnerText;
 
-                var product = new ProductRepository(_id, shopId, _name, _description, enumConverter.Value.StringToPricetype(priceType), price, formattedCreatedAt, formattedUpdatedAt)
+                var product = new ProductModel(_id, shopId, _name, _description, enumConverter.Value.StringToPricetype(priceType), price, formattedCreatedAt, formattedUpdatedAt)
                 {
                     DeletedAt = formattedDeletedAt
                 };
