@@ -6,18 +6,20 @@ using System.Threading.Tasks;
 
 namespace MrLocal_Backend.Services
 {
-    class ProductService : ValidateData, IProductService
+    class ProductService : IProductService
     {
         private readonly ProductRepository productRepository;
+        private readonly Lazy<ValidateData> validateData = null;
 
         public ProductService()
         {
+            validateData = new Lazy<ValidateData>();
             productRepository = new ProductRepository();
         }
 
         public async Task<ProductRepository> AddProductToShop(string shopId, string name, string description, string priceType, double? price)
         {
-            if (ValidateProductData(shopId, name, description, price, false, priceType))
+            if (validateData.Value.ValidateProductData(shopId, name, description, price, false, priceType))
             {
                 var createdProduct = await productRepository.Create(shopId, name, description, priceType, price);
                 return createdProduct;
@@ -30,7 +32,7 @@ namespace MrLocal_Backend.Services
 
         public async Task<ProductRepository> UpdateProduct(string id, string shopId, string name, string description, string priceType, double? price)
         {
-            if (ValidateProductData(shopId, name, description, price, true, priceType, id))
+            if (validateData.Value.ValidateProductData(shopId, name, description, price, true, priceType, id))
             {
                 var updatedProduct = await productRepository.Update(id, shopId, name, description, priceType, price);
                 return updatedProduct;
