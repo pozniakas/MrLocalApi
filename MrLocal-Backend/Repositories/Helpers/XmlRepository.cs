@@ -5,8 +5,9 @@ using System.Xml;
 
 namespace MrLocal_Backend.Repositories.Helpers
 {
-    public class XmlRepository<T> : EnumConverter
+    public class XmlRepository<T>
     {
+        private readonly Lazy<EnumConverter> enumConverter = new Lazy<EnumConverter>();
         public async Task<XmlDocument> LoadXml(string FileName)
         {
             return await Task.Run(() =>
@@ -64,7 +65,7 @@ namespace MrLocal_Backend.Repositories.Helpers
                 var priceType = node["Pricetype"].InnerText;
                 var shopId = node["ShopId"].InnerText;
 
-                var product = new ProductRepository(_id, shopId, _name, _description, StringToPricetype(priceType), price, formattedCreatedAt, formattedUpdatedAt)
+                var product = new ProductRepository(_id, shopId, _name, _description, enumConverter.Value.StringToPricetype(priceType), price, formattedCreatedAt, formattedUpdatedAt)
                 {
                     DeletedAt = formattedDeletedAt
                 };
