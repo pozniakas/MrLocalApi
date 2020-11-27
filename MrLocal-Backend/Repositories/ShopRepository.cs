@@ -1,4 +1,5 @@
-﻿using MrLocal_Backend.Repositories.Helpers;
+﻿using MrLocal_Backend.Models;
+using MrLocal_Backend.Repositories.Helpers;
 using MrLocal_Backend.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -13,22 +14,12 @@ namespace MrLocal_Backend.Repositories
     public class ShopRepository : IShopRepository
     {
         readonly string fileName;
-        private readonly Lazy<XmlRepository<ShopRepository>> xmlRepository = null;
-
-        public string Id { get; set; }
-        public string Name { get; set; }
-        public string Status { get; set; }
-        public string Description { get; set; }
-        public string TypeOfShop { get; set; }
-        public string City { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public DateTime? DeletedAt { get; set; }
+        private readonly Lazy<XmlRepository<Shop>> xmlRepository = null;
 
         public ShopRepository()
         {
             fileName = ConfigurationManager.AppSettings.Get("SHOP_REPOSITORY_FILE_NAME");
-            xmlRepository = new Lazy<XmlRepository<ShopRepository>>();
+            xmlRepository = new Lazy<XmlRepository<Shop>>();
 
             if (!Directory.Exists("Data"))
             {
@@ -43,20 +34,7 @@ namespace MrLocal_Backend.Repositories
             }
         }
 
-        public ShopRepository(string id, string name, string status, string description, string typeOfShop, string city, DateTime createdAt, DateTime updatedAt)
-        {
-            Id = id;
-            Name = name;
-            Status = status;
-            Description = description;
-            TypeOfShop = typeOfShop;
-            City = city;
-            CreatedAt = createdAt;
-            UpdatedAt = updatedAt;
-            DeletedAt = null;
-        }
-
-        public async Task<ShopRepository> Create(string name, string description, string typeOfShop, string city)
+        public async Task<Shop> Create(string name, string description, string typeOfShop, string city)
         {
             var doc = await xmlRepository.Value.LoadXml(fileName);
 
@@ -78,10 +56,10 @@ namespace MrLocal_Backend.Repositories
             doc.DocumentElement.AppendChild(shop);
             doc.Save(fileName);
 
-            return new ShopRepository(id, name, "Not Active", description, typeOfShop, city, DateTime.Parse(dateNow), DateTime.Parse(dateNow));
+            return new Shop(id, name, "Not Active", description, typeOfShop, city, DateTime.Parse(dateNow), DateTime.Parse(dateNow));
         }
 
-        public async Task<ShopRepository> Update(string id, string name, string status, string description, string typeOfShop, string city)
+        public async Task<Shop> Update(string id, string name, string status, string description, string typeOfShop, string city)
         {
             return await Task.Run(() =>
             {
@@ -109,7 +87,7 @@ namespace MrLocal_Backend.Repositories
 
                 doc.Save(fileName);
 
-                return new ShopRepository(id, values[0], values[1], values[2], values[3], values[4], DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[5]));
+                return new Shop(id, values[0], values[1], values[2], values[3], values[4], DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[5]));
             });
         }
 
@@ -130,13 +108,13 @@ namespace MrLocal_Backend.Repositories
             });
         }
 
-        public async Task<ShopRepository> FindOne(string id)
+        public async Task<Shop> FindOne(string id)
         {
             var listOfShop = await xmlRepository.Value.ReadXml(fileName);
             return listOfShop.First(i => i.Id == id && i.DeletedAt == null);
         }
 
-        public async Task<List<ShopRepository>> FindAll()
+        public async Task<List<Shop>> FindAll()
         {
             var listOfShop = await xmlRepository.Value.ReadXml(fileName);
             return listOfShop.Where(i => i.DeletedAt == null).ToList();

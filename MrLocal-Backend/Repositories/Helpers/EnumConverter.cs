@@ -1,5 +1,5 @@
 ﻿using System;
-using static MrLocal_Backend.Repositories.ProductRepository;
+using static MrLocal_Backend.Models.Product;
 
 namespace MrLocal_Backend.Repositories.Helpers
 {

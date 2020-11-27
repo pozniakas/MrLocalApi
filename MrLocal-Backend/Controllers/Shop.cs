@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrLocal_Backend.Controllers.Interfaces;
 using MrLocal_Backend.LoggerService;
-using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services;
-using System;
 using System.Threading.Tasks;
-using static MrLocal_Backend.Models.Body;
 
 namespace MrLocal_Backend.Controllers
 {
@@ -32,17 +29,17 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ShopBody body)
+        public async Task<IActionResult> Post([FromBody] Models.Shop body)
         {
             _logger.LogInfo("Creating shop");
             var createdShop = await shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.City);
             _logger.LogInfo("Shop created");
 
-            return Ok(createdShop);     
+            return Ok(createdShop);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] ShopBody body)
+        public async Task<IActionResult> Put([FromBody] Models.Shop body)
         {
             _logger.LogInfo("Updating shop");
 
@@ -50,7 +47,7 @@ namespace MrLocal_Backend.Controllers
 
             _logger.LogInfo("Shop updated");
 
-            return Ok(updatedShop);     
+            return Ok(updatedShop);
         }
 
         [HttpDelete("{id}")]
@@ -62,7 +59,7 @@ namespace MrLocal_Backend.Controllers
 
             _logger.LogInfo("Shop deleted");
 
-            return Ok();   
+            return Ok();
         }
     }
 }

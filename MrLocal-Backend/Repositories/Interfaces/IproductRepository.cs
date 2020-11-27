@@ -1,19 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using MrLocal_Backend.Models;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using static MrLocal_Backend.Repositories.ProductRepository;
 
 namespace MrLocal_Backend.Repositories.Interfaces
 {
-    interface IProductRepository : IRepository
+    interface IProductRepository
     {
-        public string ShopId { get; set; }
-        public string Description { get; set; }
-        public double Price { get; set; }
-        public PriceTypes PriceType { get; set; }
-
-        public Task<ProductRepository> Create(string shopId, string name, string description, string pricetype, double? price);
-        public Task<ProductRepository> Update(string id, string shopId, string name, string description, string pricetype, double? price);
-        public Task<ProductRepository> FindOne(string id);
-        public Task<List<ProductRepository>> FindAll(string shopId);
+        public Task<Product> Create(string shopId, string name, string description, string pricetype, double? price);
+        public Task<Product> Update(string id, string shopId, string name, string description, string pricetype, double? price);
+        public Task<string> Delete(string id);
+        public Task<Product> FindOne(string id);
+        public Task<List<Product>> FindAll(string shopId);
     }
 }

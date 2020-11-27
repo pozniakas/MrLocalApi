@@ -1,4 +1,5 @@
-﻿using MrLocal_Backend.Repositories.Helpers;
+﻿using MrLocal_Backend.Models;
+using MrLocal_Backend.Repositories.Helpers;
 using MrLocal_Backend.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -13,29 +14,13 @@ namespace MrLocal_Backend.Repositories
     public class ProductRepository : IProductRepository
     {
         readonly string fileName;
-        private readonly Lazy<XmlRepository<ProductRepository>> xmlRepository = null;
+        private readonly Lazy<XmlRepository<Product>> xmlRepository = null;
         private readonly Lazy<EnumConverter> enumConverter = null;
-        public string Id { get; set; }
-        public string ShopId { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public double Price { get; set; }
-        public PriceTypes PriceType { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public DateTime? DeletedAt { get; set; }
-
-        public enum PriceTypes
-        {
-            UNIT,
-            GRAMS,
-            KILOGRAMS
-        }
 
         public ProductRepository()
         {
             fileName = ConfigurationManager.AppSettings.Get("PRODUCT_REPOSITORY_FILE_NAME");
-            xmlRepository = new Lazy<XmlRepository<ProductRepository>>();
+            xmlRepository = new Lazy<XmlRepository<Product>>();
             enumConverter = new Lazy<EnumConverter>();
 
             if (!Directory.Exists("Data"))
@@ -52,21 +37,7 @@ namespace MrLocal_Backend.Repositories
 
         }
 
-        public ProductRepository(string id, string shopId, string name
-            , string description, PriceTypes priceType, double price, DateTime createdAt, DateTime updatedAt)
-        {
-            Id = id;
-            ShopId = shopId;
-            Name = name;
-            Description = description;
-            PriceType = priceType;
-            Price = price;
-            CreatedAt = createdAt;
-            UpdatedAt = updatedAt;
-            DeletedAt = null;
-        }
-
-        public async Task<ProductRepository> Create(string shopId, string name
+        public async Task<Product> Create(string shopId, string name
             , string description, string pricetype, double? price)
         {
             var id = Guid.NewGuid().ToString();
@@ -92,10 +63,10 @@ namespace MrLocal_Backend.Repositories
 
             doc.Save(fileName);
 
-            return new ProductRepository(id, shopId, name, description, enumConverter.Value.StringToPricetype(pricetype), (double)price, DateTime.Parse(createdAtStr), DateTime.Parse(updatedAtStr));
+            return new Product(id, shopId, name, description, enumConverter.Value.StringToPricetype(pricetype), (double)price, DateTime.Parse(createdAtStr), DateTime.Parse(updatedAtStr));
         }
 
-        public async Task<ProductRepository> Update(string id, string shopId, string name
+        public async Task<Product> Update(string id, string shopId, string name
             , string description, string pricetype, double? price)
         {
             return await Task.Run(() =>
@@ -133,8 +104,7 @@ namespace MrLocal_Backend.Repositories
 
                 doc.Save(fileName);
 
-                return new ProductRepository(id, values[0], values[1], values[2], enumConverter.Value.StringToPricetype(values[3]), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[4]));
-
+                return new Product(id, values[0], values[1], values[2], enumConverter.Value.StringToPricetype(values[3]), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[4]));
             });
         }
 
@@ -152,13 +122,13 @@ namespace MrLocal_Backend.Repositories
             });
         }
 
-        public async Task<ProductRepository> FindOne(string id)
+        public async Task<Product> FindOne(string id)
         {
             var listOfProducts = await xmlRepository.Value.ReadXml(fileName);
             return listOfProducts.First(i => i.Id == id && i.DeletedAt == null);
         }
 
-        public async Task<List<ProductRepository>> FindAll(string shopId)
+        public async Task<List<Product>> FindAll(string shopId)
         {
             var listOfProducts = await xmlRepository.Value.ReadXml(fileName);
             return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();

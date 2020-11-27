@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrLocal_Backend.Controllers.Interfaces;
 using MrLocal_Backend.LoggerService;
-using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using static MrLocal_Backend.Models.Body;
 
@@ -19,7 +17,7 @@ namespace MrLocal_Backend.Controllers
         public Search(ILoggerManager logger)
         {
             _logger = logger;
-            searchService = new SearchService();    
+            searchService = new SearchService();
         }
 
         [HttpGet]

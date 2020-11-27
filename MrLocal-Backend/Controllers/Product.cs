@@ -3,7 +3,6 @@ using MrLocal_Backend.Controllers.Interfaces;
 using MrLocal_Backend.LoggerService;
 using MrLocal_Backend.Services;
 using System.Threading.Tasks;
-using static MrLocal_Backend.Models.Body;
 
 namespace MrLocal_Backend.Controllers
 {
@@ -21,11 +20,11 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] ProductBody body)
+        public async Task<IActionResult> Post([FromBody] Models.Product body)
         {
             _logger.LogInfo("Creating product");
 
-            var createdProduct = await productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
+            var createdProduct = await productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
 
             _logger.LogInfo("Product created");
 
@@ -34,11 +33,11 @@ namespace MrLocal_Backend.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] ProductBody body)
+        public async Task<IActionResult> Put([FromBody] Models.Product body)
         {
             _logger.LogInfo("Updating product");
 
-            var updatedProduct = await productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType, body.Price);
+            var updatedProduct = await productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
 
             _logger.LogInfo("Product updated");
 
