@@ -63,7 +63,7 @@ namespace MrLocal_Backend.Services
 
             if (shop == null)
             {
-                throw new ArgumentException("Couldn't get products. Invalid shop id: Shop doesn't exist");
+                throw new ArgumentException("Couldn't get products of shop which doesn't exist");
             }
 
             var products = await productRepository.FindAll(shopId);
