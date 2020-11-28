@@ -3,6 +3,7 @@ using MrLocal_Backend.Repositories;
 using MrLocal_Backend.Services.Helpers;
 using MrLocal_Backend.Services.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace MrLocal_Backend.Services
@@ -50,8 +51,19 @@ namespace MrLocal_Backend.Services
             }
             else
             {
-                throw new ArgumentException("Invalid products parameters for creation");
+                throw new ArgumentException("Invalid products parameters for deleting");
             }
+        }
+
+        public async Task<List<Product>> GetAllProducts(string shopId)
+        {
+            var products = await productRepository.FindAll(shopId);
+
+            if (products.Count == 0)
+            {
+                throw new ArgumentException("Invalid shop id for getting products or shop does not have any products");
+            }
+            return products;
         }
     }
 }

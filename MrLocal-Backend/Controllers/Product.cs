@@ -19,6 +19,18 @@ namespace MrLocal_Backend.Controllers
             productService = new ProductService();
         }
 
+        [HttpGet("{shopId}")]
+        public async Task<IActionResult> Get(string shopId)
+        {
+            _logger.LogInfo($"Getting products with this shop Id: {shopId}");
+
+            var getProducts = await productService.GetAllProducts(shopId);
+
+            _logger.LogInfo($"Returning products with this shop Id: {shopId}");
+
+            return Ok(getProducts);
+        }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Models.Product body)
         {
