@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MrLocal_Backend.Controllers.Interfaces;
-using MrLocal_Backend.Controllers.LoggerService.Interfaces;
-using MrLocal_Backend.Services;
+using MrLocal_API.Controllers.Interfaces;
+using MrLocal_API.Controllers.LoggerService.Interfaces;
+using MrLocal_API.Services;
 using System.Threading.Tasks;
 
-namespace MrLocal_Backend.Controllers
+namespace MrLocal_API.Controllers
 {
     [Route("api/product")]
     [ApiController]

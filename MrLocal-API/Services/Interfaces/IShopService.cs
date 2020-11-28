@@ -1,7 +1,7 @@
-﻿using MrLocal_Backend.Models;
+﻿using MrLocal_API.Models;
 using System.Threading.Tasks;
 
-namespace MrLocal_Backend.Services.Interfaces
+namespace MrLocal_API.Services.Interfaces
 {
     interface IShopService
     {

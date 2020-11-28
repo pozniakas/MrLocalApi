@@ -1,7 +1,7 @@
-﻿using MrLocal_Backend.Models.Interfaces;
+﻿using MrLocal_API.Models.Interfaces;
 using System;
 
-namespace MrLocal_Backend.Models
+namespace MrLocal_API.Models
 {
     public class Shop : IModels
     {

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using MrLocal_Backend;
+using MrLocal_API;
 
 CreateHostBuilder(args).Build().Run();
 

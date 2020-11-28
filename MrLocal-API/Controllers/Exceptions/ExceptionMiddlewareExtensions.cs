@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 
-namespace MrLocal_Backend.Controllers.Exceptions
+namespace MrLocal_API.Controllers.Exceptions
 {
     public static class ExceptionMiddlewareExtensions
     {

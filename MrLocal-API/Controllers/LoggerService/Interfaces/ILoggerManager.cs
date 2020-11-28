@@ -1,4 +1,4 @@
-﻿namespace MrLocal_Backend.Controllers.LoggerService.Interfaces
+﻿namespace MrLocal_API.Controllers.LoggerService.Interfaces
 {
     public interface ILoggerManager
     {

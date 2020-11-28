@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MrLocal_Backend.Controllers.Exceptions;
-using MrLocal_Backend.Controllers.LoggerService;
-using MrLocal_Backend.Controllers.LoggerService.Interfaces;
+using MrLocal_API.Controllers.Exceptions;
+using MrLocal_API.Controllers.LoggerService;
+using MrLocal_API.Controllers.LoggerService.Interfaces;
 using NLog;
 using System.IO;
 
-namespace MrLocal_Backend
+namespace MrLocal_API
 {
     public class Startup
     {

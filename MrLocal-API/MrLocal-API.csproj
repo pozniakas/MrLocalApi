@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <RootNamespace>MrLocal_Backend</RootNamespace>
+    <RootNamespace>MrLocal_API</RootNamespace>
     <LangVersion>preview</LangVersion>
   </PropertyGroup>
 

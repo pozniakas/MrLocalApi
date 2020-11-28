@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace MrLocal_Backend.Controllers
+namespace MrLocal_API.Controllers
 {
     [ApiController]
     [Route("")]

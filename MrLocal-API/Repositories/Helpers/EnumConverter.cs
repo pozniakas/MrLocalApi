@@ -1,7 +1,7 @@
 ﻿using System;
-using static MrLocal_Backend.Models.Product;
+using static MrLocal_API.Models.Product;
 
-namespace MrLocal_Backend.Repositories.Helpers
+namespace MrLocal_API.Repositories.Helpers
 {
     public class EnumConverter
     {

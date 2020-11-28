@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
-namespace MrLocal_Backend.Controllers.Interfaces
+namespace MrLocal_API.Controllers.Interfaces
 {
     interface IProduct
     {

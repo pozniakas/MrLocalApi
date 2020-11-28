@@ -1,8 +1,8 @@
-﻿using MrLocal_Backend.Models;
+﻿using MrLocal_API.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MrLocal_Backend.Repositories.Interfaces
+namespace MrLocal_API.Repositories.Interfaces
 {
     interface IProductRepository
     {

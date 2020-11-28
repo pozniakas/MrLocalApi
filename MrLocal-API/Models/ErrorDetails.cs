@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace MrLocal_Backend.Models
+namespace MrLocal_API.Models
 {
     public class ErrorDetails
     {

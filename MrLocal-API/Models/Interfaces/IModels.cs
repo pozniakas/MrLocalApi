@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace MrLocal_Backend.Models.Interfaces
+namespace MrLocal_API.Models.Interfaces
 {
     public interface IModels
     {
