@@ -1,2 +1,2 @@
-# MrLocal Back-end service
+# MrLocal API
 ![Schema](https://i.imgur.com/gtYtG3v.png)
