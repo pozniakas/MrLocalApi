@@ -11,11 +11,13 @@ namespace MrLocal_Backend.Services
     class ProductService : IProductService
     {
         private readonly ProductRepository productRepository;
+        private readonly ShopRepository shopRepository;
         private readonly Lazy<ValidateData> validateData = null;
 
         public ProductService()
         {
             productRepository = new ProductRepository();
+            shopRepository = new ShopRepository();
             validateData = new Lazy<ValidateData>();
         }
 
@@ -57,12 +59,14 @@ namespace MrLocal_Backend.Services
 
         public async Task<List<Product>> GetAllProducts(string shopId)
         {
-            var products = await productRepository.FindAll(shopId);
+            var shop = await shopRepository.FindOne(shopId);
 
-            if (products.Count == 0)
+            if (shop == null)
             {
-                throw new ArgumentException("Invalid shop id for getting products or shop does not have any products");
+                throw new ArgumentException("Invalid id for getting shop");
             }
+
+            var products = await productRepository.FindAll(shopId);
             return products;
         }
     }
