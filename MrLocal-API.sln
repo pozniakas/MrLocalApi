@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30523.141
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MrLocal-Backend", "MrLocal-Backend\MrLocal-Backend.csproj", "{C0CE978F-81EA-4AB0-9928-17683EDFC29B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MrLocal-API", "MrLocal-API\MrLocal-API.csproj", "{C0CE978F-81EA-4AB0-9928-17683EDFC29B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
