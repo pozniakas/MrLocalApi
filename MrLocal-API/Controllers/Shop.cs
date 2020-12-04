@@ -59,7 +59,8 @@ namespace MrLocal_API.Controllers
 
             _logger.LogInfo("Shop deleted");
 
-            return Ok();
+            return Ok("Shop was deleted successfully");
+
         }
     }
 }

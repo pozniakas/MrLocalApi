@@ -65,7 +65,7 @@ namespace MrLocal_API.Controllers
 
             _logger.LogInfo("Product deleted");
 
-            return Ok();
+            return Ok("Product was deleted successfully");
         }
     }
 }
