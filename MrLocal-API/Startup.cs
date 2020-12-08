@@ -35,8 +35,6 @@ namespace MrLocal_API
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IShopRepository, ShopRepository>();
 
-            services.AddScoped((serviceProvider => new Lazy<IEnumConverter>(() => serviceProvider.GetRequiredService<IEnumConverter>()))); // not working
-
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IShopService, ShopService>();
             services.AddScoped<ISearchService, SearchService>();
@@ -67,3 +65,4 @@ namespace MrLocal_API
         }
     }
 }
+
