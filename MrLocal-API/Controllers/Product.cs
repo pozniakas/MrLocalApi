@@ -2,6 +2,7 @@
 using MrLocal_API.Controllers.Interfaces;
 using MrLocal_API.Controllers.LoggerService.Interfaces;
 using MrLocal_API.Services;
+using MrLocal_API.Services.Interfaces;
 using System.Threading.Tasks;
 
 namespace MrLocal_API.Controllers
@@ -10,13 +11,13 @@ namespace MrLocal_API.Controllers
     [ApiController]
     public class Product : ControllerBase, IProduct
     {
-        private readonly ProductService productService;
+        private readonly IProductService _productService;
         private readonly ILoggerManager _logger;
 
-        public Product(ILoggerManager logger)
+        public Product(ILoggerManager logger, IProductService productService)
         {
             _logger = logger;
-            productService = new ProductService();
+            _productService = productService;
         }
 
         [HttpGet("{shopId}")]
@@ -24,7 +25,7 @@ namespace MrLocal_API.Controllers
         {
             _logger.LogInfo($"Getting products with this shop Id: {shopId}");
 
-            var getProducts = await productService.GetAllProducts(shopId);
+            var getProducts = await _productService.GetAllProducts(shopId);
 
             _logger.LogInfo($"Returning products with this shop Id: {shopId}");
 
@@ -36,7 +37,7 @@ namespace MrLocal_API.Controllers
         {
             _logger.LogInfo("Creating product");
 
-            var createdProduct = await productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
+            var createdProduct = await _productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
 
             _logger.LogInfo("Product created");
 
@@ -49,7 +50,7 @@ namespace MrLocal_API.Controllers
         {
             _logger.LogInfo("Updating product");
 
-            var updatedProduct = await productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
+            var updatedProduct = await _productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
 
             _logger.LogInfo("Product updated");
 
@@ -61,7 +62,7 @@ namespace MrLocal_API.Controllers
         {
             _logger.LogInfo("Deleting shop");
 
-            await productService.DeleteProduct(id);
+            await _productService.DeleteProduct(id);
 
             _logger.LogInfo("Product deleted");
 

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace MrLocal_API.Repositories.Interfaces
 {
-    interface IShopRepository
+    public interface IShopRepository
     {
         public Task<Shop> Create(string name, string description, string typeOfShop, string city);
         public Task<Shop> Update(string id, string name, string status, string description, string typeOfShop, string city);

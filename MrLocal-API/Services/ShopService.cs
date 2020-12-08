@@ -1,6 +1,7 @@
 
 using MrLocal_API.Models;
 using MrLocal_API.Repositories;
+using MrLocal_API.Repositories.Interfaces;
 using MrLocal_API.Services.Helpers;
 using MrLocal_API.Services.Interfaces;
 using System;
@@ -10,25 +11,25 @@ namespace MrLocal_API.Services
 {
     public class ShopService : IShopService
     {
-        private readonly ShopRepository shopRepository;
+        private readonly IShopRepository _shopRepository;
         private readonly Lazy<ValidateData> validateData = null;
 
-        public ShopService()
+        public ShopService(IShopRepository shopRepository)
         {
             validateData = new Lazy<ValidateData>();
-            shopRepository = new ShopRepository();
+            _shopRepository = shopRepository;
         }
 
         public async Task<Shop> CreateShop(string name, string description, string typeOfShop, string city)
         {
             await validateData.Value.ValidateShopData(name, null, description, typeOfShop, city, false);
-            var createdShop = await shopRepository.Create(name, description, typeOfShop, city);
+            var createdShop = await _shopRepository.Create(name, description, typeOfShop, city);
             return createdShop;
         }
 
         public async Task<Shop> UpdateShop(string id, string name, string status, string description, string typeOfShop, string city)
         {
-            var shop = await shopRepository.FindOne(id);
+            var shop = await _shopRepository.FindOne(id);
 
             if (shop == null)
             {
@@ -36,17 +37,17 @@ namespace MrLocal_API.Services
             }
 
             await validateData.Value.ValidateShopData(name, status, description, typeOfShop, city, true);
-            var updatedShop = await shopRepository.Update(id, name, status, description, typeOfShop, city);
+            var updatedShop = await _shopRepository.Update(id, name, status, description, typeOfShop, city);
             return updatedShop;
         }
 
         public async Task<string> DeleteShop(string id)
         {
-            var shop = await shopRepository.FindOne(id);
+            var shop = await _shopRepository.FindOne(id);
 
             if (shop != null)
             {
-                var deletedShop = await shopRepository.Delete(id);
+                var deletedShop = await _shopRepository.Delete(id);
                 return deletedShop;
             }
             else
@@ -57,7 +58,7 @@ namespace MrLocal_API.Services
 
         public async Task<Shop> GetShop(string id)
         {
-            var shop = await shopRepository.FindOne(id);
+            var shop = await _shopRepository.FindOne(id);
 
             if (shop == null)
             {
