@@ -11,40 +11,39 @@ namespace MrLocal_API.Controllers
     [ApiController]
     public class Product : ControllerBase, IProduct
     {
+        public RequestEventArgs ArgsForRequestEvents;
+        public event EventHandler<RequestEventArgs> RequestStarted;
+        public event EventHandler<RequestEventArgs> RequestFinished;
         private readonly ProductService productService;
         private readonly ILoggerManager _logger;
-
-        public event EventHandler<RequestArgs> RequestStarted;
-
         public Product(ILoggerManager logger)
         {
             _logger = logger;
             productService = new ProductService();
+            ArgsForRequestEvents = new RequestEventArgs(_logger, "api/product");
+            RequestStarted += Event.RequestTriggeredHandler;
+            RequestFinished += Event.RequestFinishedHandler;
         }
 
         [HttpGet("{shopId}")]
         public async Task<IActionResult> Get(string shopId)
         {
-            RequestStarted.Invoke(this, new RequestArgs(_logger, "Api/product Get"));
-
-            _logger.LogInfo($"Getting products with this shop Id: {shopId}");
+            ArgsForRequestEvents._endpoint += "GET";
+            RequestStarted.Invoke(sender: this, ArgsForRequestEvents);
 
             var getProducts = await productService.GetAllProducts(shopId);
-
-            _logger.LogInfo($"Returning products with this shop Id: {shopId}");
-
+            RequestFinished.Invoke(sender: this, ArgsForRequestEvents);
             return Ok(getProducts);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Models.Product body)
         {
-            _logger.LogInfo("Creating product");
+            ArgsForRequestEvents._endpoint += "POST";
+            RequestStarted.Invoke(sender: this, ArgsForRequestEvents);
 
             var createdProduct = await productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
-
-            _logger.LogInfo("Product created");
-
+            RequestFinished.Invoke(sender: this, ArgsForRequestEvents);
             return Ok(createdProduct);
 
         }
@@ -52,24 +51,22 @@ namespace MrLocal_API.Controllers
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Models.Product body)
         {
-            _logger.LogInfo("Updating product");
+            ArgsForRequestEvents._endpoint += "PUT";
+            RequestStarted.Invoke(sender: this, ArgsForRequestEvents);
 
             var updatedProduct = await productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
-
-            _logger.LogInfo("Product updated");
-
+            RequestFinished.Invoke(sender: this, ArgsForRequestEvents);
             return Ok(updatedProduct);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            _logger.LogInfo("Deleting shop");
+            ArgsForRequestEvents._endpoint += "DELETE";
+            RequestStarted.Invoke(sender: this, ArgsForRequestEvents);
 
             await productService.DeleteProduct(id);
-
-            _logger.LogInfo("Product deleted");
-
+            RequestFinished.Invoke(sender: this, ArgsForRequestEvents);
             return Ok("Product was deleted successfully");
         }
     }
