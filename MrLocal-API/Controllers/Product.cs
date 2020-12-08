@@ -2,6 +2,7 @@
 using MrLocal_API.Controllers.Interfaces;
 using MrLocal_API.Controllers.LoggerService.Interfaces;
 using MrLocal_API.Services;
+using System;
 using System.Threading.Tasks;
 
 namespace MrLocal_API.Controllers
@@ -13,6 +14,8 @@ namespace MrLocal_API.Controllers
         private readonly ProductService productService;
         private readonly ILoggerManager _logger;
 
+        public event EventHandler<RequestArgs> RequestStarted;
+
         public Product(ILoggerManager logger)
         {
             _logger = logger;
@@ -22,6 +25,8 @@ namespace MrLocal_API.Controllers
         [HttpGet("{shopId}")]
         public async Task<IActionResult> Get(string shopId)
         {
+            RequestStarted.Invoke(this, new RequestArgs(_logger, "Api/product Get"));
+
             _logger.LogInfo($"Getting products with this shop Id: {shopId}");
 
             var getProducts = await productService.GetAllProducts(shopId);
