@@ -36,6 +36,7 @@ namespace MrLocal_API
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IShopService, ShopService>();
             services.AddScoped<ISearchService, SearchService>();
+
             services.AddControllers();
         }
 
