@@ -15,13 +15,13 @@ namespace MrLocal_API.Repositories
     {
         readonly string fileName;
         private readonly Lazy<XmlRepository<Product>> xmlRepository = null;
-        private readonly Lazy<EnumConverter> enumConverter = null;
+        private readonly Lazy<IEnumConverter> _enumConverter;
 
-        public ProductRepository()
+        public ProductRepository(Lazy<IEnumConverter> enumConverter)
         {
             fileName = ConfigurationManager.AppSettings.Get("PRODUCT_REPOSITORY_FILE_NAME");
             xmlRepository = new Lazy<XmlRepository<Product>>();
-            enumConverter = new Lazy<EnumConverter>();
+            _enumConverter = enumConverter;
 
             if (!Directory.Exists("Data"))
             {
@@ -63,7 +63,7 @@ namespace MrLocal_API.Repositories
 
             doc.Save(fileName);
 
-            return new Product(id, shopId, name, description, enumConverter.Value.StringToPricetype(pricetype), (double)price, DateTime.Parse(createdAtStr), DateTime.Parse(updatedAtStr));
+            return new Product(id, shopId, name, description, _enumConverter.Value.StringToPricetype(pricetype), (double)price, DateTime.Parse(createdAtStr), DateTime.Parse(updatedAtStr));
         }
 
         public async Task<Product> Update(string id, string shopId, string name
@@ -104,7 +104,7 @@ namespace MrLocal_API.Repositories
 
                 doc.Save(fileName);
 
-                return new Product(id, values[0], values[1], values[2], enumConverter.Value.StringToPricetype(values[3]), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[4]));
+                return new Product(id, values[0], values[1], values[2], _enumConverter.Value.StringToPricetype(values[3]), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[4]));
             });
         }
 
