@@ -36,8 +36,7 @@ namespace MrLocal_API
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IShopRepository, ShopRepository>();
 
-            var logger = new LoggerManager(); // ?????
-            services.AddScoped<IRequestEvent,RequestEvent>(provider => new RequestEvent(logger));
+            services.AddScoped<IRequestEvent,RequestEvent>();
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IShopService, ShopService>();
