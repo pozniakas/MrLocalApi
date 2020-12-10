@@ -16,8 +16,8 @@ namespace MrLocal_API.Repositories
         readonly string fileName;
         private readonly Lazy<XmlRepository<Product>> xmlRepository = null;
         private readonly Lazy<EnumConverter> enumConverter = null;
-
-        public ProductRepository()
+        
+       public ProductRepository()
         {
             fileName = ConfigurationManager.AppSettings.Get("PRODUCT_REPOSITORY_FILE_NAME");
             xmlRepository = new Lazy<XmlRepository<Product>>();

@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrLocal_API.Controllers.Interfaces;
 using MrLocal_API.Controllers.LoggerService.Interfaces;
-using MrLocal_API.Services;
-using System;
+using MrLocal_API.Services.Interfaces;
 using System.Threading.Tasks;
 
 namespace MrLocal_API.Controllers
@@ -11,47 +10,48 @@ namespace MrLocal_API.Controllers
     [ApiController]
     public class ProductController : ControllerBase, IProduct
     {
-        public RequestEvent RequestEvents;
-        private readonly ProductService productService;
-        public ProductController(ILoggerManager logger)
+        private readonly IProductService _productService;
+        private readonly IRequestEvent _requestEvents;
+
+        public ProductController(IProductService productService, IRequestEvent requestEvent)
         {
-            productService = new ProductService();
-            RequestEvents = new RequestEvent(logger, "api/product");
+            _productService = productService;
+            _requestEvents = requestEvent;
         }
 
         [HttpGet("{shopId}")]
         public async Task<IActionResult> Get(string shopId)
         {
-            RequestEvents.ReportAboutRequestStart("GET");
-            var getProducts = await productService.GetAllProducts(shopId);
-            RequestEvents.ReportAboutRequestFinish("GET");
+            _requestEvents.ReportAboutRequestStart("api/product GET");
+            var getProducts = await _productService.GetAllProducts(shopId);
+            _requestEvents.ReportAboutRequestFinish("api/product GET");
             return Ok(getProducts);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Models.Product body)
         {
-            RequestEvents.ReportAboutRequestStart("POST");
-            var createdProduct = await productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
-            RequestEvents.ReportAboutRequestFinish("POST");
+            _requestEvents.ReportAboutRequestStart("api/product POST");
+            var createdProduct = await _productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
+            _requestEvents.ReportAboutRequestFinish("api/product POST");
             return Ok(createdProduct);
         }
 
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Models.Product body)
         {
-            RequestEvents.ReportAboutRequestStart("PUT");
-            var updatedProduct = await productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
-            RequestEvents.ReportAboutRequestFinish("PUT");
+            _requestEvents.ReportAboutRequestStart("api/product PUT");
+            var updatedProduct = await _productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
+            _requestEvents.ReportAboutRequestFinish("api/product PUT");
             return Ok(updatedProduct);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            RequestEvents.ReportAboutRequestStart("DELETE");
-            await productService.DeleteProduct(id);
-            RequestEvents.ReportAboutRequestFinish("DELETE");
+            _requestEvents.ReportAboutRequestStart("api/product DELETE");
+            await _productService.DeleteProduct(id);
+            _requestEvents.ReportAboutRequestFinish("api/product DELETE");
             return Ok("Product was deleted successfully");
         }
     }

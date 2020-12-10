@@ -3,10 +3,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MrLocal_API.Controllers;
 using MrLocal_API.Controllers.Exceptions;
 using MrLocal_API.Controllers.LoggerService;
 using MrLocal_API.Controllers.LoggerService.Interfaces;
+using MrLocal_API.Repositories;
+using MrLocal_API.Repositories.Helpers;
+using MrLocal_API.Repositories.Interfaces;
+using MrLocal_API.Services;
+using MrLocal_API.Services.Interfaces;
 using NLog;
+using System;
 using System.IO;
 
 namespace MrLocal_API
@@ -25,9 +32,18 @@ namespace MrLocal_API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton<ILoggerManager, LoggerManager>();
+
+            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IShopRepository, ShopRepository>();
+
+            services.AddScoped<IRequestEvent,RequestEvent>();
+
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IShopService, ShopService>();
+            services.AddScoped<ISearchService, SearchService>();
+
             services.AddControllers();
         }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -51,3 +67,4 @@ namespace MrLocal_API
         }
     }
 }
+

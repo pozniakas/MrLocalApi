@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrLocal_API.Controllers.Interfaces;
 using MrLocal_API.Controllers.LoggerService.Interfaces;
-using MrLocal_API.Services;
-using System;
+using MrLocal_API.Services.Interfaces;
 using System.Threading.Tasks;
 using static MrLocal_API.Models.Body;
 
@@ -12,21 +11,21 @@ namespace MrLocal_API.Controllers
     [ApiController]
     public class Search : ControllerBase, ISearch
     {
-        public RequestEvent RequestEvents;
-        private readonly SearchService searchService;
+        private readonly ISearchService _searchService;
+        public IRequestEvent _requestEvents;
 
-        public Search(ILoggerManager logger)
+        public Search(ISearchService searchService, IRequestEvent requestEvent)
         {
-            searchService = new SearchService();
-            RequestEvents = new RequestEvent(logger, "api/search");
+            _searchService = searchService;
+            _requestEvents = requestEvent;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get([FromBody] SearchBody body)
         {
-            RequestEvents.ReportAboutRequestStart("GET");
-            var search = await searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);
-            RequestEvents.ReportAboutRequestFinish("GET");
+            _requestEvents.ReportAboutRequestStart("api/search GET");
+            var search = await _searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);
+            _requestEvents.ReportAboutRequestFinish("api/search GET");
             return Ok(search);
         }
     }

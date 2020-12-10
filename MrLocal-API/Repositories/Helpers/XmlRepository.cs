@@ -1,5 +1,6 @@
 ﻿using MrLocal_API.Models;
 using MrLocal_API.Models.Interfaces;
+using MrLocal_API.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -10,6 +11,7 @@ namespace MrLocal_API.Repositories.Helpers
     public class XmlRepository<T> where T : IModels
     {
         private readonly Lazy<EnumConverter> enumConverter = new Lazy<EnumConverter>();
+
         public async Task<XmlDocument> LoadXml(string FileName)
         {
             return await Task.Run(() =>

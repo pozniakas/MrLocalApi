@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace MrLocal_API.Repositories.Interfaces
 {
-    interface IProductRepository
+    public interface IProductRepository
     {
         public Task<Product> Create(string shopId, string name, string description, string pricetype, double? price);
         public Task<Product> Update(string id, string shopId, string name, string description, string pricetype, double? price);
