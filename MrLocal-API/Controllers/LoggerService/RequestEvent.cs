@@ -2,22 +2,22 @@
 
 namespace MrLocal_API.Controllers
 {
-    public class RequestEvent
+    public class RequestEvent : IRequestEvent
     {
         public delegate void RequestStarted(object sender, RequestEventArgs e);
         public delegate void RequestFinished(object sender, RequestEventArgs e);
         public event RequestStarted RequestStartedEvent;
         public event RequestFinished RequestFinishedEvent;
         public RequestEventArgs Args;
-        public void RequestTriggeredHandler(object sender, RequestEventArgs e) => e.Logger.LogInfo($"Endpoint ({e.Endpoint} {e.Method}) request was started");
-        public void RequestFinishedHandler(object sender, RequestEventArgs e) => e.Logger.LogInfo($"Endpoint ({e.Endpoint} {e.Method}) request was finished");
-
-        public RequestEvent(ILoggerManager logger, string endpoint)
+        
+        public RequestEvent(ILoggerManager logger)
         {
             RequestStartedEvent += RequestTriggeredHandler;
             RequestFinishedEvent += RequestFinishedHandler;
-            Args = new RequestEventArgs(logger, endpoint);
+            Args = new RequestEventArgs(logger);
         }
+        public void RequestTriggeredHandler(object sender, RequestEventArgs e) => e.Logger.LogInfo($"Endpoint ({e.Method}) request was started");
+        public void RequestFinishedHandler(object sender, RequestEventArgs e) => e.Logger.LogInfo($"Endpoint ({e.Method}) request was finished");
 
         public void ReportAboutRequestStart(string method)
         {
@@ -34,13 +34,11 @@ namespace MrLocal_API.Controllers
     public class RequestEventArgs
     {
         public ILoggerManager Logger { set; get; }
-        public string Endpoint { set; get; }
         public string Method { set; get; }
 
-        public RequestEventArgs(ILoggerManager logger, string endpoint)
+        public RequestEventArgs(ILoggerManager logger)
         {
             Logger = logger;
-            Endpoint = endpoint;
         }
     }
 }

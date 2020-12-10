@@ -11,49 +11,47 @@ namespace MrLocal_API.Controllers
     public class ShopController : ControllerBase, IShop
     {
         private readonly IShopService _shopService;
-        private readonly ILoggerManager _logger;
-        public RequestEvent RequestEvents;
+        public IRequestEvent _requestEvents;
 
-        public ShopController(ILoggerManager logger, IShopService shopService)
+        public ShopController(IShopService shopService, IRequestEvent requestEvent)
         {
-            _logger = logger;
             _shopService = shopService;
-            RequestEvents = new RequestEvent(logger, "api/shop");
+            _requestEvents = requestEvent;
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            RequestEvents.ReportAboutRequestStart("GET");
+            _requestEvents.ReportAboutRequestStart("api/shop GET");
             var getShop = await _shopService.GetShop(id);
-            RequestEvents.ReportAboutRequestFinish("GET");
+            _requestEvents.ReportAboutRequestFinish("api/shop GET");
             return Ok(getShop);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Models.Shop body)
         {
-            RequestEvents.ReportAboutRequestStart("POST");
+            _requestEvents.ReportAboutRequestStart("api/shop POST");
             var createdShop = await _shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.City);
-            RequestEvents.ReportAboutRequestFinish("POST");
+            _requestEvents.ReportAboutRequestFinish("api/shop POST");
             return Ok(createdShop);
         }
 
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Models.Shop body)
         {
-            RequestEvents.ReportAboutRequestStart("PUT");
+            _requestEvents.ReportAboutRequestStart("api/shop PUT");
             var updatedShop = await _shopService.UpdateShop(body.Id, body.Name, body.Status, body.Description, body.TypeOfShop, body.City);
-            RequestEvents.ReportAboutRequestFinish("PUT");
+            _requestEvents.ReportAboutRequestFinish("api/shop PUT");
             return Ok(updatedShop);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            RequestEvents.ReportAboutRequestStart("DELETE");
+            _requestEvents.ReportAboutRequestStart("api/shop DELETE");
             await _shopService.DeleteShop(id);
-            RequestEvents.ReportAboutRequestFinish("DELETE");
+            _requestEvents.ReportAboutRequestFinish("api/shop DELETE");
             return Ok("Shop was deleted successfully");
         }
     }

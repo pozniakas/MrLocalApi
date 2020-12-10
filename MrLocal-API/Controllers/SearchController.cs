@@ -12,22 +12,20 @@ namespace MrLocal_API.Controllers
     public class Search : ControllerBase, ISearch
     {
         private readonly ISearchService _searchService;
-        private readonly ILoggerManager _logger;
-        public RequestEvent RequestEvents;
+        public IRequestEvent _requestEvents;
 
-        public Search(ILoggerManager logger, ISearchService searchService)
+        public Search(ISearchService searchService, IRequestEvent requestEvent)
         {
-            _logger = logger;
             _searchService = searchService;
-            RequestEvents = new RequestEvent(logger, "api/search");
+            _requestEvents = requestEvent;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get([FromBody] SearchBody body)
         {
-            RequestEvents.ReportAboutRequestStart("GET");
+            _requestEvents.ReportAboutRequestStart("api/search GET");
             var search = await _searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);
-            RequestEvents.ReportAboutRequestFinish("GET");
+            _requestEvents.ReportAboutRequestFinish("api/search GET");
             return Ok(search);
         }
     }

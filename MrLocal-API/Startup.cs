@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MrLocal_API.Controllers;
 using MrLocal_API.Controllers.Exceptions;
 using MrLocal_API.Controllers.LoggerService;
 using MrLocal_API.Controllers.LoggerService.Interfaces;
@@ -37,6 +38,10 @@ namespace MrLocal_API
 
             /*services.AddScoped<IEnumConverter, EnumConverter>();
             services.AddScoped(provider => new Lazy<IEnumConverter>(provider.GetService<IEnumConverter>));*/
+
+            var logger = new LoggerManager(); // ?????
+
+            services.AddScoped<IRequestEvent,RequestEvent>(provider => new RequestEvent(logger));
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IShopService, ShopService>();
