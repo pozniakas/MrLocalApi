@@ -12,11 +12,6 @@ namespace MrLocal_API.Repositories.Helpers
     {
         private readonly Lazy<EnumConverter> enumConverter = new Lazy<EnumConverter>();
 
-       /* public XmlRepository(Lazy<IEnumConverter> enumConverter)
-        {
-            this.enumConverter = enumConverter;
-        }*/
-
         public async Task<XmlDocument> LoadXml(string FileName)
         {
             return await Task.Run(() =>

@@ -16,27 +16,7 @@ namespace MrLocal_API.Repositories
         readonly string fileName;
         private readonly Lazy<XmlRepository<Product>> xmlRepository = null;
         private readonly Lazy<EnumConverter> enumConverter = null;
-        /* private readonly Lazy<IEnumConverter> _enumConverter;
-
-        public ProductRepository(Lazy<IEnumConverter> enumConverter)
-        {
-            fileName = ConfigurationManager.AppSettings.Get("PRODUCT_REPOSITORY_FILE_NAME");
-            xmlRepository = new Lazy<XmlRepository<Product>>();
-            _enumConverter = enumConverter ;
-
-            if (!Directory.Exists("Data"))
-            {
-                Directory.CreateDirectory("Data");
-            }
-
-            if (!File.Exists(fileName))
-            {
-                var xElement = new XElement("Products");
-                var xDocument = new XDocument(xElement);
-                xDocument.Save(fileName);
-            }
-
-        }*/
+        
        public ProductRepository()
         {
             fileName = ConfigurationManager.AppSettings.Get("PRODUCT_REPOSITORY_FILE_NAME");

@@ -36,11 +36,7 @@ namespace MrLocal_API
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IShopRepository, ShopRepository>();
 
-            /*services.AddScoped<IEnumConverter, EnumConverter>();
-            services.AddScoped(provider => new Lazy<IEnumConverter>(provider.GetService<IEnumConverter>));*/
-
             var logger = new LoggerManager(); // ?????
-
             services.AddScoped<IRequestEvent,RequestEvent>(provider => new RequestEvent(logger));
 
             services.AddScoped<IProductService, ProductService>();
