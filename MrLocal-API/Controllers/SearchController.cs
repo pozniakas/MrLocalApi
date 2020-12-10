@@ -2,6 +2,7 @@
 using MrLocal_API.Controllers.Interfaces;
 using MrLocal_API.Controllers.LoggerService.Interfaces;
 using MrLocal_API.Services;
+using System;
 using System.Threading.Tasks;
 using static MrLocal_API.Models.Body;
 
@@ -11,24 +12,21 @@ namespace MrLocal_API.Controllers
     [ApiController]
     public class Search : ControllerBase, ISearch
     {
+        public RequestEvent RequestEvents;
         private readonly SearchService searchService;
-        private readonly ILoggerManager _logger;
 
         public Search(ILoggerManager logger)
         {
-            _logger = logger;
             searchService = new SearchService();
+            RequestEvents = new RequestEvent(logger, "api/search");
         }
 
         [HttpGet]
         public async Task<IActionResult> Get([FromBody] SearchBody body)
         {
-            _logger.LogInfo("Searching for shop");
-
+            RequestEvents.ReportAboutRequestStart("GET");
             var search = await searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);
-
-            _logger.LogInfo("Returning shops");
-
+            RequestEvents.ReportAboutRequestFinish("GET");
             return Ok(search);
         }
     }

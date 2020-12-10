@@ -2,69 +2,56 @@
 using MrLocal_API.Controllers.Interfaces;
 using MrLocal_API.Controllers.LoggerService.Interfaces;
 using MrLocal_API.Services;
+using System;
 using System.Threading.Tasks;
 
 namespace MrLocal_API.Controllers
 {
     [Route("api/product")]
     [ApiController]
-    public class Product : ControllerBase, IProduct
+    public class ProductController : ControllerBase, IProduct
     {
+        public RequestEvent RequestEvents;
         private readonly ProductService productService;
-        private readonly ILoggerManager _logger;
-
-        public Product(ILoggerManager logger)
+        public ProductController(ILoggerManager logger)
         {
-            _logger = logger;
             productService = new ProductService();
+            RequestEvents = new RequestEvent(logger, "api/product");
         }
 
         [HttpGet("{shopId}")]
         public async Task<IActionResult> Get(string shopId)
         {
-            _logger.LogInfo($"Getting products with this shop Id: {shopId}");
-
+            RequestEvents.ReportAboutRequestStart("GET");
             var getProducts = await productService.GetAllProducts(shopId);
-
-            _logger.LogInfo($"Returning products with this shop Id: {shopId}");
-
+            RequestEvents.ReportAboutRequestFinish("GET");
             return Ok(getProducts);
         }
 
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Models.Product body)
         {
-            _logger.LogInfo("Creating product");
-
+            RequestEvents.ReportAboutRequestStart("POST");
             var createdProduct = await productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
-
-            _logger.LogInfo("Product created");
-
+            RequestEvents.ReportAboutRequestFinish("POST");
             return Ok(createdProduct);
-
         }
 
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] Models.Product body)
         {
-            _logger.LogInfo("Updating product");
-
+            RequestEvents.ReportAboutRequestStart("PUT");
             var updatedProduct = await productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
-
-            _logger.LogInfo("Product updated");
-
+            RequestEvents.ReportAboutRequestFinish("PUT");
             return Ok(updatedProduct);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            _logger.LogInfo("Deleting shop");
-
+            RequestEvents.ReportAboutRequestStart("DELETE");
             await productService.DeleteProduct(id);
-
-            _logger.LogInfo("Product deleted");
-
+            RequestEvents.ReportAboutRequestFinish("DELETE");
             return Ok("Product was deleted successfully");
         }
     }
