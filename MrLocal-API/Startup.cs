@@ -1,3 +1,4 @@
+using Autofac;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -35,9 +36,8 @@ namespace MrLocal_API
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IShopRepository, ShopRepository>();
 
-            //services.AddScoped(typeof(Lazy<IEnumConverter>),typeof(EnumConverter));
-            services.AddScoped<IEnumConverter, EnumConverter>();
-            services.AddScoped(provider => new Lazy<IEnumConverter>(provider.GetService<IEnumConverter>));
+            /*services.AddScoped<IEnumConverter, EnumConverter>();
+            services.AddScoped(provider => new Lazy<IEnumConverter>(provider.GetService<IEnumConverter>));*/
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IShopService, ShopService>();

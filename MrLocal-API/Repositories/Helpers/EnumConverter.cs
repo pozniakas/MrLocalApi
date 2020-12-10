@@ -6,6 +6,11 @@ namespace MrLocal_API.Repositories.Helpers
 {
     public class EnumConverter : IEnumConverter
     {
+        public EnumConverter()
+        {
+
+        }
+
         public PriceTypes StringToPricetype(string pricetype)
         {
             return pricetype switch

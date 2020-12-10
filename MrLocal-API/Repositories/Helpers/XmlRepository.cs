@@ -10,12 +10,12 @@ namespace MrLocal_API.Repositories.Helpers
 {
     public class XmlRepository<T> where T : IModels
     {
-        private readonly Lazy<IEnumConverter> _enumConverter;
+        private readonly Lazy<EnumConverter> enumConverter = new Lazy<EnumConverter>();
 
-        public XmlRepository(Lazy<IEnumConverter> enumConverter)
+       /* public XmlRepository(Lazy<IEnumConverter> enumConverter)
         {
-            _enumConverter = enumConverter;
-        }
+            this.enumConverter = enumConverter;
+        }*/
 
         public async Task<XmlDocument> LoadXml(string FileName)
         {
@@ -74,7 +74,7 @@ namespace MrLocal_API.Repositories.Helpers
                 var priceType = node["Pricetype"].InnerText;
                 var shopId = node["ShopId"].InnerText;
 
-                var product = new Product(_id, shopId, _name, _description, _enumConverter.Value.StringToPricetype(priceType), price, formattedCreatedAt, formattedUpdatedAt)
+                var product = new Product(_id, shopId, _name, _description, enumConverter.Value.StringToPricetype(priceType), price, formattedCreatedAt, formattedUpdatedAt)
                 {
                     DeletedAt = formattedDeletedAt
                 };
