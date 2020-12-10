@@ -4,7 +4,7 @@ namespace MrLocal_API.Controllers
 {
     [ApiController]
     [Route("")]
-    public class Main : ControllerBase
+    public class MainController : ControllerBase
     {
         [HttpGet]
         public string Get()
