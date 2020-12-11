@@ -39,8 +39,11 @@ namespace MrLocal_API.Controllers.Exceptions
                 _logger.LogWarn($"User-friendly error: {exception}");
                 return context.Response.WriteAsync(new ErrorDetails()
                 {
-                    StatusCode = context.Response.StatusCode = 400,
-                    Message = exception.Message
+                    Error = new ApiError()
+                    {
+                        StatusCode = context.Response.StatusCode = 400,
+                        Message = exception.Message
+                    }
                 }.ToString());
             }
             else
@@ -48,8 +51,11 @@ namespace MrLocal_API.Controllers.Exceptions
                 _logger.LogError($"Internal server error: {exception}");
                 return context.Response.WriteAsync(new ErrorDetails()
                 {
-                    StatusCode = context.Response.StatusCode,
-                    Message = "Internal Server Error"
+                    Error = new ApiError()
+                    {
+                        StatusCode = context.Response.StatusCode,
+                        Message = "Internal Server Error"
+                    }
                 }.ToString());
             }
 
