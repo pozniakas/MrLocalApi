@@ -8,7 +8,7 @@ using System.Xml;
 
 namespace MrLocal_API.Repositories.Helpers
 {
-    public class XmlRepository<T> where T : IModels
+    public class XmlRepository<T> where T : IModel
     {
         private readonly Lazy<EnumConverter> enumConverter = new Lazy<EnumConverter>();
 

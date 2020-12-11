@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace MrLocal_API.Models
 {
-    public class Product : IModels
+    public class Product : IModel
     {
 
         public string Id { get; set; }

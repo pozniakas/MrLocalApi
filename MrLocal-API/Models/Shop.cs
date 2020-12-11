@@ -3,7 +3,7 @@ using System;
 
 namespace MrLocal_API.Models
 {
-    public class Shop : IModels
+    public class Shop : IModel
     {
         public string Id { get; set; }
         public string Name { get; set; }
