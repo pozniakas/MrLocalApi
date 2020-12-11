@@ -26,7 +26,9 @@ namespace MrLocal_API.Controllers
             _requestEvents.ReportAboutRequestStart("api/search GET");
             var search = await _searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);
             _requestEvents.ReportAboutRequestFinish("api/search GET");
-            return Ok(search);
+            return ReturnResponse(search);
         }
+
+        public IActionResult ReturnResponse(object value) => Ok(new { Response = value });
     }
 }

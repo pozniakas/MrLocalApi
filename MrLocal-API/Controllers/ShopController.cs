@@ -25,7 +25,7 @@ namespace MrLocal_API.Controllers
             _requestEvents.ReportAboutRequestStart("api/shop GET");
             var getShop = await _shopService.GetShop(id);
             _requestEvents.ReportAboutRequestFinish("api/shop GET");
-            return Ok(getShop);
+            return ReturnResponse(getShop);
         }
 
         [HttpPost]
@@ -34,7 +34,7 @@ namespace MrLocal_API.Controllers
             _requestEvents.ReportAboutRequestStart("api/shop POST");
             var createdShop = await _shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.City);
             _requestEvents.ReportAboutRequestFinish("api/shop POST");
-            return Ok(createdShop);
+            return ReturnResponse(createdShop);
         }
 
         [HttpPut]
@@ -43,7 +43,7 @@ namespace MrLocal_API.Controllers
             _requestEvents.ReportAboutRequestStart("api/shop PUT");
             var updatedShop = await _shopService.UpdateShop(body.Id, body.Name, body.Status, body.Description, body.TypeOfShop, body.City);
             _requestEvents.ReportAboutRequestFinish("api/shop PUT");
-            return Ok(updatedShop);
+            return ReturnResponse(updatedShop);
         }
 
         [HttpDelete("{id}")]
@@ -52,7 +52,9 @@ namespace MrLocal_API.Controllers
             _requestEvents.ReportAboutRequestStart("api/shop DELETE");
             await _shopService.DeleteShop(id);
             _requestEvents.ReportAboutRequestFinish("api/shop DELETE");
-            return Ok("Shop was deleted successfully");
+            return ReturnResponse("Shop was deleted successfully");
         }
+
+        public IActionResult ReturnResponse(object value) => Ok(new { Response = value });
     }
 }
