@@ -1,5 +1,6 @@
 ﻿using MrLocal_API.Models;
-using MrLocal_API.Repositories;
+using MrLocal_API.Repositories.Interfaces;
+using MrLocal_API.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace MrLocal_API.Services.Helpers
 {
-    public class ValidateData
+    public class ValidateData : IValidateData
     {
-        private readonly ShopRepository shopRepository;
+        private readonly IShopRepository _shopRepository;
 
-        public ValidateData()
+        public ValidateData(IShopRepository shopRepository)
         {
-            shopRepository = new ShopRepository();
+            _shopRepository = shopRepository;
         }
         public async Task<bool> ValidateProductData(string shopId, string name, string description, double? price, bool isUpdate, string priceType)
         {
@@ -22,9 +23,9 @@ namespace MrLocal_API.Services.Helpers
 
             var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
             var priceRegex = new Regex(@"\d+(?:\.\d+)?");
-            var shop = await shopRepository.FindOne(shopId);
+            var shop = await _shopRepository.FindOne(shopId);
             var priceTypes = new List<string> { "UNIT", "GRAMS", "KILOGRAMS" };
-            var isValidShop = shop != null; 
+            var isValidShop = shop != null;
             var isValidName = (isUpdate && IsStringEmpty(name)) || (name != null && name.Length > 2 && nameRegex.IsMatch(name));
             var isValidDescription = (isUpdate && IsStringEmpty(description)) || (description != null && description.Length > 2);
             var isValidPrice = priceRegex.IsMatch(price.ToString()) || (isUpdate && price == null);
@@ -52,14 +53,14 @@ namespace MrLocal_API.Services.Helpers
             string[] arrayOfCities = { "Vilnius", "Kaunas", "Klaipėda", "Šiauliai", "Panevėžys" };
             string[] arrayOfStatusTypes = { "Active", "Not Active", "Paused" };
             var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
-            var shops = await shopRepository.FindAll();
+            var shops = await _shopRepository.FindAll();
 
             var isValidName = (isUpdate && IsStringEmpty(name)) || (name != null && name.Length > 2 && nameRegex.IsMatch(name) && shops.Where(i => i.Name == name).Count() == 0);
             var isValidStatus = (isUpdate && IsStringEmpty(status)) || Array.Exists(arrayOfStatusTypes, i => i == status) || (!isUpdate && IsStringEmpty(status));
             var isValidDescription = (isUpdate && IsStringEmpty(description)) || (description != null && description.Length > 2);
             var isValidTypeOfShop = (isUpdate && IsStringEmpty(description)) || Array.Exists(arrayOfShopTypes, i => i == typeOfShop);
             var isValidCity = (isUpdate && IsStringEmpty(city)) || Array.Exists(arrayOfCities, i => i == city);
-            
+
             bool[] validators = { isValidName, isValidStatus, isValidDescription, isValidTypeOfShop, isValidCity };
             string[] namesOfParams = { "name", "status", "description", "typeOfShop", "city" };
 

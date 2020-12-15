@@ -14,14 +14,14 @@ namespace MrLocal_API.Repositories
     public class ProductRepository : IProductRepository
     {
         readonly string fileName;
-        private readonly Lazy<XmlRepository<Product>> xmlRepository = null;
-        private readonly Lazy<EnumConverter> enumConverter = null;
+        private readonly Lazy<IXmlRepository<Product>> _xmlRepository = null;
+        private readonly Lazy<IEnumConverter> _enumConverter = null;
         
-       public ProductRepository()
+       public ProductRepository(Lazy<IEnumConverter> enumConverter, Lazy<IXmlRepository<Product>> xmlRepository)
         {
             fileName = ConfigurationManager.AppSettings.Get("PRODUCT_REPOSITORY_FILE_NAME");
-            xmlRepository = new Lazy<XmlRepository<Product>>();
-            enumConverter = new Lazy<EnumConverter>();
+            _xmlRepository = xmlRepository;
+            _enumConverter = enumConverter;
 
             if (!Directory.Exists("Data"))
             {
@@ -41,7 +41,7 @@ namespace MrLocal_API.Repositories
             , string description, string pricetype, double? price)
         {
             var id = Guid.NewGuid().ToString();
-            var doc = await xmlRepository.Value.LoadXml(fileName);
+            var doc = await _xmlRepository.Value.LoadXml(fileName);
 
             var updatedAtStr = DateTime.UtcNow.ToString();
             var createdAtStr = DateTime.UtcNow.ToString();
@@ -63,7 +63,7 @@ namespace MrLocal_API.Repositories
 
             doc.Save(fileName);
 
-            return new Product(id, shopId, name, description, enumConverter.Value.StringToPricetype(pricetype), (double)price, DateTime.Parse(createdAtStr), DateTime.Parse(updatedAtStr));
+            return new Product(id, shopId, name, description, _enumConverter.Value.StringToPricetype(pricetype), (double)price, DateTime.Parse(createdAtStr), DateTime.Parse(updatedAtStr));
         }
 
         public async Task<Product> Update(string id, string shopId, string name
@@ -104,7 +104,7 @@ namespace MrLocal_API.Repositories
 
                 doc.Save(fileName);
 
-                return new Product(id, values[0], values[1], values[2], enumConverter.Value.StringToPricetype(values[3]), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[4]));
+                return new Product(id, values[0], values[1], values[2], _enumConverter.Value.StringToPricetype(values[3]), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[4]));
             });
         }
 
@@ -126,7 +126,7 @@ namespace MrLocal_API.Repositories
         {
             try
             {
-                var listOfProducts = await xmlRepository.Value.ReadXml(fileName);
+                var listOfProducts = await _xmlRepository.Value.ReadXml(fileName);
                 return listOfProducts.First(i => i.Id == id && i.DeletedAt == null);
             }
             catch
@@ -137,7 +137,7 @@ namespace MrLocal_API.Repositories
 
         public async Task<List<Product>> FindAll(string shopId)
         {
-            var listOfProducts = await xmlRepository.Value.ReadXml(fileName);
+            var listOfProducts = await _xmlRepository.Value.ReadXml(fileName);
             return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();
         }
     }

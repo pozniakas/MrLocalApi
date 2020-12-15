@@ -14,12 +14,12 @@ namespace MrLocal_API.Repositories
     public class ShopRepository : IShopRepository
     {
         readonly string fileName;
-        private readonly Lazy<XmlRepository<Shop>> xmlRepository = null;
+        private readonly Lazy<IXmlRepository<Shop>> _xmlRepository = null;
 
-        public ShopRepository()
+        public ShopRepository(Lazy<IXmlRepository<Shop>> xmlRepository)
         {
             fileName = ConfigurationManager.AppSettings.Get("SHOP_REPOSITORY_FILE_NAME");
-            xmlRepository = new Lazy<XmlRepository<Shop>>();
+            _xmlRepository = xmlRepository;
 
             if (!Directory.Exists("Data"))
             {
@@ -36,7 +36,7 @@ namespace MrLocal_API.Repositories
 
         public async Task<Shop> Create(string name, string description, string typeOfShop, string city)
         {
-            var doc = await xmlRepository.Value.LoadXml(fileName);
+            var doc = await _xmlRepository.Value.LoadXml(fileName);
 
             var shop = doc.CreateElement("Shop");
 
@@ -112,7 +112,7 @@ namespace MrLocal_API.Repositories
         {
             try
             {
-                var listOfShop = await xmlRepository.Value.ReadXml(fileName);
+                var listOfShop = await _xmlRepository.Value.ReadXml(fileName);
                 return listOfShop.First(i => i.Id == id && i.DeletedAt == null);
             }
             catch
@@ -123,7 +123,7 @@ namespace MrLocal_API.Repositories
 
         public async Task<List<Shop>> FindAll()
         {
-            var listOfShop = await xmlRepository.Value.ReadXml(fileName);
+            var listOfShop = await _xmlRepository.Value.ReadXml(fileName);
             return listOfShop.Where(i => i.DeletedAt == null).ToList();
         }
     }

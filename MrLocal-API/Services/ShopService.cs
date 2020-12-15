@@ -1,8 +1,5 @@
-
 using MrLocal_API.Models;
-using MrLocal_API.Repositories;
 using MrLocal_API.Repositories.Interfaces;
-using MrLocal_API.Services.Helpers;
 using MrLocal_API.Services.Interfaces;
 using System;
 using System.Threading.Tasks;
@@ -12,17 +9,17 @@ namespace MrLocal_API.Services
     public class ShopService : IShopService
     {
         private readonly IShopRepository _shopRepository;
-        private readonly Lazy<ValidateData> validateData = null;
+        private readonly Lazy<IValidateData> _validateData = null;
 
-        public ShopService(IShopRepository shopRepository)
+        public ShopService(IShopRepository shopRepository, Lazy<IValidateData> validateData)
         {
-            validateData = new Lazy<ValidateData>();
+            _validateData = validateData;
             _shopRepository = shopRepository;
         }
 
         public async Task<Shop> CreateShop(string name, string description, string typeOfShop, string city)
         {
-            await validateData.Value.ValidateShopData(name, null, description, typeOfShop, city, false);
+            await _validateData.Value.ValidateShopData(name, null, description, typeOfShop, city, false);
             var createdShop = await _shopRepository.Create(name, description, typeOfShop, city);
             return createdShop;
         }
@@ -36,7 +33,7 @@ namespace MrLocal_API.Services
                 throw new ArgumentException("Shop to update doesn't exist");
             }
 
-            await validateData.Value.ValidateShopData(name, status, description, typeOfShop, city, true);
+            await _validateData.Value.ValidateShopData(name, status, description, typeOfShop, city, true);
             var updatedShop = await _shopRepository.Update(id, name, status, description, typeOfShop, city);
             return updatedShop;
         }
