@@ -13,18 +13,18 @@ namespace MrLocal_API.Services
     {
         private readonly IProductRepository _productRepository;
         private readonly IShopRepository _shopRepository;
-        private readonly Lazy<ValidateData> validateData = null;
+        private readonly Lazy<IValidateData> _validateData = null;
 
-        public ProductService(IProductRepository productRepository, IShopRepository shopRepository)
+        public ProductService(IProductRepository productRepository, IShopRepository shopRepository, Lazy<IValidateData> validateData)
         {
             _productRepository = productRepository;
             _shopRepository = shopRepository;
-            validateData = new Lazy<ValidateData>();
+            _validateData = validateData;
         }
 
         public async Task<Product> AddProductToShop(string shopId, string name, string description, string priceType, double? price)
         {
-            await validateData.Value.ValidateProductData(shopId, name, description, price, false, priceType);
+            await _validateData.Value.ValidateProductData(shopId, name, description, price, false, priceType);
             var createdProduct = await _productRepository.Create(shopId, name, description, priceType, price);
             return createdProduct;
         }
@@ -38,7 +38,7 @@ namespace MrLocal_API.Services
                 throw new ArgumentException("Product to update doesn't exist");
             }
 
-            await validateData.Value.ValidateProductData(shopId, name, description, price, true, priceType);
+            await _validateData.Value.ValidateProductData(shopId, name, description, price, true, priceType);
             var updatedProduct = await _productRepository.Update(id, shopId, name, description, priceType, price);
             return updatedProduct;
         }

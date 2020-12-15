@@ -7,10 +7,12 @@ using MrLocal_API.Controllers;
 using MrLocal_API.Controllers.Exceptions;
 using MrLocal_API.Controllers.LoggerService;
 using MrLocal_API.Controllers.LoggerService.Interfaces;
+using MrLocal_API.Models;
 using MrLocal_API.Repositories;
 using MrLocal_API.Repositories.Helpers;
 using MrLocal_API.Repositories.Interfaces;
 using MrLocal_API.Services;
+using MrLocal_API.Services.Helpers;
 using MrLocal_API.Services.Interfaces;
 using NLog;
 using System;
@@ -37,6 +39,16 @@ namespace MrLocal_API
             services.AddScoped<IShopRepository, ShopRepository>();
 
             services.AddScoped<IRequestEvent,RequestEvent>();
+
+            services.AddScoped<IEnumConverter, EnumConverter>();
+            services.AddScoped(provider => new Lazy<IEnumConverter>(provider.GetService<IEnumConverter>));
+
+            services.AddScoped(typeof(IXmlRepository<>), typeof(XmlRepository<>));
+            services.AddScoped(provider => new Lazy<IXmlRepository<Product>>(provider.GetService<IXmlRepository<Product>>));
+            services.AddScoped(provider => new Lazy<IXmlRepository<Shop>>(provider.GetService<IXmlRepository<Shop>>));
+
+            services.AddScoped<IValidateData, ValidateData>();
+            services.AddScoped(provider => new Lazy<IValidateData>(provider.GetService<IValidateData>));
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IShopService, ShopService>();
