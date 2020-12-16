@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
+using MrLocal.Backend.Models;
 using MrLocal_API.Controllers.LoggerService.Interfaces;
-using MrLocal_API.Models;
 using System;
 using System.Net;
 using System.Threading.Tasks;

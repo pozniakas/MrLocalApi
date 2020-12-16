@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MrLocal.Backend.Services.Interfaces;
 using MrLocal_API.Controllers.Interfaces;
 using MrLocal_API.Controllers.LoggerService.Interfaces;
-using MrLocal_API.Services.Interfaces;
 using System.Threading.Tasks;
-using static MrLocal_API.Models.Body;
+using static MrLocal.Backend.Models.Body;
 
 namespace MrLocal_API.Controllers
 {

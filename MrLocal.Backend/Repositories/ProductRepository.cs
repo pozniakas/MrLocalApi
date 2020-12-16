@@ -1,6 +1,5 @@
-﻿using MrLocal_API.Models;
-using MrLocal_API.Repositories.Helpers;
-using MrLocal_API.Repositories.Interfaces;
+﻿using MrLocal.Backend.Models;
+using MrLocal.Backend.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -9,15 +8,15 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace MrLocal_API.Repositories
+namespace MrLocal.Backend.Repositories
 {
     public class ProductRepository : IProductRepository
     {
         readonly string fileName;
         private readonly Lazy<IXmlRepository<Product>> _xmlRepository = null;
         private readonly Lazy<IEnumConverter> _enumConverter = null;
-        
-       public ProductRepository(Lazy<IEnumConverter> enumConverter, Lazy<IXmlRepository<Product>> xmlRepository)
+
+        public ProductRepository(Lazy<IEnumConverter> enumConverter, Lazy<IXmlRepository<Product>> xmlRepository)
         {
             fileName = ConfigurationManager.AppSettings.Get("PRODUCT_REPOSITORY_FILE_NAME");
             _xmlRepository = xmlRepository;

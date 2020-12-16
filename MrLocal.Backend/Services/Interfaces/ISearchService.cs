@@ -1,8 +1,8 @@
-﻿using MrLocal_API.Models;
+﻿using MrLocal.Backend.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MrLocal_API.Services.Interfaces
+namespace MrLocal.Backend.Services.Interfaces
 {
     public interface ISearchService
     {

@@ -1,6 +1,5 @@
-﻿using MrLocal_API.Models;
-using MrLocal_API.Repositories.Helpers;
-using MrLocal_API.Repositories.Interfaces;
+﻿using MrLocal.Backend.Models;
+using MrLocal.Backend.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -9,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace MrLocal_API.Repositories
+namespace MrLocal.Backend.Repositories
 {
     public class ShopRepository : IShopRepository
     {

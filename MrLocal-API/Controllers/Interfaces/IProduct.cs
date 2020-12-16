@@ -6,8 +6,8 @@ namespace MrLocal_API.Controllers.Interfaces
     interface IProduct
     {
         public Task<IActionResult> Get(string shopId);
-        public Task<IActionResult> Post([FromBody] Models.Product body);
-        public Task<IActionResult> Put([FromBody] Models.Product body);
+        public Task<IActionResult> Post([FromBody] MrLocal.Backend.Models.Product body);
+        public Task<IActionResult> Put([FromBody] MrLocal.Backend.Models.Product body);
         public Task<IActionResult> Delete(string id);
     }
 }

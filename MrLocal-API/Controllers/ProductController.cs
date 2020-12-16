@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MrLocal.Backend.Services.Interfaces;
 using MrLocal_API.Controllers.Interfaces;
 using MrLocal_API.Controllers.LoggerService.Interfaces;
-using MrLocal_API.Services.Interfaces;
 using System.Threading.Tasks;
 
 namespace MrLocal_API.Controllers
@@ -29,7 +29,7 @@ namespace MrLocal_API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Models.Product body)
+        public async Task<IActionResult> Post([FromBody] MrLocal.Backend.Models.Product body)
         {
             _requestEvents.ReportAboutRequestStart("api/product POST");
             var createdProduct = await _productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
@@ -38,7 +38,7 @@ namespace MrLocal_API.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] Models.Product body)
+        public async Task<IActionResult> Put([FromBody] MrLocal.Backend.Models.Product body)
         {
             _requestEvents.ReportAboutRequestStart("api/product PUT");
             var updatedProduct = await _productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);

@@ -1,6 +1,6 @@
-﻿using static MrLocal_API.Models.Product;
+﻿using static MrLocal.Backend.Models.Product;
 
-namespace MrLocal_API.Repositories.Interfaces
+namespace MrLocal.Backend.Repositories.Interfaces
 {
     public interface IEnumConverter
     {

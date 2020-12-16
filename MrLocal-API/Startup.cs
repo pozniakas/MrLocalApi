@@ -3,17 +3,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MrLocal.Backend.Models;
+using MrLocal.Backend.Repositories;
+using MrLocal.Backend.Repositories.Helpers;
+using MrLocal.Backend.Repositories.Interfaces;
+using MrLocal.Backend.Services;
+using MrLocal.Backend.Services.Helpers;
+using MrLocal.Backend.Services.Interfaces;
 using MrLocal_API.Controllers;
 using MrLocal_API.Controllers.Exceptions;
 using MrLocal_API.Controllers.LoggerService;
 using MrLocal_API.Controllers.LoggerService.Interfaces;
-using MrLocal_API.Models;
-using MrLocal_API.Repositories;
-using MrLocal_API.Repositories.Helpers;
-using MrLocal_API.Repositories.Interfaces;
-using MrLocal_API.Services;
-using MrLocal_API.Services.Helpers;
-using MrLocal_API.Services.Interfaces;
 using NLog;
 using System;
 using System.IO;
@@ -38,7 +38,7 @@ namespace MrLocal_API
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IShopRepository, ShopRepository>();
 
-            services.AddScoped<IRequestEvent,RequestEvent>();
+            services.AddScoped<IRequestEvent, RequestEvent>();
 
             services.AddScoped<IEnumConverter, EnumConverter>();
             services.AddScoped(provider => new Lazy<IEnumConverter>(provider.GetService<IEnumConverter>));

@@ -1,8 +1,8 @@
-﻿using MrLocal_API.Models;
+﻿using MrLocal.Backend.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MrLocal_API.Repositories.Interfaces
+namespace MrLocal.Backend.Repositories.Interfaces
 {
     public interface IShopRepository
     {

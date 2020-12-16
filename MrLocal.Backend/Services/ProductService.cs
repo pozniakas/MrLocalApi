@@ -1,15 +1,13 @@
-﻿using MrLocal_API.Models;
-using MrLocal_API.Repositories;
-using MrLocal_API.Repositories.Interfaces;
-using MrLocal_API.Services.Helpers;
-using MrLocal_API.Services.Interfaces;
+﻿using MrLocal.Backend.Models;
+using MrLocal.Backend.Repositories.Interfaces;
+using MrLocal.Backend.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MrLocal_API.Services
+namespace MrLocal.Backend.Services
 {
-    class ProductService : IProductService
+    public class ProductService : IProductService
     {
         private readonly IProductRepository _productRepository;
         private readonly IShopRepository _shopRepository;
