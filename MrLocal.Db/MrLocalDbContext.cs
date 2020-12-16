@@ -1,0 +1,16 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore;
+using MrLocal.Db.Entities;
+
+namespace MrLocal.Db
+{
+    public class MrLocalDbContext : DbContext
+    {
+        public MrLocalDbContext(DbContextOptions<MrLocalDbContext> options) : base(options)
+        {
+        }
+
+        public DbSet<Shop> Shops { get; set; }
+        public DbSet<Product> Products { get; set; }
+    }
+}

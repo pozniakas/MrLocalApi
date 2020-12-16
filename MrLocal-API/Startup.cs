@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,6 +11,7 @@ using MrLocal.Backend.Repositories.Interfaces;
 using MrLocal.Backend.Services;
 using MrLocal.Backend.Services.Helpers;
 using MrLocal.Backend.Services.Interfaces;
+using MrLocal.Db;
 using MrLocal_API.Controllers;
 using MrLocal_API.Controllers.Exceptions;
 using MrLocal_API.Controllers.LoggerService;
@@ -33,6 +35,9 @@ namespace MrLocal_API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            services.AddDbContext<MrLocalDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddSingleton<ILoggerManager, LoggerManager>();
 
             services.AddScoped<IProductRepository, ProductRepository>();
