@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MrLocal.Db.Entities
+namespace MrLocalDb.Entities
 {
     public class Shop
     {

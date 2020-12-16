@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MrLocal.Db.Entities
+namespace MrLocalDb.Entities
 {
     public class Product
     {

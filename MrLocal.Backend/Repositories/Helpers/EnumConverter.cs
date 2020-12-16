@@ -1,8 +1,8 @@
-﻿using MrLocal.Backend.Repositories.Interfaces;
+﻿using MrLocalBackend.Repositories.Interfaces;
 using System;
-using static MrLocal.Backend.Models.Product;
+using static MrLocalBackend.Models.Product;
 
-namespace MrLocal.Backend.Repositories.Helpers
+namespace MrLocalBackend.Repositories.Helpers
 {
     public class EnumConverter : IEnumConverter
     {

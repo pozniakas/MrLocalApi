@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace MrLocal.Backend.Models
+namespace MrLocalBackend.Models
 {
     public class Body : ControllerBase
     {

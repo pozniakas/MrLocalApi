@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using MrLocal.Db.Entities;
+using MrLocalDb.Entities;
 
-namespace MrLocal.Db
+namespace MrLocalDb
 {
     public class MrLocalDbContext : DbContext
     {

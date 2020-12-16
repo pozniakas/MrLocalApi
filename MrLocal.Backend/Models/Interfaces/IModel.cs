@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MrLocal.Backend.Models.Interfaces
+namespace MrLocalBackend.Models.Interfaces
 {
     public interface IModel
     {

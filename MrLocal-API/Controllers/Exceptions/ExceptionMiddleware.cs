@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using MrLocal.Backend.Models;
+using Backend.Models;
 using MrLocal_API.Controllers.LoggerService.Interfaces;
 using System;
 using System.Net;

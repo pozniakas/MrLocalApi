@@ -1,17 +1,17 @@
+using Db;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MrLocal.Backend.Models;
-using MrLocal.Backend.Repositories;
-using MrLocal.Backend.Repositories.Helpers;
-using MrLocal.Backend.Repositories.Interfaces;
-using MrLocal.Backend.Services;
-using MrLocal.Backend.Services.Helpers;
-using MrLocal.Backend.Services.Interfaces;
-using MrLocal.Db;
+using Backend.Models;
+using Backend.Repositories;
+using Backend.Repositories.Helpers;
+using Backend.Repositories.Interfaces;
+using Backend.Services;
+using Backend.Services.Helpers;
+using Backend.Services.Interfaces;
 using MrLocal_API.Controllers;
 using MrLocal_API.Controllers.Exceptions;
 using MrLocal_API.Controllers.LoggerService;
@@ -36,7 +36,7 @@ namespace MrLocal_API
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<MrLocalDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<MrlocalDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSingleton<ILoggerManager, LoggerManager>();
 

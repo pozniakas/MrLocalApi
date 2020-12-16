@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using static MrLocal.Backend.Models.Body;
+using static Backend.Models.Body;
 
 namespace MrLocal_API.Controllers.Interfaces
 {

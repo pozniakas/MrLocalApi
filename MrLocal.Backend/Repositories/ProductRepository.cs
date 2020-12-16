@@ -1,5 +1,5 @@
-﻿using MrLocal.Backend.Models;
-using MrLocal.Backend.Repositories.Interfaces;
+﻿using MrLocalBackend.Models;
+using MrLocalBackend.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace MrLocal.Backend.Repositories
+namespace MrLocalBackend.Repositories
 {
     public class ProductRepository : IProductRepository
     {

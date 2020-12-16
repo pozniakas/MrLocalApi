@@ -1,7 +1,7 @@
-﻿using MrLocal.Backend.Models;
+﻿using MrLocalBackend.Models;
 using System.Threading.Tasks;
 
-namespace MrLocal.Backend.Services.Interfaces
+namespace MrLocalBackend.Services.Interfaces
 {
     public interface IValidateData
     {
