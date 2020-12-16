@@ -1,8 +1,8 @@
-﻿using MrLocal.Backend.Models;
+﻿using MrLocalBackend.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MrLocal.Backend.Services.Interfaces
+namespace MrLocalBackend.Services.Interfaces
 {
     public interface IProductService
     {

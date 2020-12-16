@@ -1,12 +1,12 @@
-﻿using MrLocal.Backend.Models;
-using MrLocal.Backend.Models.Interfaces;
-using MrLocal.Backend.Repositories.Interfaces;
+﻿using MrLocalBackend.Models;
+using MrLocalBackend.Models.Interfaces;
+using MrLocalBackend.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace MrLocal.Backend.Repositories.Helpers
+namespace MrLocalBackend.Repositories.Helpers
 {
     public class XmlRepository<T> : IXmlRepository<T> where T : IModel
     {

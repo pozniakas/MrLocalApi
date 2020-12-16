@@ -1,9 +1,9 @@
-﻿using MrLocal.Backend.Models.Interfaces;
+﻿using MrLocalBackend.Models.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace MrLocal.Backend.Repositories.Interfaces
+namespace MrLocalBackend.Repositories.Interfaces
 {
     public interface IXmlRepository<T> where T : IModel
     {

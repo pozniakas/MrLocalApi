@@ -1,11 +1,11 @@
-﻿using MrLocal.Backend.Models;
-using MrLocal.Backend.Repositories.Interfaces;
-using MrLocal.Backend.Services.Interfaces;
+﻿using MrLocalBackend.Models;
+using MrLocalBackend.Repositories.Interfaces;
+using MrLocalBackend.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MrLocal.Backend.Services
+namespace MrLocalBackend.Services
 {
     public class ProductService : IProductService
     {

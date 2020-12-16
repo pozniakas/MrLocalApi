@@ -1,8 +1,8 @@
-﻿using MrLocal.Backend.Models.Interfaces;
+﻿using MrLocalBackend.Models.Interfaces;
 using System;
 using System.Text.Json.Serialization;
 
-namespace MrLocal.Backend.Models
+namespace MrLocalBackend.Models
 {
     public class Product : IModel
     {

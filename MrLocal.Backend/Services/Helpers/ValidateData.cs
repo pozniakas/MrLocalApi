@@ -1,13 +1,13 @@
-﻿using MrLocal.Backend.Models;
-using MrLocal.Backend.Repositories.Interfaces;
-using MrLocal.Backend.Services.Interfaces;
+﻿using MrLocalBackend.Models;
+using MrLocalBackend.Repositories.Interfaces;
+using MrLocalBackend.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace MrLocal.Backend.Services.Helpers
+namespace MrLocalBackend.Services.Helpers
 {
     public class ValidateData : IValidateData
     {
