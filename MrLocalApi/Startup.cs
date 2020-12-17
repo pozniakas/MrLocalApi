@@ -1,31 +1,33 @@
-using MrLocalDb;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MrLocalBackend.Models;
+using MrLocalApi.Controllers;
+using MrLocalApi.Controllers.Exceptions;
+using MrLocalApi.Controllers.LoggerService;
+using MrLocalApi.Controllers.LoggerService.Interfaces;
 using MrLocalBackend.Repositories;
 using MrLocalBackend.Repositories.Helpers;
 using MrLocalBackend.Repositories.Interfaces;
 using MrLocalBackend.Services;
 using MrLocalBackend.Services.Helpers;
 using MrLocalBackend.Services.Interfaces;
-using MrLocalApi.Controllers;
-using MrLocalApi.Controllers.Exceptions;
-using MrLocalApi.Controllers.LoggerService;
-using MrLocalApi.Controllers.LoggerService.Interfaces;
+using MrLocalDb;
 using NLog;
 using System;
+using System.Configuration;
 using System.IO;
 
 namespace MrLocalApi
 {
     public class Startup
     {
+        readonly string connectionString;
         public Startup(IConfiguration configuration)
         {
+            connectionString = ConfigurationManager.AppSettings.Get("CONNECTION_STRING");
             LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/Configs/nlog.config"));
             Configuration = configuration;
         }
@@ -36,7 +38,7 @@ namespace MrLocalApi
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<MrLocalDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<MrLocalDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString(connectionString)));
 
             services.AddSingleton<ILoggerManager, LoggerManager>();
 
