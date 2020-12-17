@@ -80,7 +80,7 @@ namespace MrLocalBackend.Repositories
         {
             var dbProducts = _context.Products.Where(a => a.ShopId == shopId).ToList();
             var products = new List<Product>();
-            foreach (MrLocalDb.Entities.Product product in dbProducts)
+            foreach (var product in dbProducts)
             {
                 products.Add(new Product(product.ProductId, product.ShopId, product.Name, product.Description, _enumConverter.Value.StringToPricetype(product.PriceType), product.Price, product.CreatedAt, product.UpdatedAt));
             }
