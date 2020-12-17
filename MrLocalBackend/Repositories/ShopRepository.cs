@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using MrLocalBackend.Models;
 using MrLocalBackend.Repositories.Interfaces;
 using MrLocalDb;
@@ -63,7 +64,7 @@ namespace MrLocalBackend.Repositories
 
         public async Task<Shop> FindOne(string id)
         {
-            var result = _context.Shops.SingleOrDefault(b => b.ShopId == id);
+            var result = await _context.Shops.SingleOrDefaultAsync(b => b.ShopId == id);
 
             if (result != null)
             {
@@ -77,7 +78,7 @@ namespace MrLocalBackend.Repositories
 
         public async Task<List<Shop>> FindAll()
         {
-            var dbShops = _context.Shops.ToList();
+            var dbShops = await _context.Shops.ToListAsync();
             var shops = new List<Shop>();
 
             foreach (var shop in dbShops)
