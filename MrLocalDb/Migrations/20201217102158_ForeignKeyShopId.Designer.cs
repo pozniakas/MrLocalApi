@@ -10,8 +10,8 @@ using MrLocalDb;
 namespace MrLocalDb.Migrations
 {
     [DbContext(typeof(MrLocalDbContext))]
-    [Migration("20201217074413_Init")]
-    partial class Init
+    [Migration("20201217102158_ForeignKeyShopId")]
+    partial class ForeignKeyShopId
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -46,7 +46,7 @@ namespace MrLocalDb.Migrations
                     b.Property<string>("PriceType")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ShopId")
+                    b.Property<int>("ShopId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
@@ -99,7 +99,9 @@ namespace MrLocalDb.Migrations
                 {
                     b.HasOne("MrLocalDb.Entities.Shop", "Shop")
                         .WithMany("Product")
-                        .HasForeignKey("ShopId");
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Shop");
                 });
