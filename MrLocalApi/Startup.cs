@@ -48,10 +48,6 @@ namespace MrLocalApi
             services.AddScoped<IEnumConverter, EnumConverter>();
             services.AddScoped(provider => new Lazy<IEnumConverter>(provider.GetService<IEnumConverter>));
 
-            services.AddScoped(typeof(IXmlRepository<>), typeof(XmlRepository<>));
-            services.AddScoped(provider => new Lazy<IXmlRepository<Product>>(provider.GetService<IXmlRepository<Product>>));
-            services.AddScoped(provider => new Lazy<IXmlRepository<Shop>>(provider.GetService<IXmlRepository<Shop>>));
-
             services.AddScoped<IValidateData, ValidateData>();
             services.AddScoped(provider => new Lazy<IValidateData>(provider.GetService<IValidateData>));
 

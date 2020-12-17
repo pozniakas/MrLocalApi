@@ -11,16 +11,15 @@ namespace MrLocalDb.Migrations
                 name: "Shops",
                 columns: table => new
                 {
-                    ShopId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    TypeOfShop = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    City = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ShopId = table.Column<string>(type: "nvarchar(36)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(10)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", nullable: false),
+                    TypeOfShop = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -31,16 +30,15 @@ namespace MrLocalDb.Migrations
                 name: "Products",
                 columns: table => new
                 {
-                    ProductId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProductId = table.Column<string>(type: "nvarchar(36)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PriceType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PriceType = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ShopId = table.Column<int>(type: "int", nullable: true)
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ShopId = table.Column<string>(type: "nvarchar(36)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,7 +48,7 @@ namespace MrLocalDb.Migrations
                         column: x => x.ShopId,
                         principalTable: "Shops",
                         principalColumn: "ShopId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

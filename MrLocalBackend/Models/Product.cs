@@ -11,7 +11,7 @@ namespace MrLocalBackend.Models
         public string ShopId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public double? Price { get; set; }
+        public decimal? Price { get; set; }
         public PriceTypes PriceType { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
@@ -28,7 +28,7 @@ namespace MrLocalBackend.Models
         public Product() { }
 
         public Product(string id, string shopId, string name
-    , string description, PriceTypes priceType, double price, DateTime createdAt, DateTime updatedAt)
+    , string description, PriceTypes priceType, decimal price, DateTime createdAt, DateTime updatedAt)
         {
             Id = id;
             ShopId = shopId;
