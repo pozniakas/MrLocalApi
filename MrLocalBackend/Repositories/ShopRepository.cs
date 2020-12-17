@@ -80,7 +80,7 @@ namespace MrLocalBackend.Repositories
             var dbShops = _context.Shops.ToList();
             var shops = new List<Shop>();
 
-            foreach (MrLocalDb.Entities.Shop shop in dbShops)
+            foreach (var shop in dbShops)
             {
                 shops.Add(new Shop(shop.ShopId, shop.Name, shop.Status, shop.Description, shop.TypeOfShop, shop.City, shop.CreatedAt, shop.UpdatedAt));
             }
