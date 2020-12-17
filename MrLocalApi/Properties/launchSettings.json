@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "MrLocalAPI": {
+    "MrLocalApi": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "",
