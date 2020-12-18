@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using MrLocalBackend.Models;
 using MrLocalBackend.Repositories.Interfaces;
 using MrLocalDb;
+using MrLocalDb.Entities;
 
 namespace MrLocalBackend.Repositories
 {
@@ -26,11 +27,12 @@ namespace MrLocalBackend.Repositories
             var updatedAt = DateTime.UtcNow;
             var createdAt = DateTime.UtcNow;
             var id = Guid.NewGuid().ToString();
+            var product = new Product(id, shopId, name, description, _enumConverter.Value.StringToPricetype(pricetype), price, createdAt, updatedAt);
 
-            _context.Products.Add(new MrLocalDb.Entities.Product { ProductId = id, Name = name, Description = description, UpdatedAt = updatedAt, CreatedAt = createdAt, DeletedAt = null, PriceType = pricetype, ShopId = shopId, Price = price }); ;
+            _context.Products.Add(product);
             await _context.SaveChangesAsync();
 
-            return new Product(id, shopId, name, description, _enumConverter.Value.StringToPricetype(pricetype), price, createdAt, updatedAt);
+            return product;
         }
 
         public async Task<Product> Update(string id, string shopId, string name
@@ -44,12 +46,12 @@ namespace MrLocalBackend.Repositories
             result.Price = price != null ? (decimal)price : result.Price;
             result.Name = IsStringEmpty(name) ? result.Name : name;
             result.Description = IsStringEmpty(description) ? result.Description : description;
-            result.PriceType = IsStringEmpty(pricetype) ? result.PriceType : pricetype;
+            result.PriceType = IsStringEmpty(pricetype) ? result.PriceType : _enumConverter.Value.StringToPricetype(pricetype);
             result.UpdatedAt = dateNow;
 
             await _context.SaveChangesAsync();
 
-            return new Product(id, shopId, result.Name, result.Description, _enumConverter.Value.StringToPricetype(result.PriceType), result.Price, result.CreatedAt, dateNow);
+            return result;
         }
 
         public async Task<string> Delete(string id)
@@ -68,25 +70,14 @@ namespace MrLocalBackend.Repositories
         {
             var result = await _context.Products.SingleOrDefaultAsync(b => b.ProductId == id);
 
-            if (result != null)
-            {
-                var product = new Product { Id = result.ProductId, Name = result.Name, Description = result.Description, ShopId = result.ShopId, PriceType = _enumConverter.Value.StringToPricetype(result.PriceType), Price = result.Price, CreatedAt = result.CreatedAt, UpdatedAt = result.UpdatedAt, DeletedAt = result.DeletedAt };
-
-                return product;
-            }
-            return null;
+            return result;
         }
 
         public async Task<List<Product>> FindAll(string shopId)
         {
             var dbProducts = await _context.Products.Where(a => a.ShopId == shopId).ToListAsync();
-            var products = new List<Product>();
-            foreach (var product in dbProducts)
-            {
-                products.Add(new Product(product.ProductId, product.ShopId, product.Name, product.Description, _enumConverter.Value.StringToPricetype(product.PriceType), product.Price, product.CreatedAt, product.UpdatedAt));
-            }
 
-            return products;
+            return dbProducts;
         }
     }
 }

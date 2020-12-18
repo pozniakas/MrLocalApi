@@ -31,6 +31,19 @@ namespace MrLocalDb.Entities
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
 
-        public virtual List<Product> Product { get; set; }//lazy loading
+        public Shop(string shopId, string name, string status, string description, string typeOfShop, string city, DateTime createdAt, DateTime updatedAt)
+        {
+            ShopId = shopId;
+            Name = name;
+            Status = status;
+            Description = description;
+            TypeOfShop = typeOfShop;
+            City = city;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            DeletedAt = null;
+        }
+
+        public virtual List<Product> Product { get; set; }
     }
 }

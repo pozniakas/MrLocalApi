@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using MrLocalBackend.Models;
 using MrLocalBackend.Repositories.Interfaces;
 using MrLocalDb;
+using MrLocalDb.Entities;
 
 namespace MrLocalBackend.Repositories
 {
@@ -23,11 +23,12 @@ namespace MrLocalBackend.Repositories
             var updatedAt = DateTime.UtcNow;
             var createdAt = DateTime.UtcNow;
             var id = Guid.NewGuid().ToString();
+            var shop = new Shop(id, name, "Not Active", description, typeOfShop, city, createdAt, updatedAt);
 
-            _context.Shops.Add(new MrLocalDb.Entities.Shop { ShopId = id, Name = name, Status = "Not Active", Description = description, TypeOfShop = typeOfShop, City = city, UpdatedAt = updatedAt, CreatedAt = createdAt, DeletedAt = null }); ;
+            _context.Shops.Add(shop);
             await _context.SaveChangesAsync();
 
-            return new Shop(id, name, "Not Active", description, typeOfShop, city, createdAt, updatedAt);
+            return shop;
         }
 
         public async Task<Shop> Update(string id, string name, string status, string description, string typeOfShop, string city)
@@ -46,7 +47,7 @@ namespace MrLocalBackend.Repositories
 
             await _context.SaveChangesAsync();
 
-            return new Shop(id, result.Name, result.Status, result.Description, result.TypeOfShop, result.City, result.CreatedAt, result.UpdatedAt);
+            return result;
         }
 
         public async Task<string> Delete(string id)
@@ -66,27 +67,14 @@ namespace MrLocalBackend.Repositories
         {
             var result = await _context.Shops.SingleOrDefaultAsync(b => b.ShopId == id);
 
-            if (result != null)
-            {
-                var shop = new Shop(result.ShopId, result.Name, result.Status, result.Description, result.TypeOfShop, result.City, result.CreatedAt, result.UpdatedAt);
-
-                return shop;
-            }
-
-            return null;
+            return result;
         }
 
         public async Task<List<Shop>> FindAll()
         {
             var dbShops = await _context.Shops.ToListAsync();
-            var shops = new List<Shop>();
 
-            foreach (var shop in dbShops)
-            {
-                shops.Add(new Shop(shop.ShopId, shop.Name, shop.Status, shop.Description, shop.TypeOfShop, shop.City, shop.CreatedAt, shop.UpdatedAt));
-            }
-
-            return shops;
+            return dbShops;
         }
     }
 }

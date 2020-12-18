@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MrLocalBackend.Services.Interfaces;
 using MrLocalApi.Controllers.Interfaces;
 using MrLocalApi.Controllers.LoggerService.Interfaces;
+using MrLocalBackend.Services.Interfaces;
 using System.Threading.Tasks;
+using static MrLocalBackend.Models.Body;
 
 namespace MrLocalApi.Controllers
 {
@@ -29,7 +30,7 @@ namespace MrLocalApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] MrLocalBackend.Models.Shop body)
+        public async Task<IActionResult> Post([FromBody] ShopBody body)
         {
             _requestEvents.ReportAboutRequestStart("api/shop POST");
             var createdShop = await _shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.City);
@@ -38,10 +39,10 @@ namespace MrLocalApi.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] MrLocalBackend.Models.Shop body)
+        public async Task<IActionResult> Put([FromBody] ShopBody body)
         {
             _requestEvents.ReportAboutRequestStart("api/shop PUT");
-            var updatedShop = await _shopService.UpdateShop(body.Id, body.Name, body.Status, body.Description, body.TypeOfShop, body.City);
+            var updatedShop = await _shopService.UpdateShop(body.ShopId, body.Name, body.Status, body.Description, body.TypeOfShop, body.City);
             _requestEvents.ReportAboutRequestFinish("api/shop PUT");
             return ReturnResponse(updatedShop);
         }

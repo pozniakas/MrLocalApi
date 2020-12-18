@@ -24,10 +24,8 @@ namespace MrLocalApi
 {
     public class Startup
     {
-        readonly string connectionString;
         public Startup(IConfiguration configuration)
         {
-            connectionString = ConfigurationManager.AppSettings.Get("CONNECTION_STRING");
             LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/Configs/nlog.config"));
             Configuration = configuration;
         }
@@ -38,7 +36,7 @@ namespace MrLocalApi
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddDbContext<MrLocalDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString(connectionString)));
+            services.AddDbContext<MrLocalDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSingleton<ILoggerManager, LoggerManager>();
 

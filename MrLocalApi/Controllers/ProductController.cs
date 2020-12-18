@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MrLocalBackend.Services.Interfaces;
 using MrLocalApi.Controllers.Interfaces;
 using MrLocalApi.Controllers.LoggerService.Interfaces;
+using MrLocalBackend.Services.Interfaces;
 using System.Threading.Tasks;
+using static MrLocalBackend.Models.Body;
 
 namespace MrLocalApi.Controllers
 {
@@ -29,7 +30,7 @@ namespace MrLocalApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] MrLocalBackend.Models.Product body)
+        public async Task<IActionResult> Post([FromBody] ProductBody body)
         {
             _requestEvents.ReportAboutRequestStart("api/product POST");
             var createdProduct = await _productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
@@ -38,10 +39,10 @@ namespace MrLocalApi.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Put([FromBody] MrLocalBackend.Models.Product body)
+        public async Task<IActionResult> Put([FromBody] ProductBody body)
         {
             _requestEvents.ReportAboutRequestStart("api/product PUT");
-            var updatedProduct = await _productService.UpdateProduct(body.Id, body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
+            var updatedProduct = await _productService.UpdateProduct(body.ProductId, body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
             _requestEvents.ReportAboutRequestFinish("api/product PUT");
             return ReturnResponse(updatedProduct);
         }

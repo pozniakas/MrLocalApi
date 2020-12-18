@@ -1,6 +1,6 @@
-﻿using MrLocalBackend.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MrLocalDb.Entities;
 
 namespace MrLocalBackend.Services.Interfaces
 {

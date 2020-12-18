@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace MrLocalDb.Entities
 {
@@ -20,7 +21,7 @@ namespace MrLocalDb.Entities
         public decimal Price { get; set; }
         [Required]
         [Column(TypeName = "nvarchar(10)")]
-        public string PriceType { get; set; }
+        public PriceTypes PriceType { get; set; }
         [Required]
         public DateTime CreatedAt { get; set; }
         [Required]
@@ -28,8 +29,30 @@ namespace MrLocalDb.Entities
         public DateTime? DeletedAt { get; set; }
         [Required]
         [ForeignKey("ShopId")]
-        public string ShopId { get; set;}
-        
-        public virtual Shop Shop { get; set; }//lazy loading
+        public string ShopId { get; set; }
+
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public enum PriceTypes
+        {
+            UNIT,
+            GRAMS,
+            KILOGRAMS
+        }
+
+        public Product(string productId, string shopId, string name
+    , string description, PriceTypes priceType, decimal price, DateTime createdAt, DateTime updatedAt)
+        {
+            ProductId = productId;
+            ShopId = shopId;
+            Name = name;
+            Description = description;
+            PriceType = priceType;
+            Price = price;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            DeletedAt = null;
+        }
+
+        public virtual Shop Shop { get; set; }
     }
 }
