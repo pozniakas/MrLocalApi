@@ -17,7 +17,6 @@ using MrLocalBackend.Services.Interfaces;
 using MrLocalDb;
 using NLog;
 using System;
-using System.Configuration;
 using System.IO;
 
 namespace MrLocalApi
@@ -35,7 +34,7 @@ namespace MrLocalApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddDbContext<MrLocalDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSingleton<ILoggerManager, LoggerManager>();

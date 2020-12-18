@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using MrLocalBackend.Models;
 using MrLocalBackend.Repositories.Interfaces;
 using MrLocalDb;
 using MrLocalDb.Entities;
@@ -68,14 +67,14 @@ namespace MrLocalBackend.Repositories
 
         public async Task<Product> FindOne(string id)
         {
-            var result = await _context.Products.SingleOrDefaultAsync(b => b.ProductId == id);
+            var result = await _context.Products.SingleOrDefaultAsync(b => b.ProductId == id && b.DeletedAt == null);
 
             return result;
         }
 
         public async Task<List<Product>> FindAll(string shopId)
         {
-            var dbProducts = await _context.Products.Where(a => a.ShopId == shopId).ToListAsync();
+            var dbProducts = await _context.Products.Where(a => a.ShopId == shopId && a.DeletedAt == null).ToListAsync();
 
             return dbProducts;
         }
