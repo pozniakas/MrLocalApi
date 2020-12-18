@@ -1,11 +1,11 @@
-using MrLocalBackend.Models;
-using MrLocalBackend.Repositories.Interfaces;
-using MrLocalBackend.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using MrLocalBackend.Repositories.Interfaces;
+using MrLocalBackend.Services.Interfaces;
+using MrLocalDb.Entities;
 
 namespace MrLocalBackend.Services
 {

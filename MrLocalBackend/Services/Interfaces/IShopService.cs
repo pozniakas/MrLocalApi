@@ -1,5 +1,5 @@
-﻿using MrLocalBackend.Models;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using MrLocalDb.Entities;
 
 namespace MrLocalBackend.Services.Interfaces
 {

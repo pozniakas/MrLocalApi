@@ -1,8 +1,8 @@
-using MrLocalBackend.Models;
-using MrLocalBackend.Repositories.Interfaces;
-using MrLocalBackend.Services.Interfaces;
 using System;
 using System.Threading.Tasks;
+using MrLocalBackend.Repositories.Interfaces;
+using MrLocalBackend.Services.Interfaces;
+using MrLocalDb.Entities;
 
 namespace MrLocalBackend.Services
 {

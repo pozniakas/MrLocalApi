@@ -1,4 +1,4 @@
-﻿using static MrLocalBackend.Models.Product;
+﻿using static MrLocalDb.Entities.Product;
 
 namespace MrLocalBackend.Repositories.Interfaces
 {

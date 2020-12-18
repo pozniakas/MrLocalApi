@@ -1,9 +1,9 @@
-﻿using MrLocalBackend.Models;
-using MrLocalBackend.Repositories.Interfaces;
-using MrLocalBackend.Services.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MrLocalBackend.Repositories.Interfaces;
+using MrLocalBackend.Services.Interfaces;
+using MrLocalDb.Entities;
 
 namespace MrLocalBackend.Services
 {
@@ -20,14 +20,14 @@ namespace MrLocalBackend.Services
             _validateData = validateData;
         }
 
-        public async Task<Product> AddProductToShop(string shopId, string name, string description, string priceType, double? price)
+        public async Task<Product> AddProductToShop(string shopId, string name, string description, string priceType, decimal? price)
         {
-            await _validateData.Value.ValidateProductData(shopId, name, description, price, false, priceType);
-            var createdProduct = await _productRepository.Create(shopId, name, description, priceType, price);
+            await _validateData.Value.ValidateProductData(shopId, name, description, (decimal)price, false, priceType);
+            var createdProduct = await _productRepository.Create(shopId, name, description, priceType, (decimal)price);
             return createdProduct;
         }
 
-        public async Task<Product> UpdateProduct(string id, string shopId, string name, string description, string priceType, double? price)
+        public async Task<Product> UpdateProduct(string id, string shopId, string name, string description, string priceType, decimal? price)
         {
             var product = await _productRepository.FindOne(id);
 

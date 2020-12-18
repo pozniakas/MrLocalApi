@@ -1,6 +1,5 @@
-﻿using MrLocalDb.Entities;
-using Microsoft.EntityFrameworkCore;
-using System;
+﻿using Microsoft.EntityFrameworkCore;
+using MrLocalDb.Entities;
 
 namespace MrLocalDb
 {

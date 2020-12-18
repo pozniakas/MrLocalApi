@@ -1,21 +1,20 @@
-using MrLocalDb;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MrLocalBackend.Models;
+using MrLocalApi.Controllers;
+using MrLocalApi.Controllers.Exceptions;
+using MrLocalApi.Controllers.LoggerService;
+using MrLocalApi.Controllers.LoggerService.Interfaces;
 using MrLocalBackend.Repositories;
 using MrLocalBackend.Repositories.Helpers;
 using MrLocalBackend.Repositories.Interfaces;
 using MrLocalBackend.Services;
 using MrLocalBackend.Services.Helpers;
 using MrLocalBackend.Services.Interfaces;
-using MrLocalApi.Controllers;
-using MrLocalApi.Controllers.Exceptions;
-using MrLocalApi.Controllers.LoggerService;
-using MrLocalApi.Controllers.LoggerService.Interfaces;
+using MrLocalDb;
 using NLog;
 using System;
 using System.IO;
@@ -35,7 +34,7 @@ namespace MrLocalApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddControllersWithViews().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddDbContext<MrLocalDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddSingleton<ILoggerManager, LoggerManager>();
@@ -47,10 +46,6 @@ namespace MrLocalApi
 
             services.AddScoped<IEnumConverter, EnumConverter>();
             services.AddScoped(provider => new Lazy<IEnumConverter>(provider.GetService<IEnumConverter>));
-
-            services.AddScoped(typeof(IXmlRepository<>), typeof(XmlRepository<>));
-            services.AddScoped(provider => new Lazy<IXmlRepository<Product>>(provider.GetService<IXmlRepository<Product>>));
-            services.AddScoped(provider => new Lazy<IXmlRepository<Shop>>(provider.GetService<IXmlRepository<Shop>>));
 
             services.AddScoped<IValidateData, ValidateData>();
             services.AddScoped(provider => new Lazy<IValidateData>(provider.GetService<IValidateData>));

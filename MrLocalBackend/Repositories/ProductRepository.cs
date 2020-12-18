@@ -1,143 +1,82 @@
-﻿using MrLocalBackend.Models;
-using MrLocalBackend.Repositories.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Xml.Linq;
+using Microsoft.EntityFrameworkCore;
+using MrLocalBackend.Repositories.Interfaces;
+using MrLocalDb;
+using MrLocalDb.Entities;
 
 namespace MrLocalBackend.Repositories
 {
     public class ProductRepository : IProductRepository
     {
-        readonly string fileName;
-        private readonly Lazy<IXmlRepository<Product>> _xmlRepository = null;
+        private readonly MrLocalDbContext _context;
         private readonly Lazy<IEnumConverter> _enumConverter = null;
 
-        public ProductRepository(Lazy<IEnumConverter> enumConverter, Lazy<IXmlRepository<Product>> xmlRepository)
+        public ProductRepository(Lazy<IEnumConverter> enumConverter, MrLocalDbContext context)
         {
-            fileName = ConfigurationManager.AppSettings.Get("PRODUCT_REPOSITORY_FILE_NAME");
-            _xmlRepository = xmlRepository;
+            _context = context;
             _enumConverter = enumConverter;
-
-            if (!Directory.Exists("Data"))
-            {
-                Directory.CreateDirectory("Data");
-            }
-
-            if (!File.Exists(fileName))
-            {
-                var xElement = new XElement("Products");
-                var xDocument = new XDocument(xElement);
-                xDocument.Save(fileName);
-            }
-
         }
 
         public async Task<Product> Create(string shopId, string name
-            , string description, string pricetype, double? price)
+            , string description, string pricetype, decimal price)
         {
+            var updatedAt = DateTime.UtcNow;
+            var createdAt = DateTime.UtcNow;
             var id = Guid.NewGuid().ToString();
-            var doc = await _xmlRepository.Value.LoadXml(fileName);
+            var product = new Product(id, shopId, name, description, _enumConverter.Value.StringToPricetype(pricetype), price, createdAt, updatedAt);
 
-            var updatedAtStr = DateTime.UtcNow.ToString();
-            var createdAtStr = DateTime.UtcNow.ToString();
-            var deletedAtStr = "";
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
 
-            var product = doc.CreateElement("Product");
-
-            string[] titles = { "Id", "ShopId", "Name", "Description", "Pricetype", "Price", "CreatedAt", "UpdatedAt", "DeletedAt" };
-            string[] values = { id, shopId, name, description, pricetype, price?.ToString("#.##"), createdAtStr, updatedAtStr, deletedAtStr };
-
-            for (var i = 0; i < titles.Length; i++)
-            {
-                var node = doc.CreateElement(titles[i]);
-                node.InnerText = values[i];
-                product.AppendChild(node);
-            }
-
-            doc.DocumentElement.AppendChild(product);
-
-            doc.Save(fileName);
-
-            return new Product(id, shopId, name, description, _enumConverter.Value.StringToPricetype(pricetype), (double)price, DateTime.Parse(createdAtStr), DateTime.Parse(updatedAtStr));
+            return product;
         }
 
         public async Task<Product> Update(string id, string shopId, string name
-            , string description, string pricetype, double? price)
+            , string description, string pricetype, decimal? price)
         {
-            return await Task.Run(() =>
-            {
-                static bool IsStringEmpty(string str) => str == null || str.Length == 0;
+            var dateNow = DateTime.UtcNow;
+            var result = _context.Products.SingleOrDefault(b => b.ProductId == id && b.ShopId == shopId);
 
-                var dateNow = DateTime.UtcNow.ToString();
-                var doc = XDocument.Load(fileName);
+            static bool IsStringEmpty(string str) => str == null || str.Length == 0;
 
-                var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id && product.Element("ShopId").Value == shopId && product.Element("DeletedAt").Value == "");
+            result.Price = price != null ? (decimal)price : result.Price;
+            result.Name = IsStringEmpty(name) ? result.Name : name;
+            result.Description = IsStringEmpty(description) ? result.Description : description;
+            result.PriceType = IsStringEmpty(pricetype) ? result.PriceType : _enumConverter.Value.StringToPricetype(pricetype);
+            result.UpdatedAt = dateNow;
 
-                string[] titles = { "ShopId", "Name", "Description", "Pricetype", "UpdatedAt" };
-                string[] values = { shopId, name, description, pricetype, dateNow };
+            await _context.SaveChangesAsync();
 
-                for (var i = 0; i < titles.Length; i++)
-                {
-                    if (!IsStringEmpty(values[i]))
-                    {
-                        node.SetElementValue(titles[i], values[i]);
-                    }
-                    else
-                    {
-                        values[i] = node.Element(titles[i]).Value.ToString();
-                    }
-                }
-
-                if (price != null)
-                {
-                    node.SetElementValue("Price", price.ToString());
-                }
-                else
-                {
-                    price = double.Parse(node.Element("Price").Value.ToString());
-                }
-
-                doc.Save(fileName);
-
-                return new Product(id, values[0], values[1], values[2], _enumConverter.Value.StringToPricetype(values[3]), (double)price, DateTime.Parse(node.Element("CreatedAt").Value.ToString()), DateTime.Parse(values[4]));
-            });
+            return result;
         }
 
         public async Task<string> Delete(string id)
         {
-            return await Task.Run(() =>
-            {
-                var doc = XDocument.Load(fileName);
+            var result = _context.Products.SingleOrDefault(b => b.ProductId == id);
+            var dateNow = DateTime.UtcNow;
 
-                var node = doc.Descendants("Product").FirstOrDefault(product => product.Element("Id").Value == id);
-                node.SetElementValue("DeletedAt", DateTime.UtcNow.ToString());
+            result.DeletedAt = dateNow;
 
-                doc.Save(fileName);
-                return id;
-            });
+            await _context.SaveChangesAsync();
+
+            return id;
         }
 
         public async Task<Product> FindOne(string id)
         {
-            try
-            {
-                var listOfProducts = await _xmlRepository.Value.ReadXml(fileName);
-                return listOfProducts.First(i => i.Id == id && i.DeletedAt == null);
-            }
-            catch
-            {
-                return null;
-            }
+            var result = await _context.Products.SingleOrDefaultAsync(b => b.ProductId == id && b.DeletedAt == null);
+
+            return result;
         }
 
         public async Task<List<Product>> FindAll(string shopId)
         {
-            var listOfProducts = await _xmlRepository.Value.ReadXml(fileName);
-            return listOfProducts.Where(i => i.DeletedAt == null && i.ShopId == shopId).ToList();
+            var dbProducts = await _context.Products.Where(a => a.ShopId == shopId && a.DeletedAt == null).ToListAsync();
+
+            return dbProducts;
         }
     }
 }

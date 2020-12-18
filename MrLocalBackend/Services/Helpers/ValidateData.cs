@@ -1,11 +1,11 @@
-﻿using MrLocalBackend.Models;
-using MrLocalBackend.Repositories.Interfaces;
-using MrLocalBackend.Services.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using MrLocalBackend.Repositories.Interfaces;
+using MrLocalBackend.Services.Interfaces;
+using MrLocalDb.Entities;
 
 namespace MrLocalBackend.Services.Helpers
 {
@@ -17,7 +17,7 @@ namespace MrLocalBackend.Services.Helpers
         {
             _shopRepository = shopRepository;
         }
-        public async Task<bool> ValidateProductData(string shopId, string name, string description, double? price, bool isUpdate, string priceType)
+        public async Task<bool> ValidateProductData(string shopId, string name, string description, decimal? price, bool isUpdate, string priceType)
         {
             static bool IsStringEmpty(string str) => str == null || str.Length == 0;
 
