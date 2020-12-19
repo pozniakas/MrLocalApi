@@ -56,7 +56,7 @@ namespace MrLocalBackend.Repositories
             var result = _context.Shops.SingleOrDefault(b => b.ShopId == id);
             var dateNow = DateTime.UtcNow;
 
-            result.DeletedAt = dateNow;
+            _context.Remove(result);
 
             await _context.SaveChangesAsync();
 
@@ -65,14 +65,14 @@ namespace MrLocalBackend.Repositories
 
         public async Task<Shop> FindOne(string id)
         {
-            var result = await _context.Shops.SingleOrDefaultAsync(b => b.ShopId == id && b.DeletedAt == null);
+            var result = await _context.Shops.SingleOrDefaultAsync(b => b.ShopId == id);
 
             return result;
         }
 
         public async Task<List<Shop>> FindAll()
         {
-            var dbShops = await _context.Shops.Where(a => a.DeletedAt == null).ToListAsync();
+            var dbShops = await _context.Shops.ToListAsync();
 
             return dbShops;
         }
