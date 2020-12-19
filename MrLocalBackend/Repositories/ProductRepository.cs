@@ -58,7 +58,7 @@ namespace MrLocalBackend.Repositories
             var result = _context.Products.SingleOrDefault(b => b.ProductId == id);
             var dateNow = DateTime.UtcNow;
 
-            result.DeletedAt = dateNow;
+            _context.Remove(result);
 
             await _context.SaveChangesAsync();
 
@@ -67,14 +67,14 @@ namespace MrLocalBackend.Repositories
 
         public async Task<Product> FindOne(string id)
         {
-            var result = await _context.Products.SingleOrDefaultAsync(b => b.ProductId == id && b.DeletedAt == null);
+            var result = await _context.Products.SingleOrDefaultAsync(b => b.ProductId == id);
 
             return result;
         }
 
         public async Task<List<Product>> FindAll(string shopId)
         {
-            var dbProducts = await _context.Products.Where(a => a.ShopId == shopId && a.DeletedAt == null).ToListAsync();
+            var dbProducts = await _context.Products.Where(a => a.ShopId == shopId).ToListAsync();
 
             return dbProducts;
         }
