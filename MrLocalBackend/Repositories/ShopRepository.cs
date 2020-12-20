@@ -18,6 +18,16 @@ namespace MrLocalBackend.Repositories
             _context = context;
         }
 
+        private Shop checkForProducts(Shop shop)
+        {
+            if (shop.Product == null)
+            {
+                shop.Product = new List<Product>();
+            }
+
+            return shop;
+        }
+
         public async Task<Shop> Create(string name, string description, string typeOfShop, string city)
         {
             var updatedAt = DateTime.UtcNow;
@@ -27,8 +37,8 @@ namespace MrLocalBackend.Repositories
 
             _context.Shops.Add(shop);
             await _context.SaveChangesAsync();
-
-            return shop;
+            
+            return shop != null ? checkForProducts(shop) : shop;
         }
 
         public async Task<Shop> Update(string id, string name, string status, string description, string typeOfShop, string city)
@@ -47,7 +57,7 @@ namespace MrLocalBackend.Repositories
 
             await _context.SaveChangesAsync();
 
-            return result;
+            return result != null ? checkForProducts(result) : result;
         }
 
         public async Task<string> Delete(string id)
@@ -67,14 +77,14 @@ namespace MrLocalBackend.Repositories
         {
             var result = await _context.Shops.Include(b => b.Product).SingleOrDefaultAsync(b => b.ShopId == id);
 
-            return result;
+            return result != null ? checkForProducts(result) : result;
         }
 
         public async Task<List<Shop>> FindAll()
         {
             var dbShops = await _context.Shops.Include(b => b.Product).ToListAsync();
 
-            return dbShops;
+            return dbShops.Select(shop => checkForProducts(shop)).ToList();
         }
     }
 }
