@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using static MrLocalDb.Entities.Product;
+using MrLocalDb.Entities;
 
 namespace MrLocalBackend.Models
 {

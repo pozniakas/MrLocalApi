@@ -1,6 +1,6 @@
 ﻿using System;
 using MrLocalBackend.Repositories.Interfaces;
-using static MrLocalDb.Entities.Product;
+using MrLocalDb.Entities;
 
 namespace MrLocalBackend.Repositories.Helpers
 {

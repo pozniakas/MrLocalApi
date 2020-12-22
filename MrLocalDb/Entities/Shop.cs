@@ -7,6 +7,19 @@ namespace MrLocalDb.Entities
 {
     public class Shop
     {
+        public Shop(string shopId, string name, string status, string description, string typeOfShop, string city, DateTime createdAt, DateTime updatedAt)
+        {
+            ShopId = shopId;
+            Name = name;
+            Status = status;
+            Description = description;
+            TypeOfShop = typeOfShop;
+            City = city;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            DeletedAt = null;
+        }
+
         [Key]
         [Column(TypeName = "nvarchar(36)")]
         public string ShopId { get; set; }
@@ -30,20 +43,6 @@ namespace MrLocalDb.Entities
         [Required]
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
-
-        public Shop(string shopId, string name, string status, string description, string typeOfShop, string city, DateTime createdAt, DateTime updatedAt)
-        {
-            ShopId = shopId;
-            Name = name;
-            Status = status;
-            Description = description;
-            TypeOfShop = typeOfShop;
-            City = city;
-            CreatedAt = createdAt;
-            UpdatedAt = updatedAt;
-            DeletedAt = null;
-        }
-
         public virtual List<Product> Product { get; set; }
     }
 }

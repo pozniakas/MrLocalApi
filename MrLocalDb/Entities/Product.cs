@@ -5,8 +5,29 @@ using System.Text.Json.Serialization;
 
 namespace MrLocalDb.Entities
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
+    public enum PriceTypes
+    {
+        UNIT,
+        GRAMS,
+        KILOGRAMS
+    }
     public class Product
     {
+        public Product(string productId, string shopId, string name
+, string description, PriceTypes priceType, decimal price, DateTime createdAt, DateTime updatedAt)
+        {
+            ProductId = productId;
+            ShopId = shopId;
+            Name = name;
+            Description = description;
+            PriceType = priceType;
+            Price = price;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            DeletedAt = null;
+        }
+
         [Key]
         [Column(TypeName = "nvarchar(36)")]
         public string ProductId { get; set; }
@@ -30,29 +51,6 @@ namespace MrLocalDb.Entities
         [Required]
         [ForeignKey("ShopId")]
         public string ShopId { get; set; }
-
-        [JsonConverter(typeof(JsonStringEnumConverter))]
-        public enum PriceTypes
-        {
-            UNIT,
-            GRAMS,
-            KILOGRAMS
-        }
-
-        public Product(string productId, string shopId, string name
-    , string description, PriceTypes priceType, decimal price, DateTime createdAt, DateTime updatedAt)
-        {
-            ProductId = productId;
-            ShopId = shopId;
-            Name = name;
-            Description = description;
-            PriceType = priceType;
-            Price = price;
-            CreatedAt = createdAt;
-            UpdatedAt = updatedAt;
-            DeletedAt = null;
-        }
-
         public virtual Shop Shop { get; set; }
     }
 }
