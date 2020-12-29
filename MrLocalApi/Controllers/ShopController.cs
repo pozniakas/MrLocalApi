@@ -42,7 +42,7 @@ namespace MrLocalApi.Controllers
         public async Task<IActionResult> Put([FromBody] ShopBody body)
         {
             _requestEvents.ReportAboutRequestStart("api/shop PUT");
-            var updatedShop = await _shopService.UpdateShop(body.ShopId, body.Name, body.Status, body.Description, body.TypeOfShop, body.City);
+            var updatedShop = await _shopService.UpdateShop(body.ShopId, body.Name, body.Status, body.Description, body.TypeOfShop, body.City, body.Product);
             _requestEvents.ReportAboutRequestFinish("api/shop PUT");
             return ReturnResponse(updatedShop);
         }
