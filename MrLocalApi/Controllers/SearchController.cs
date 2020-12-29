@@ -24,7 +24,7 @@ namespace MrLocalApi.Controllers
         public async Task<IActionResult> Get([FromBody] SearchBody body)
         {
             _requestEvents.ReportAboutRequestStart("api/search GET");
-            var search = await _searchService.SearchForShops(body.SearchQuery, body.City, body.TypeOfShop);
+            var search = await _searchService.SearchForShops(body.SearchQuery, body.Status, body.City, body.TypeOfShop);
             _requestEvents.ReportAboutRequestFinish("api/search GET");
             return ReturnResponse(search);
         }
