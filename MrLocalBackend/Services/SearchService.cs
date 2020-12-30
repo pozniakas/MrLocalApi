@@ -23,7 +23,7 @@ namespace MrLocalBackend.Services
 
         public async Task<List<Shop>> SearchForShops(string searchQuery, string status, string city = "All cities", string typeOfShop = "All types")
         {
-            string[] statusList = { "All shops", "Active", "Not active" };
+            string[] statusList = { "All shops", "Active", "Not Active" };
             var shopList = (await _shopRepository.FindAll()).Where(i => _validateData.Value.ValidateFilters(i, city, typeOfShop));
             var correctStatusShopList = status == statusList[0] ? shopList : status == statusList[1] ? shopList.Where(a => a.Status == "Active" || a.Status == "Paused") : status == statusList[2] ? shopList.Where(a => a.Status == "Not Active") : new List<Shop>();
             var trimmedSearchQuery = searchQuery.Trim();
