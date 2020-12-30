@@ -11,6 +11,7 @@ namespace MrLocalBackend.Models
             public string SearchQuery { get; set; }
             public string City { get; set; }
             public string TypeOfShop { get; set; }
+            public string Status { get; set; }
         }
         public class ProductBody
         {
