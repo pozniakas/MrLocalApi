@@ -12,13 +12,15 @@ namespace MrLocalBackend.Repositories
     public class ShopRepository : IShopRepository
     {
         private readonly MrLocalDbContext _context;
+        private readonly IProductRepository _productRepository;
 
-        public ShopRepository(MrLocalDbContext context)
+        public ShopRepository(MrLocalDbContext context, IProductRepository productRepository)
         {
             _context = context;
+            _productRepository = productRepository;
         }
 
-        private Shop checkForProducts(Shop shop)
+        private static Shop checkForProducts(Shop shop)
         {
             if (shop.Product == null)
             {
@@ -37,11 +39,11 @@ namespace MrLocalBackend.Repositories
 
             _context.Shops.Add(shop);
             await _context.SaveChangesAsync();
-            
+
             return shop != null ? checkForProducts(shop) : shop;
         }
 
-        public async Task<Shop> Update(string id, string name, string status, string description, string typeOfShop, string city)
+        public async Task<Shop> Update(string id, string name, string status, string description, string typeOfShop, string city, Product[] listOfNewProducts)
         {
             static bool IsStringEmpty(string str) => str == null || str.Length == 0;
 
@@ -55,9 +57,25 @@ namespace MrLocalBackend.Repositories
             result.City = IsStringEmpty(city) ? result.City : city;
             result.UpdatedAt = dateNow;
 
+            var previousShopProducts = await _productRepository.FindAll(id);
+            var deletedShopProducts = previousShopProducts.Where(a =>  listOfNewProducts.Where(b => a.ProductId == b.ProductId).Count() == 0).ToList();
+            var addedShopProducts = listOfNewProducts.Where(a => a.ProductId == null).ToList();
+
+            foreach (var product in deletedShopProducts)
+            {
+                await _productRepository.Delete(product.ProductId);
+            }
+
+            foreach (var product in addedShopProducts)
+            {
+                await _productRepository.Create(product.ShopId, product.Name, product.Description, product.PriceType.ToString(), product.Price);
+            }
+
             await _context.SaveChangesAsync();
 
-            return result != null ? checkForProducts(result) : result;
+            var newResult = _context.Shops.SingleOrDefault(b => b.ShopId == id);
+
+            return newResult != null ? checkForProducts(newResult) : newResult;
         }
 
         public async Task<string> Delete(string id)

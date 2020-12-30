@@ -24,7 +24,7 @@ namespace MrLocalBackend.Services
             return createdShop;
         }
 
-        public async Task<Shop> UpdateShop(string id, string name, string status, string description, string typeOfShop, string city)
+        public async Task<Shop> UpdateShop(string id, string name, string status, string description, string typeOfShop, string city, Product[] products)
         {
             var shop = await _shopRepository.FindOne(id);
 
@@ -33,8 +33,13 @@ namespace MrLocalBackend.Services
                 throw new ArgumentException("Shop to update doesn't exist");
             }
 
+            foreach (var product in products)
+            {
+                await _validateData.Value.ValidateProductData(product.ShopId, product.Name, product.Description, product.Price, false, product.PriceType.ToString());
+            }
+
             await _validateData.Value.ValidateShopData(name, status, description, typeOfShop, city, true);
-            var updatedShop = await _shopRepository.Update(id, name, status, description, typeOfShop, city);
+            var updatedShop = await _shopRepository.Update(id, name, status, description, typeOfShop, city, products);
             return updatedShop;
         }
 
