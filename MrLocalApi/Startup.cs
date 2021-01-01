@@ -59,6 +59,7 @@ namespace MrLocalApi
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IShopService, ShopService>();
             services.AddScoped<ISearchService, SearchService>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddControllers();
 

@@ -12,6 +12,7 @@ namespace MrLocalBackend.Services.Helpers
     public class ValidateData : IValidateData
     {
         private readonly IShopRepository _shopRepository;
+        private readonly IUserRepository _userRepository;
 
         public ValidateData(IShopRepository shopRepository)
         {
@@ -81,6 +82,13 @@ namespace MrLocalBackend.Services.Helpers
                 || (city != "All cities" && typeOfShop == "All types" && shop.City == city)
                 || (city == "All cities" && typeOfShop != "All types" && shop.TypeOfShop == typeOfShop)
                 || (city == "All cities" && typeOfShop == "All types");
+        }
+
+        public async Task<bool> ValidateUsername(string username)
+        {
+            var isUsernameTaken = await _userRepository.FindOne(username) == null;
+
+            return isUsernameTaken;
         }
     }
 }

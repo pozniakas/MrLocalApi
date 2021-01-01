@@ -28,9 +28,9 @@ namespace MrLocalBackend.Repositories
             return user;
         }
 
-        public async Task<User> FindOne(string username, string password)
+        public async Task<User> FindOne(string username)
         {
-            var result = await _context.Users.SingleOrDefaultAsync(b => b.Username == username && b.Password == password);
+            var result = await _context.Users.SingleOrDefaultAsync(b => b.Username == username);
 
             return result;
         }
