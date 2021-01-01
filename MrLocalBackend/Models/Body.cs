@@ -5,6 +5,11 @@ namespace MrLocalBackend.Models
 {
     public class Body
     {
+        public class UserCred
+        {
+            public string Name { get; set; }
+            public string Password { get; set; }
+        }
         public class SearchBody
         {
             public string SearchQuery { get; set; }

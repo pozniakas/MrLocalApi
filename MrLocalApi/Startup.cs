@@ -8,16 +8,21 @@ using MrLocalApi.Controllers;
 using MrLocalApi.Controllers.Exceptions;
 using MrLocalApi.Controllers.LoggerService;
 using MrLocalApi.Controllers.LoggerService.Interfaces;
+using MrLocalBackend.Authentication.Interfaces;
 using MrLocalBackend.Repositories;
 using MrLocalBackend.Repositories.Helpers;
 using MrLocalBackend.Repositories.Interfaces;
 using MrLocalBackend.Services;
 using MrLocalBackend.Services.Helpers;
 using MrLocalBackend.Services.Interfaces;
+using MrLocalBackend.Authentication;
 using MrLocalDb;
 using NLog;
 using System;
 using System.IO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace MrLocalApi
 {
@@ -56,6 +61,26 @@ namespace MrLocalApi
             services.AddScoped<ISearchService, SearchService>();
 
             services.AddControllers();
+
+            var key = "This is my test key";
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x => {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)), 
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+
+            services.AddSingleton<IJwdAuthenticationManager>(new JwdAuthenticationManager(key));
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -72,6 +97,8 @@ namespace MrLocalApi
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
