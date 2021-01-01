@@ -93,14 +93,14 @@ namespace MrLocalBackend.Repositories
 
         public async Task<Shop> FindOne(string id)
         {
-            var result = await _context.Shops.Include(b => b.Product).SingleOrDefaultAsync(b => b.ShopId == id);
+            var result = await _context.Shops.Include(b => b.Product).Include(b => b.Location).SingleOrDefaultAsync(b => b.ShopId == id);
 
             return result != null ? CheckForProducts(result) : result;
         }
 
         public async Task<List<Shop>> FindAll()
         {
-            var dbShops = await _context.Shops.Include(b => b.Product).ToListAsync();
+            var dbShops = await _context.Shops.Include(b => b.Product).Include(b => b.Location).ToListAsync();
 
             return dbShops.Select(shop => CheckForProducts(shop)).ToList();
         }
