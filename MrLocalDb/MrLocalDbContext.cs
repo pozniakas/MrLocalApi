@@ -25,6 +25,7 @@ namespace MrLocalDb
             builder.Entity<Product>().Property<DateTime?>("DeletedAt");
             builder.Entity<Product>().HasQueryFilter(m => EF.Property<DateTime?>(m, "DeletedAt") == null);
             builder.Entity<Location>().Property<DateTime?>("DeletedAt");
+            builder.Entity<Location>().HasQueryFilter(m => EF.Property<DateTime?>(m, "DeletedAt") == null);
 
         }
         public override int SaveChanges()
