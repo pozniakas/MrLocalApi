@@ -37,6 +37,12 @@ namespace MrLocalDb.Entities
         public string TypeOfShop { get; set; }
         [Required]
         [Column(TypeName = "nvarchar(50)")]
+        public string Latitude { get; set; }
+        [Required]
+        [Column(TypeName = "nvarchar(50)")]
+        public string Longitude { get; set; }
+        [Required]
+        [Column(TypeName = "nvarchar(50)")]
         public string City { get; set; }
         [Required]
         public DateTime CreatedAt { get; set; }

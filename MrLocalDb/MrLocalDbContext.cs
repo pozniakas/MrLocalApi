@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using MrLocalDb.Entities;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using MrLocalDb.Entities;
 
 namespace MrLocalDb
 {
@@ -23,6 +23,7 @@ namespace MrLocalDb
             builder.Entity<Shop>().HasQueryFilter(m => EF.Property<DateTime?>(m, "DeletedAt") == null);
             builder.Entity<Product>().Property<DateTime?>("DeletedAt");
             builder.Entity<Product>().HasQueryFilter(m => EF.Property<DateTime?>(m, "DeletedAt") == null);
+
         }
         public override int SaveChanges()
         {

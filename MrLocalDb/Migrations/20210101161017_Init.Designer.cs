@@ -10,7 +10,7 @@ using MrLocalDb;
 namespace MrLocalDb.Migrations
 {
     [DbContext(typeof(MrLocalDbContext))]
-    [Migration("20201217210030_Init")]
+    [Migration("20210101161017_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -79,6 +79,14 @@ namespace MrLocalDb.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Latitude")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Longitude")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Name")
                         .IsRequired()

@@ -16,6 +16,8 @@ namespace MrLocalDb.Migrations
                     Status = table.Column<string>(type: "nvarchar(10)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", nullable: false),
                     TypeOfShop = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Latitude = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Longitude = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(50)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
