@@ -19,6 +19,40 @@ namespace MrLocalDb.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.1");
 
+            modelBuilder.Entity("MrLocalDb.Entities.Location", b =>
+                {
+                    b.Property<string>("LocationId")
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Latitude")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Longitude")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ShopId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(36)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("LocationId");
+
+                    b.HasIndex("ShopId")
+                        .IsUnique();
+
+                    b.ToTable("Location");
+                });
+
             modelBuilder.Entity("MrLocalDb.Entities.Product", b =>
                 {
                     b.Property<string>("ProductId")
@@ -98,6 +132,17 @@ namespace MrLocalDb.Migrations
                     b.ToTable("Shops");
                 });
 
+            modelBuilder.Entity("MrLocalDb.Entities.Location", b =>
+                {
+                    b.HasOne("MrLocalDb.Entities.Shop", "Shop")
+                        .WithOne("Location")
+                        .HasForeignKey("MrLocalDb.Entities.Location", "ShopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Shop");
+                });
+
             modelBuilder.Entity("MrLocalDb.Entities.Product", b =>
                 {
                     b.HasOne("MrLocalDb.Entities.Shop", "Shop")
@@ -111,6 +156,8 @@ namespace MrLocalDb.Migrations
 
             modelBuilder.Entity("MrLocalDb.Entities.Shop", b =>
                 {
+                    b.Navigation("Location");
+
                     b.Navigation("Product");
                 });
 #pragma warning restore 612, 618

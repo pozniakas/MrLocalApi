@@ -44,5 +44,6 @@ namespace MrLocalDb.Entities
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
         public virtual List<Product> Product { get; set; }
+        public virtual Location Location { get; set; }
     }
 }

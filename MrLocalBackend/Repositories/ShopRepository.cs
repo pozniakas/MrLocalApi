@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MrLocalBackend.Repositories.Interfaces;
 using MrLocalDb;
 using MrLocalDb.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MrLocalBackend.Repositories
 {
@@ -20,7 +20,7 @@ namespace MrLocalBackend.Repositories
             _productRepository = productRepository;
         }
 
-        private static Shop checkForProducts(Shop shop)
+        private static Shop CheckForProducts(Shop shop)
         {
             if (shop.Product == null)
             {
@@ -40,7 +40,7 @@ namespace MrLocalBackend.Repositories
             _context.Shops.Add(shop);
             await _context.SaveChangesAsync();
 
-            return shop != null ? checkForProducts(shop) : shop;
+            return shop != null ? CheckForProducts(shop) : shop;
         }
 
         public async Task<Shop> Update(string id, string name, string status, string description, string typeOfShop, string city, Product[] listOfNewProducts)
@@ -58,7 +58,7 @@ namespace MrLocalBackend.Repositories
             result.UpdatedAt = dateNow;
 
             var previousShopProducts = await _productRepository.FindAll(id);
-            var deletedShopProducts = previousShopProducts.Where(a =>  listOfNewProducts.Where(b => a.ProductId == b.ProductId).Count() == 0).ToList();
+            var deletedShopProducts = previousShopProducts.Where(a => listOfNewProducts.Where(b => a.ProductId == b.ProductId).Count() == 0).ToList();
             var addedShopProducts = listOfNewProducts.Where(a => a.ProductId == null).ToList();
 
             foreach (var product in deletedShopProducts)
@@ -75,7 +75,7 @@ namespace MrLocalBackend.Repositories
 
             var newResult = _context.Shops.SingleOrDefault(b => b.ShopId == id);
 
-            return newResult != null ? checkForProducts(newResult) : newResult;
+            return newResult != null ? CheckForProducts(newResult) : newResult;
         }
 
         public async Task<string> Delete(string id)
@@ -93,16 +93,16 @@ namespace MrLocalBackend.Repositories
 
         public async Task<Shop> FindOne(string id)
         {
-            var result = await _context.Shops.Include(b => b.Product).SingleOrDefaultAsync(b => b.ShopId == id);
+            var result = await _context.Shops.Include(b => b.Product).Include(b => b.Location).SingleOrDefaultAsync(b => b.ShopId == id);
 
-            return result != null ? checkForProducts(result) : result;
+            return result != null ? CheckForProducts(result) : result;
         }
 
         public async Task<List<Shop>> FindAll()
         {
-            var dbShops = await _context.Shops.Include(b => b.Product).ToListAsync();
+            var dbShops = await _context.Shops.Include(b => b.Product).Include(b => b.Location).ToListAsync();
 
-            return dbShops.Select(shop => checkForProducts(shop)).ToList();
+            return dbShops.Select(shop => CheckForProducts(shop)).ToList();
         }
     }
 }

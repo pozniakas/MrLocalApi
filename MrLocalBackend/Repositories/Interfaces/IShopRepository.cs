@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using MrLocalDb.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using MrLocalDb.Entities;
 
 namespace MrLocalBackend.Repositories.Interfaces
 {

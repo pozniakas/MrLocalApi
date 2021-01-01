@@ -1,8 +1,8 @@
-using System;
-using System.Threading.Tasks;
 using MrLocalBackend.Repositories.Interfaces;
 using MrLocalBackend.Services.Interfaces;
 using MrLocalDb.Entities;
+using System;
+using System.Threading.Tasks;
 
 namespace MrLocalBackend.Services
 {
@@ -10,17 +10,20 @@ namespace MrLocalBackend.Services
     {
         private readonly IShopRepository _shopRepository;
         private readonly Lazy<IValidateData> _validateData = null;
+        private readonly ILocationRepository _locationRepository;
 
-        public ShopService(IShopRepository shopRepository, Lazy<IValidateData> validateData)
+        public ShopService(IShopRepository shopRepository, Lazy<IValidateData> validateData, ILocationRepository locationRepository)
         {
             _validateData = validateData;
             _shopRepository = shopRepository;
+            _locationRepository = locationRepository;
         }
 
-        public async Task<Shop> CreateShop(string name, string description, string typeOfShop, string city)
+        public async Task<Shop> CreateShop(string name, string description, string typeOfShop, string latitude, string longitude, string city)
         {
             await _validateData.Value.ValidateShopData(name, null, description, typeOfShop, city, false);
             var createdShop = await _shopRepository.Create(name, description, typeOfShop, city);
+            await _locationRepository.Create(latitude, longitude, createdShop.ShopId);
             return createdShop;
         }
 

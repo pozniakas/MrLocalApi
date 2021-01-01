@@ -18,6 +18,7 @@ namespace MrLocalApi.Controllers
         {
             _shopService = shopService;
             _requestEvents = requestEvent;
+
         }
 
         [HttpGet("{id}")]
@@ -33,7 +34,7 @@ namespace MrLocalApi.Controllers
         public async Task<IActionResult> Post([FromBody] ShopBody body)
         {
             _requestEvents.ReportAboutRequestStart("api/shop POST");
-            var createdShop = await _shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.City);
+            var createdShop = await _shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.Latitude, body.Longitude, body.City);
             _requestEvents.ReportAboutRequestFinish("api/shop POST");
             return ReturnResponse(createdShop);
         }

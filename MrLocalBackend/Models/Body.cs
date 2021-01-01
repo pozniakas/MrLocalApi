@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using MrLocalDb.Entities;
 using System.Text.Json.Serialization;
-using MrLocalDb.Entities;
 
 namespace MrLocalBackend.Models
 {
@@ -31,6 +30,8 @@ namespace MrLocalBackend.Models
             public string Status { get; set; }
             public string Description { get; set; }
             public string TypeOfShop { get; set; }
+            public string Latitude { get; set; }
+            public string Longitude { get; set; }
             public string City { get; set; }
             public Product[] Product { get; set; }
         }

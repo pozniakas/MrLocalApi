@@ -27,6 +27,29 @@ namespace MrLocalDb.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Location",
+                columns: table => new
+                {
+                    LocationId = table.Column<string>(type: "nvarchar(36)", nullable: false),
+                    Latitude = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Longitude = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DeletedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ShopId = table.Column<string>(type: "nvarchar(36)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Location", x => x.LocationId);
+                    table.ForeignKey(
+                        name: "FK_Location_Shops_ShopId",
+                        column: x => x.ShopId,
+                        principalTable: "Shops",
+                        principalColumn: "ShopId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Products",
                 columns: table => new
                 {
@@ -52,6 +75,12 @@ namespace MrLocalDb.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Location_ShopId",
+                table: "Location",
+                column: "ShopId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Products_ShopId",
                 table: "Products",
                 column: "ShopId");
@@ -59,6 +88,9 @@ namespace MrLocalDb.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Location");
+
             migrationBuilder.DropTable(
                 name: "Products");
 
