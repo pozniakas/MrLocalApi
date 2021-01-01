@@ -6,7 +6,7 @@ namespace MrLocalDb.Entities
 {
     public class Location
     {
-        public Location(string locationId, string latitude, string longitude, DateTime createdAt, DateTime updatedAt)
+        public Location(string locationId, string latitude, string longitude, string shopId, DateTime createdAt, DateTime updatedAt)
         {
             LocationId = locationId;
             Latitude = latitude;
@@ -14,6 +14,7 @@ namespace MrLocalDb.Entities
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
             DeletedAt = null;
+            ShopId = shopId;
         }
 
         [Key]
@@ -30,7 +31,9 @@ namespace MrLocalDb.Entities
         [Required]
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
-
+        [Required]
+        [ForeignKey("ShopId")]
+        public string ShopId { get; set; }
         public virtual Shop Shop { get; set; }
     }
 }
