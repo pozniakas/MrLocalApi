@@ -7,13 +7,15 @@ namespace MrLocalDb.Entities
 {
     public class Shop
     {
-        public Shop(string shopId, string name, string status, string description, string typeOfShop, string city, DateTime createdAt, DateTime updatedAt)
+        public Shop(string shopId, string name, string status, string description, string typeOfShop, string latitude, string longitude, string city, DateTime createdAt, DateTime updatedAt)
         {
             ShopId = shopId;
             Name = name;
             Status = status;
             Description = description;
             TypeOfShop = typeOfShop;
+            Latitude = latitude;
+            Longitude = longitude;
             City = city;
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;

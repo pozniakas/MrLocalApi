@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MrLocalBackend.Repositories.Interfaces;
 using MrLocalDb;
 using MrLocalDb.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace MrLocalBackend.Repositories
 {
@@ -30,12 +30,12 @@ namespace MrLocalBackend.Repositories
             return shop;
         }
 
-        public async Task<Shop> Create(string name, string description, string typeOfShop, string city)
+        public async Task<Shop> Create(string name, string description, string typeOfShop, string latitude, string longitude, string city)
         {
             var updatedAt = DateTime.UtcNow;
             var createdAt = DateTime.UtcNow;
             var id = Guid.NewGuid().ToString();
-            var shop = new Shop(id, name, "Not Active", description, typeOfShop, city, createdAt, updatedAt);
+            var shop = new Shop(id, name, "Not Active", description, typeOfShop, latitude, longitude, city, createdAt, updatedAt);
 
             _context.Shops.Add(shop);
             await _context.SaveChangesAsync();
@@ -58,7 +58,7 @@ namespace MrLocalBackend.Repositories
             result.UpdatedAt = dateNow;
 
             var previousShopProducts = await _productRepository.FindAll(id);
-            var deletedShopProducts = previousShopProducts.Where(a =>  listOfNewProducts.Where(b => a.ProductId == b.ProductId).Count() == 0).ToList();
+            var deletedShopProducts = previousShopProducts.Where(a => listOfNewProducts.Where(b => a.ProductId == b.ProductId).Count() == 0).ToList();
             var addedShopProducts = listOfNewProducts.Where(a => a.ProductId == null).ToList();
 
             foreach (var product in deletedShopProducts)

@@ -1,8 +1,8 @@
-using System;
-using System.Threading.Tasks;
 using MrLocalBackend.Repositories.Interfaces;
 using MrLocalBackend.Services.Interfaces;
 using MrLocalDb.Entities;
+using System;
+using System.Threading.Tasks;
 
 namespace MrLocalBackend.Services
 {
@@ -17,10 +17,10 @@ namespace MrLocalBackend.Services
             _shopRepository = shopRepository;
         }
 
-        public async Task<Shop> CreateShop(string name, string description, string typeOfShop, string city)
+        public async Task<Shop> CreateShop(string name, string description, string typeOfShop, string latitude, string longitude, string city)
         {
             await _validateData.Value.ValidateShopData(name, null, description, typeOfShop, city, false);
-            var createdShop = await _shopRepository.Create(name, description, typeOfShop, city);
+            var createdShop = await _shopRepository.Create(name, description, typeOfShop, latitude, longitude, city);
             return createdShop;
         }
 
