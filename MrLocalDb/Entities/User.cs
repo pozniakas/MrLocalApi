@@ -7,6 +7,16 @@ namespace MrLocalDb.Entities
 {
     public class User
     {
+        public User(string userId, string username, string password, DateTime createdAt, DateTime updatedAt)
+        {
+            UserId = userId;
+            Username = username;
+            Password = password;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            DeletedAt = null;
+        }
+
         [Key]
         [Column(TypeName = "nvarchar(36)")]
         public string UserId { get; set; }
