@@ -15,6 +15,7 @@ namespace MrLocalDb
         public DbSet<Shop> Shops { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<Location> Location { get; set; }
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -26,6 +27,8 @@ namespace MrLocalDb
             builder.Entity<Product>().HasQueryFilter(m => EF.Property<DateTime?>(m, "DeletedAt") == null);
             builder.Entity<Location>().Property<DateTime?>("DeletedAt");
             builder.Entity<Location>().HasQueryFilter(m => EF.Property<DateTime?>(m, "DeletedAt") == null);
+            builder.Entity<User>().Property<DateTime?>("DeletedAt");
+            builder.Entity<User>().HasQueryFilter(m => EF.Property<DateTime?>(m, "DeletedAt") == null);
 
         }
         public override int SaveChanges()
