@@ -43,7 +43,12 @@ namespace MrLocalDb.Entities
         [Required]
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
+        [Required]
+        [ForeignKey("UserId")]
+        public string UserId { get; set; }
+
         public virtual List<Product> Product { get; set; }
         public virtual Location Location { get; set; }
+        public virtual User user { get; set; }
     }
 }

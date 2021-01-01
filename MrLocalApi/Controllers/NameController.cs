@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MrLocalApi.Controllers.Interfaces;
 using MrLocalBackend.Authentication.Interfaces;
 using System.Threading.Tasks;
@@ -8,6 +9,7 @@ namespace MrLocalApi.Controllers
 {
     [Route("api/login")]
     [ApiController]
+    [Authorize]
     public class NameController : ControllerBase, IName
     {
         private readonly IJwdAuthenticationManager _JwtAuthenticationManager;
@@ -22,6 +24,8 @@ namespace MrLocalApi.Controllers
         {
             return Ok();
         }
+
+        [AllowAnonymous]
         [HttpPost("authentificate")]
         public async Task<IActionResult> Authenticate([FromBody] UserCred userCred)
         {
