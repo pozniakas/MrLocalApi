@@ -20,7 +20,7 @@ namespace MrLocalBackend.Repositories
             _productRepository = productRepository;
         }
 
-        private static Shop checkForProducts(Shop shop)
+        private static Shop CheckForProducts(Shop shop)
         {
             if (shop.Product == null)
             {
@@ -30,17 +30,17 @@ namespace MrLocalBackend.Repositories
             return shop;
         }
 
-        public async Task<Shop> Create(string name, string description, string typeOfShop, string latitude, string longitude, string city)
+        public async Task<Shop> Create(string name, string description, string typeOfShop, string city)
         {
             var updatedAt = DateTime.UtcNow;
             var createdAt = DateTime.UtcNow;
             var id = Guid.NewGuid().ToString();
-            var shop = new Shop(id, name, "Not Active", description, typeOfShop, latitude, longitude, city, createdAt, updatedAt);
+            var shop = new Shop(id, name, "Not Active", description, typeOfShop, city, createdAt, updatedAt);
 
             _context.Shops.Add(shop);
             await _context.SaveChangesAsync();
 
-            return shop != null ? checkForProducts(shop) : shop;
+            return shop != null ? CheckForProducts(shop) : shop;
         }
 
         public async Task<Shop> Update(string id, string name, string status, string description, string typeOfShop, string city, Product[] listOfNewProducts)
@@ -75,7 +75,7 @@ namespace MrLocalBackend.Repositories
 
             var newResult = _context.Shops.SingleOrDefault(b => b.ShopId == id);
 
-            return newResult != null ? checkForProducts(newResult) : newResult;
+            return newResult != null ? CheckForProducts(newResult) : newResult;
         }
 
         public async Task<string> Delete(string id)
@@ -95,14 +95,14 @@ namespace MrLocalBackend.Repositories
         {
             var result = await _context.Shops.Include(b => b.Product).SingleOrDefaultAsync(b => b.ShopId == id);
 
-            return result != null ? checkForProducts(result) : result;
+            return result != null ? CheckForProducts(result) : result;
         }
 
         public async Task<List<Shop>> FindAll()
         {
             var dbShops = await _context.Shops.Include(b => b.Product).ToListAsync();
 
-            return dbShops.Select(shop => checkForProducts(shop)).ToList();
+            return dbShops.Select(shop => CheckForProducts(shop)).ToList();
         }
     }
 }

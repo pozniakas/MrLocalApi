@@ -14,6 +14,7 @@ namespace MrLocalDb
 
         public DbSet<Shop> Shops { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Location> Location { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
