@@ -1,11 +1,11 @@
-﻿using System;
+﻿using MrLocalBackend.Repositories.Interfaces;
+using MrLocalBackend.Services.Interfaces;
+using MrLocalDb.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using MrLocalBackend.Repositories.Interfaces;
-using MrLocalBackend.Services.Interfaces;
-using MrLocalDb.Entities;
 
 namespace MrLocalBackend.Services.Helpers
 {
@@ -55,7 +55,7 @@ namespace MrLocalBackend.Services.Helpers
             var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
             var shops = await _shopRepository.FindAll();
 
-            var isValidName = (isUpdate && IsStringEmpty(name)) || (name != null && name.Length > 2 && nameRegex.IsMatch(name) && !shops.Where(i => i.Name == name).Any());
+            var isValidName = (isUpdate && IsStringEmpty(name) || isUpdate && shops.Where(i => i.Name == name).Count() == 1) || (name != null && name.Length > 2 && nameRegex.IsMatch(name) && !shops.Where(i => i.Name == name).Any());
             var isValidStatus = (isUpdate && IsStringEmpty(status)) || Array.Exists(arrayOfStatusTypes, i => i == status) || (!isUpdate && IsStringEmpty(status));
             var isValidDescription = (isUpdate && IsStringEmpty(description)) || (description != null && description.Length > 2);
             var isValidTypeOfShop = (isUpdate && IsStringEmpty(description)) || Array.Exists(arrayOfShopTypes, i => i == typeOfShop);
