@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MrLocalApi.Controllers.Interfaces;
 using MrLocalApi.Controllers.LoggerService.Interfaces;
-using MrLocalBackend.Repositories.Interfaces;
 using MrLocalBackend.Services.Interfaces;
 using System.Threading.Tasks;
 using static MrLocalBackend.Models.Body;
@@ -13,14 +12,13 @@ namespace MrLocalApi.Controllers
     public class ShopController : ControllerBase, IShop
     {
         private readonly IShopService _shopService;
-        private readonly ILocationRepository _locationRepository;
         public IRequestEvent _requestEvents;
 
-        public ShopController(IShopService shopService, IRequestEvent requestEvent, ILocationRepository locationRepository)
+        public ShopController(IShopService shopService, IRequestEvent requestEvent)
         {
             _shopService = shopService;
             _requestEvents = requestEvent;
-            _locationRepository = locationRepository;
+
         }
 
         [HttpGet("{id}")]
@@ -36,7 +34,7 @@ namespace MrLocalApi.Controllers
         public async Task<IActionResult> Post([FromBody] ShopBody body)
         {
             _requestEvents.ReportAboutRequestStart("api/shop POST");
-            var createdShop = await _locationRepository.Create(body.Name, body.Description, body.TypeOfShop, body.Latitude, body.Longitude, body.City);
+            var createdShop = await _shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.Latitude, body.Longitude, body.City);
             _requestEvents.ReportAboutRequestFinish("api/shop POST");
             return ReturnResponse(createdShop);
         }
