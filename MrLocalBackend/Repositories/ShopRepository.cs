@@ -30,12 +30,12 @@ namespace MrLocalBackend.Repositories
             return shop;
         }
 
-        public async Task<Shop> Create(string name, string description, string typeOfShop, string city)
+        public async Task<Shop> Create(string name, string description, string typeOfShop, string city, string locationId)
         {
             var updatedAt = DateTime.UtcNow;
             var createdAt = DateTime.UtcNow;
             var id = Guid.NewGuid().ToString();
-            var shop = new Shop(id, name, "Not Active", description, typeOfShop, city, createdAt, updatedAt);
+            var shop = new Shop(id, name, "Not Active", description, typeOfShop, city, locationId, createdAt, updatedAt);
 
             _context.Shops.Add(shop);
             await _context.SaveChangesAsync();

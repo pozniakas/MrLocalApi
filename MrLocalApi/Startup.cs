@@ -41,6 +41,7 @@ namespace MrLocalApi
 
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped<IShopRepository, ShopRepository>();
+            services.AddScoped<ILocationRepository, LocationRepository>();
 
             services.AddScoped<IRequestEvent, RequestEvent>();
 

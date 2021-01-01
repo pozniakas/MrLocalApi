@@ -17,10 +17,10 @@ namespace MrLocalBackend.Services
             _shopRepository = shopRepository;
         }
 
-        public async Task<Shop> CreateShop(string name, string description, string typeOfShop, string city)
+        public async Task<Shop> CreateShop(string name, string description, string typeOfShop, string city, string locationId)
         {
             await _validateData.Value.ValidateShopData(name, null, description, typeOfShop, city, false);
-            var createdShop = await _shopRepository.Create(name, description, typeOfShop, city);
+            var createdShop = await _shopRepository.Create(name, description, typeOfShop, city,locationId);
             return createdShop;
         }
 

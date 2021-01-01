@@ -7,7 +7,7 @@ namespace MrLocalDb.Entities
 {
     public class Shop
     {
-        public Shop(string shopId, string name, string status, string description, string typeOfShop, string city, DateTime createdAt, DateTime updatedAt)
+        public Shop(string shopId, string name, string status, string description, string typeOfShop, string city, string locationId, DateTime createdAt, DateTime updatedAt)
         {
             ShopId = shopId;
             Name = name;
@@ -15,6 +15,7 @@ namespace MrLocalDb.Entities
             Description = description;
             TypeOfShop = typeOfShop;
             City = city;
+            LocationId = locationId;
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
             DeletedAt = null;

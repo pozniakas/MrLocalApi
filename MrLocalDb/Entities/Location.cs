@@ -1,10 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MrLocalDb.Entities
 {
     public class Location
     {
+        public Location(string locationId, string latitude, string longitude, DateTime createdAt, DateTime updatedAt)
+        {
+            LocationId = locationId;
+            Latitude = latitude;
+            Longitude = longitude;
+            CreatedAt = createdAt;
+            UpdatedAt = updatedAt;
+            DeletedAt = null;
+        }
+
         [Key]
         [Column(TypeName = "nvarchar(36)")]
         public string LocationId { get; set; }
@@ -14,5 +25,10 @@ namespace MrLocalDb.Entities
         [Required]
         [Column(TypeName = "nvarchar(50)")]
         public string Longitude { get; set; }
+        [Required]
+        public DateTime CreatedAt { get; set; }
+        [Required]
+        public DateTime UpdatedAt { get; set; }
+        public DateTime? DeletedAt { get; set; }
     }
 }
