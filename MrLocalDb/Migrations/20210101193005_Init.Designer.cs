@@ -10,8 +10,8 @@ using MrLocalDb;
 namespace MrLocalDb.Migrations
 {
     [DbContext(typeof(MrLocalDbContext))]
-    [Migration("20210101190811_UpdatedLocationAndShopTables")]
-    partial class UpdatedLocationAndShopTables
+    [Migration("20210101193005_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
