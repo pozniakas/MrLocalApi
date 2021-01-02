@@ -12,10 +12,12 @@ namespace MrLocalBackend.Services.Helpers
     public class ValidateData : IValidateData
     {
         private readonly IShopRepository _shopRepository;
+        private readonly IUserRepository _userRepository;
 
-        public ValidateData(IShopRepository shopRepository)
+        public ValidateData(IShopRepository shopRepository, IUserRepository userRepository)
         {
             _shopRepository = shopRepository;
+            _userRepository = userRepository;
         }
         public async Task<bool> ValidateProductData(string shopId, string name, string description, decimal? price, bool isUpdate, string priceType)
         {
@@ -81,6 +83,18 @@ namespace MrLocalBackend.Services.Helpers
                 || (city != "All cities" && typeOfShop == "All types" && shop.City == city)
                 || (city == "All cities" && typeOfShop != "All types" && shop.TypeOfShop == typeOfShop)
                 || (city == "All cities" && typeOfShop == "All types");
+        }
+
+        public async Task<bool> ValidateUsername(string username)
+        {
+            var isUsernameTaken = await _userRepository.FindOne(username) != null;
+
+            if (isUsernameTaken)
+            {
+                throw new ArgumentException("Username already taken");
+            }
+
+            return true;
         }
     }
 }

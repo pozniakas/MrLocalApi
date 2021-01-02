@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MrLocalDb;
 
 namespace MrLocalDb.Migrations
 {
     [DbContext(typeof(MrLocalDbContext))]
-    partial class MrLocalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210101220048_Added user table")]
+    partial class Addedusertable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +52,7 @@ namespace MrLocalDb.Migrations
                     b.HasIndex("ShopId")
                         .IsUnique();
 
-                    b.ToTable("Locations");
+                    b.ToTable("Location");
                 });
 
             modelBuilder.Entity("MrLocalDb.Entities.Product", b =>
@@ -133,7 +135,8 @@ namespace MrLocalDb.Migrations
 
                     b.HasKey("ShopId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Shops");
                 });
@@ -163,7 +166,7 @@ namespace MrLocalDb.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Users");
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("MrLocalDb.Entities.Location", b =>
@@ -190,13 +193,13 @@ namespace MrLocalDb.Migrations
 
             modelBuilder.Entity("MrLocalDb.Entities.Shop", b =>
                 {
-                    b.HasOne("MrLocalDb.Entities.User", "User")
-                        .WithMany("Shop")
-                        .HasForeignKey("UserId")
+                    b.HasOne("MrLocalDb.Entities.User", "user")
+                        .WithOne("shop")
+                        .HasForeignKey("MrLocalDb.Entities.Shop", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("user");
                 });
 
             modelBuilder.Entity("MrLocalDb.Entities.Shop", b =>
@@ -208,7 +211,7 @@ namespace MrLocalDb.Migrations
 
             modelBuilder.Entity("MrLocalDb.Entities.User", b =>
                 {
-                    b.Navigation("Shop");
+                    b.Navigation("shop");
                 });
 #pragma warning restore 612, 618
         }

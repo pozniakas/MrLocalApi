@@ -10,4 +10,3 @@ namespace MrLocalApi.Controllers.Exceptions
         }
     }
 }
-
