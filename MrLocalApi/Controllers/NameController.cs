@@ -7,7 +7,7 @@ using static MrLocalBackend.Models.Body;
 
 namespace MrLocalApi.Controllers
 {
-    [Route("api/login")]
+    [Route("api/aut")]
     [ApiController]
     [Authorize]
     public class NameController : ControllerBase, IName
@@ -29,7 +29,7 @@ namespace MrLocalApi.Controllers
         [HttpPost("authentificate")]
         public async Task<IActionResult> Authenticate([FromBody] UserCred userCred)
         {
-            var token = _JwtAuthenticationManager.Authenticate(userCred.Name, userCred.Password);
+            var token = _JwtAuthenticationManager.Authenticate(userCred.Username, userCred.Password);
 
             if (token == null)
             {

@@ -2,9 +2,9 @@
 
 namespace MrLocalApi.Controllers.Exceptions
 {
-    public static class ExceptionMiddlewareExtensions
+    public static class AuthenticationMiddlewareExtensions
     {
-        public static void ConfigureCustomExceptionMiddleware(this IApplicationBuilder app)
+        public static void ConfigureCustomAuthenticationMiddleware(this IApplicationBuilder app)
         {
             app.UseMiddleware<ExceptionMiddleware>();
         }

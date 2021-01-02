@@ -3,7 +3,6 @@ using MrLocalBackend.Authentication.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -21,7 +20,7 @@ namespace MrLocalBackend.Authentication
 
         public string Authenticate(string username, string password)
         {
-            if (users.Any(u => u.Key == username && u.Value == password))
+            if (false)
             {
                 return null;
             }
@@ -33,14 +32,13 @@ namespace MrLocalBackend.Authentication
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, username)
+                    new Claim(ClaimTypes.Name, username) //i tokena dedam userid ne username
                 }),
-                Expires = DateTime.UtcNow.AddHours(1),
+                Expires = DateTime.UtcNow.AddMonths(1),
                 SigningCredentials =
                 new SigningCredentials(
                     new SymmetricSecurityKey(tokenKey),
                     SecurityAlgorithms.HmacSha256Signature)
-
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
