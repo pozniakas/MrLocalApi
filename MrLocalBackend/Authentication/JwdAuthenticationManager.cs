@@ -2,7 +2,7 @@
 using MrLocalBackend.Authentication.Interfaces;
 using MrLocalBackend.Services.Interfaces;
 using System;
-using System.Collections.Generic;
+using System.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -14,9 +14,11 @@ namespace MrLocalBackend.Authentication
     {
         private readonly string _Key;
         private readonly IUserService _userService;
-        public JwdAuthenticationManager(string key, IUserService userService)
+
+
+        public JwdAuthenticationManager(IUserService userService)
         {
-            _Key = key;
+            _Key = ConfigurationManager.AppSettings.Get("SECRET_KEY");
             _userService = userService;
         }
 
@@ -35,7 +37,7 @@ namespace MrLocalBackend.Authentication
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.NameIdentifier, user.UserId)
+                    new Claim(ClaimTypes.Name, user.UserId)
                 }),
                 Expires = DateTime.UtcNow.AddMonths(1),
                 SigningCredentials =

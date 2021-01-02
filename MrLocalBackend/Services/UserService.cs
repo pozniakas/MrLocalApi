@@ -34,7 +34,7 @@ namespace MrLocalBackend.Services
 
         public async Task<User> GetUserById(string id)
         {
-            var user = await _userRepository.FindOne(id);
+            var user = await _userRepository.FindOneById(id);
 
             return user;
         }

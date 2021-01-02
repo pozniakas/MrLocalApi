@@ -14,9 +14,10 @@ namespace MrLocalBackend.Services.Helpers
         private readonly IShopRepository _shopRepository;
         private readonly IUserRepository _userRepository;
 
-        public ValidateData(IShopRepository shopRepository)
+        public ValidateData(IShopRepository shopRepository, IUserRepository userRepository)
         {
             _shopRepository = shopRepository;
+            _userRepository = userRepository;
         }
         public async Task<bool> ValidateProductData(string shopId, string name, string description, decimal? price, bool isUpdate, string priceType)
         {
@@ -90,7 +91,7 @@ namespace MrLocalBackend.Services.Helpers
 
             if (isUsernameTaken)
             {
-                throw new ArgumentException("Not valid username");
+                throw new ArgumentException("Username already taken");
             }
 
             return true;

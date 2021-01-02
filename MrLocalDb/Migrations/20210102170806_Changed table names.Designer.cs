@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MrLocalDb;
 
 namespace MrLocalDb.Migrations
 {
     [DbContext(typeof(MrLocalDbContext))]
-    partial class MrLocalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210102170806_Changed table names")]
+    partial class Changedtablenames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -133,7 +135,8 @@ namespace MrLocalDb.Migrations
 
                     b.HasKey("ShopId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Shops");
                 });
@@ -191,8 +194,8 @@ namespace MrLocalDb.Migrations
             modelBuilder.Entity("MrLocalDb.Entities.Shop", b =>
                 {
                     b.HasOne("MrLocalDb.Entities.User", "User")
-                        .WithMany("Shop")
-                        .HasForeignKey("UserId")
+                        .WithOne("Shop")
+                        .HasForeignKey("MrLocalDb.Entities.Shop", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

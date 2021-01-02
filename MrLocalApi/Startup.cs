@@ -1,13 +1,16 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using MrLocalApi.Controllers;
 using MrLocalApi.Controllers.Exceptions;
 using MrLocalApi.Controllers.LoggerService;
 using MrLocalApi.Controllers.LoggerService.Interfaces;
+using MrLocalBackend.Authentication;
 using MrLocalBackend.Authentication.Interfaces;
 using MrLocalBackend.Repositories;
 using MrLocalBackend.Repositories.Helpers;
@@ -15,13 +18,11 @@ using MrLocalBackend.Repositories.Interfaces;
 using MrLocalBackend.Services;
 using MrLocalBackend.Services.Helpers;
 using MrLocalBackend.Services.Interfaces;
-using MrLocalBackend.Authentication;
 using MrLocalDb;
 using NLog;
 using System;
+using System.Configuration;
 using System.IO;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 namespace MrLocalApi
@@ -60,27 +61,28 @@ namespace MrLocalApi
             services.AddScoped<IShopService, ShopService>();
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IUserService, UserService>();
 
+            services.AddScoped<IJwdAuthenticationManager, JwdAuthenticationManager>();
 
-            var key = "This is my test key";
+            var key = ConfigurationManager.AppSettings.Get("SECRET_KEY");
 
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(x => {
+            }).AddJwtBearer(x =>
+            {
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)), 
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
             });
-
-            services.AddSingleton<IJwdAuthenticationManager>(new JwdAuthenticationManager(key));
 
             services.AddControllers();
         }

@@ -22,7 +22,7 @@ namespace MrLocalBackend.Repositories
             var locationId = Guid.NewGuid().ToString();
 
             var location = new Location(locationId, latitude, longitude,shopId, createdAt, updatedAt);
-            _context.Location.Add(location);
+            _context.Locations.Add(location);
             await _context.SaveChangesAsync();
 
             return location;

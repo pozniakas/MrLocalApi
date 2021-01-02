@@ -7,7 +7,7 @@ namespace MrLocalDb.Entities
 {
     public class Shop
     {
-        public Shop(string shopId, string name, string status, string description, string typeOfShop, string city, DateTime createdAt, DateTime updatedAt)
+        public Shop(string shopId, string name, string status, string description, string typeOfShop, string city, DateTime createdAt, DateTime updatedAt, string userId)
         {
             ShopId = shopId;
             Name = name;
@@ -18,6 +18,7 @@ namespace MrLocalDb.Entities
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
             DeletedAt = null;
+            UserId = userId;
         }
 
         [Key]
@@ -49,6 +50,6 @@ namespace MrLocalDb.Entities
 
         public virtual List<Product> Product { get; set; }
         public virtual Location Location { get; set; }
-        public virtual User user { get; set; }
+        public virtual User User { get; set; }
     }
 }

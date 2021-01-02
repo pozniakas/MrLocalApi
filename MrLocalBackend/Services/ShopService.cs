@@ -23,12 +23,12 @@ namespace MrLocalBackend.Services
 
         public async Task<Shop> CreateShop(string name, string description, string typeOfShop, string latitude, string longitude, string city, string userId)
         {
-            var user = _userRepository.FindOneById(userId);
+            var user = await _userRepository.FindOneById(userId);
 
             if (user != null)
             {
                 await _validateData.Value.ValidateShopData(name, null, description, typeOfShop, city, false);
-                var createdShop = await _shopRepository.Create(name, description, typeOfShop, city);
+                var createdShop = await _shopRepository.Create(name, description, typeOfShop, city, userId);
                 await _locationRepository.Create(latitude, longitude, createdShop.ShopId);
                 return createdShop;
             }
