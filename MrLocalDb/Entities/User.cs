@@ -33,6 +33,6 @@ namespace MrLocalDb.Entities
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
 
-        public virtual Shop shop { get; set; }
+        public virtual Shop Shop { get; set; }
     }
 }

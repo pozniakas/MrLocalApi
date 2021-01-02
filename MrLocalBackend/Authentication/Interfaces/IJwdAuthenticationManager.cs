@@ -1,7 +1,9 @@
-﻿namespace MrLocalBackend.Authentication.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace MrLocalBackend.Authentication.Interfaces
 {
     public interface IJwdAuthenticationManager
     {
-        string Authenticate(string username, string password);
+        public Task<string> AuthenticateAsync(string username, string password);
     }
 }

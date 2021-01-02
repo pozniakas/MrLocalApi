@@ -1,26 +1,29 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using MrLocalBackend.Authentication.Interfaces;
+using MrLocalBackend.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace MrLocalBackend.Authentication
 {
     public class JwdAuthenticationManager : IJwdAuthenticationManager
     {
-        private readonly IDictionary<string, string> users = new Dictionary<string, string>
-        { { "test1", "password1"},{ "test2", "password2"} };
         private readonly string _Key;
-        public JwdAuthenticationManager(string key)
+        private readonly IUserService _userService;
+        public JwdAuthenticationManager(string key, IUserService userService)
         {
             _Key = key;
+            _userService = userService;
         }
 
-        public string Authenticate(string username, string password)
+        public async Task<string> AuthenticateAsync(string username, string password)
         {
-            if (false)
+            var user = await _userService.GetUserByUsername(username);
+            if (user == null || user.Password != password)
             {
                 return null;
             }
@@ -32,7 +35,7 @@ namespace MrLocalBackend.Authentication
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, username) //i tokena dedam userid ne username
+                    new Claim(ClaimTypes.NameIdentifier, user.UserId)
                 }),
                 Expires = DateTime.UtcNow.AddMonths(1),
                 SigningCredentials =

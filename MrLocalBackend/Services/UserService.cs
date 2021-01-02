@@ -25,9 +25,16 @@ namespace MrLocalBackend.Services
             return createdUser;
         }
 
-        public async Task<User> GetUser(string username)
+        public async Task<User> GetUserByUsername(string username)
         {
             var user = await _userRepository.FindOne(username);
+
+            return user;
+        }
+
+        public async Task<User> GetUserById(string id)
+        {
+            var user = await _userRepository.FindOne(id);
 
             return user;
         }

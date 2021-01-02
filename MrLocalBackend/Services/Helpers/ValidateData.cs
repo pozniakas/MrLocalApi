@@ -86,9 +86,14 @@ namespace MrLocalBackend.Services.Helpers
 
         public async Task<bool> ValidateUsername(string username)
         {
-            var isUsernameTaken = await _userRepository.FindOne(username) == null;
+            var isUsernameTaken = await _userRepository.FindOne(username) != null;
 
-            return isUsernameTaken;
+            if (isUsernameTaken)
+            {
+                throw new ArgumentException("Not valid username");
+            }
+
+            return true;
         }
     }
 }

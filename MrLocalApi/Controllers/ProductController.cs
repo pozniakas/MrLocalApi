@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MrLocalApi.Controllers.Interfaces;
 using MrLocalApi.Controllers.LoggerService.Interfaces;
 using MrLocalBackend.Services.Interfaces;
@@ -9,6 +10,7 @@ namespace MrLocalApi.Controllers
 {
     [Route("api/product")]
     [ApiController]
+    [Authorize]
     public class ProductController : ControllerBase, IProduct
     {
         private readonly IProductService _productService;
@@ -33,7 +35,7 @@ namespace MrLocalApi.Controllers
         public async Task<IActionResult> Post([FromBody] ProductBody body)
         {
             _requestEvents.ReportAboutRequestStart("api/product POST");
-            var createdProduct = await _productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
+            var createdProduct = await _productService.AddProductToShop(body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price, HttpContext.User.Identity.Name);
             _requestEvents.ReportAboutRequestFinish("api/product POST");
             return ReturnResponse(createdProduct);
         }
@@ -42,7 +44,7 @@ namespace MrLocalApi.Controllers
         public async Task<IActionResult> Put([FromBody] ProductBody body)
         {
             _requestEvents.ReportAboutRequestStart("api/product PUT");
-            var updatedProduct = await _productService.UpdateProduct(body.ProductId, body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price);
+            var updatedProduct = await _productService.UpdateProduct(body.ProductId, body.ShopId, body.Name, body.Description, body.PriceType.ToString(), body.Price, HttpContext.User.Identity.Name);
             _requestEvents.ReportAboutRequestFinish("api/product PUT");
             return ReturnResponse(updatedProduct);
         }
@@ -51,7 +53,7 @@ namespace MrLocalApi.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             _requestEvents.ReportAboutRequestStart("api/product DELETE");
-            await _productService.DeleteProduct(id);
+            await _productService.DeleteProduct(id, HttpContext.User.Identity.Name);
             _requestEvents.ReportAboutRequestFinish("api/product DELETE");
             return ReturnResponse("Product was deleted successfully");
         }

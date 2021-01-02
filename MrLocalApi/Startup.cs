@@ -61,7 +61,6 @@ namespace MrLocalApi
             services.AddScoped<ISearchService, SearchService>();
             services.AddScoped<IUserRepository, UserRepository>();
 
-            services.AddControllers();
 
             var key = "This is my test key";
 
@@ -82,6 +81,8 @@ namespace MrLocalApi
             });
 
             services.AddSingleton<IJwdAuthenticationManager>(new JwdAuthenticationManager(key));
+
+            services.AddControllers();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -97,9 +98,9 @@ namespace MrLocalApi
 
             app.UseRouting();
 
-            app.UseAuthorization();
-
             app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -34,5 +34,12 @@ namespace MrLocalBackend.Repositories
 
             return result;
         }
+
+        public async Task<User> FindOneById(string id)
+        {
+            var result = await _context.Users.SingleOrDefaultAsync(b => b.UserId == id);
+
+            return result;
+        }
     }
 }

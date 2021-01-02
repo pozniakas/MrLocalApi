@@ -7,5 +7,6 @@ namespace MrLocalBackend.Repositories.Interfaces
     {
         public Task<User> Create(string username, string password);
         public Task<User> FindOne(string username);
+        public Task<User> FindOneById(string id);
     }
 }
