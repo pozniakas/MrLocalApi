@@ -22,6 +22,7 @@ namespace MrLocalApi.Controllers
             _requestEvents = requestEvent;
         }
 
+        [AllowAnonymous]
         [HttpGet("{shopId}")]
         public async Task<IActionResult> Get(string shopId)
         {
