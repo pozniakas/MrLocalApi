@@ -9,6 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MrLocalBackend", "MrLocalBa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MrLocalDb", "MrLocalDb\MrLocalDb.csproj", "{BC0E3D08-1C56-4E3E-B8A6-9160AB065D49}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MrLocalUnitTests", "MrLocalUnitTests\MrLocalUnitTests.csproj", "{B371B575-A388-4B0B-ABE8-DAB32CFC9DA8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{BC0E3D08-1C56-4E3E-B8A6-9160AB065D49} = {BC0E3D08-1C56-4E3E-B8A6-9160AB065D49}
+		{AADFBBD8-6032-452A-9E10-A3F85C7079AB} = {AADFBBD8-6032-452A-9E10-A3F85C7079AB}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +33,10 @@ Global
 		{BC0E3D08-1C56-4E3E-B8A6-9160AB065D49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC0E3D08-1C56-4E3E-B8A6-9160AB065D49}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC0E3D08-1C56-4E3E-B8A6-9160AB065D49}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B371B575-A388-4B0B-ABE8-DAB32CFC9DA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B371B575-A388-4B0B-ABE8-DAB32CFC9DA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B371B575-A388-4B0B-ABE8-DAB32CFC9DA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B371B575-A388-4B0B-ABE8-DAB32CFC9DA8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
