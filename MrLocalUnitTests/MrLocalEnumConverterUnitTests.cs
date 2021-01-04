@@ -1,15 +1,11 @@
-﻿using Moq;
-using MrLocalBackend.Repositories.Helpers;
-using MrLocalBackend.Repositories.Interfaces;
-using MrLocalBackend.Services.Helpers;
+﻿using MrLocalBackend.Repositories.Helpers;
 using MrLocalDb.Entities;
 using System;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace MrLocalUnitTests
 {
-    public class MrLocalValidateDataUnitTests
+    public class MrLocalEnumConverterUnitTests
     {
         [Theory]
         [InlineData(PriceTypes.KILOGRAMS, "KILOGRAMS")]
