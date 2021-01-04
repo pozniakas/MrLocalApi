@@ -59,7 +59,7 @@ namespace MrLocalBackend.Repositories
             result.UpdatedAt = dateNow;
 
             var previousShopProducts = await _productRepository.FindAll(id);
-            var deletedShopProducts = previousShopProducts.Where(a => listOfNewProducts.Where(b => a.ProductId == b.ProductId).Any()).ToList();
+            var deletedShopProducts = previousShopProducts.Where(a => listOfNewProducts.Where(b => a.ProductId == b.ProductId).Count() == 0).ToList();
             var addedShopProducts = listOfNewProducts.Where(a => a.ProductId == null).ToList();
 
             foreach (var product in deletedShopProducts)
