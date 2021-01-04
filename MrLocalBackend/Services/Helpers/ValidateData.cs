@@ -55,7 +55,7 @@ namespace MrLocalBackend.Services.Helpers
             string[] arrayOfCities = { "Vilnius", "Kaunas", "Klaipėda", "Šiauliai", "Panevėžys" };
             string[] arrayOfStatusTypes = { "Active", "Not Active", "Paused" };
             var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
-            var phoneRegex = new Regex(@"^[+] *[(]{ 0, 1 }[0 - 9]{ 1,4}[)]{ 0,1}[-\s\./ 0 - 9]*$");
+            var phoneRegex = new Regex(@"^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]\d{0,6}$");
             var shops = await _shopRepository.FindAll();
 
             var isValidName = (isUpdate && IsStringEmpty(name) || isUpdate && shops.Where(i => i.Name == name).Count() == 1) || (name != null && name.Length > 2 && nameRegex.IsMatch(name) && !shops.Where(i => i.Name == name).Any());
