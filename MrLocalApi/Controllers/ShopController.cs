@@ -36,7 +36,7 @@ namespace MrLocalApi.Controllers
         public async Task<IActionResult> Post([FromBody] ShopBody body)
         {
             _requestEvents.ReportAboutRequestStart("api/shop POST");
-            var createdShop = await _shopService.CreateShop(body.Name, body.Description, body.TypeOfShop, body.Latitude, body.Longitude, body.City, HttpContext.User.Identity.Name);
+            var createdShop = await _shopService.CreateShop(body.Name, body.Description, body.TypeOfShop,body.Phone, body.Latitude, body.Longitude, body.City, HttpContext.User.Identity.Name);
             _requestEvents.ReportAboutRequestFinish("api/shop POST");
             return ReturnResponse(createdShop);
         }
@@ -45,7 +45,7 @@ namespace MrLocalApi.Controllers
         public async Task<IActionResult> Put([FromBody] ShopBody body)
         {
             _requestEvents.ReportAboutRequestStart("api/shop PUT");
-            var updatedShop = await _shopService.UpdateShop(body.ShopId, body.Name, body.Status, body.Description, body.TypeOfShop, body.City, body.Product, HttpContext.User.Identity.Name);
+            var updatedShop = await _shopService.UpdateShop(body.ShopId, body.Name, body.Status, body.Description, body.TypeOfShop,body.Phone, body.City, body.Product, HttpContext.User.Identity.Name);
             _requestEvents.ReportAboutRequestFinish("api/shop PUT");
             return ReturnResponse(updatedShop);
         }

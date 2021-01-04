@@ -7,13 +7,14 @@ namespace MrLocalDb.Entities
 {
     public class Shop
     {
-        public Shop(string shopId, string name, string status, string description, string typeOfShop, string city, DateTime createdAt, DateTime updatedAt, string userId)
+        public Shop(string shopId, string name, string status, string description, string typeOfShop, string phone, string city, DateTime createdAt, DateTime updatedAt, string userId)
         {
             ShopId = shopId;
             Name = name;
             Status = status;
             Description = description;
             TypeOfShop = typeOfShop;
+            Phone = phone;
             City = city;
             CreatedAt = createdAt;
             UpdatedAt = updatedAt;
@@ -36,6 +37,9 @@ namespace MrLocalDb.Entities
         [Required]
         [Column(TypeName = "nvarchar(50)")]
         public string TypeOfShop { get; set; }
+        [Required]
+        [Column(TypeName = "nvarchar(12)")]
+        public string Phone { get; set; }
         [Required]
         [Column(TypeName = "nvarchar(50)")]
         public string City { get; set; }
