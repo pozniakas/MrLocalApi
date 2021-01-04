@@ -30,12 +30,12 @@ namespace MrLocalBackend.Repositories
             return shop;
         }
 
-        public async Task<Shop> Create(string name, string description, string typeOfShop, string city, string userId)
+        public async Task<Shop> Create(string name, string description, string typeOfShop, string phone, string city, string userId)
         {
             var updatedAt = DateTime.UtcNow;
             var createdAt = DateTime.UtcNow;
             var id = Guid.NewGuid().ToString();
-            var shop = new Shop(id, name, "Not Active", description, typeOfShop, city, createdAt, updatedAt, userId);
+            var shop = new Shop(id, name, "Not Active", description, typeOfShop, phone, city, createdAt, updatedAt, userId);
 
             _context.Shops.Add(shop);
             await _context.SaveChangesAsync();
@@ -43,7 +43,7 @@ namespace MrLocalBackend.Repositories
             return shop != null ? CheckForProducts(shop) : shop;
         }
 
-        public async Task<Shop> Update(string id, string name, string status, string description, string typeOfShop, string city, Product[] listOfNewProducts)
+        public async Task<Shop> Update(string id, string name, string status, string description, string typeOfShop, string phone, string city, Product[] listOfNewProducts)
         {
             static bool IsStringEmpty(string str) => str == null || str.Length == 0;
 
@@ -54,11 +54,12 @@ namespace MrLocalBackend.Repositories
             result.Status = IsStringEmpty(status) ? result.Status : status;
             result.Description = IsStringEmpty(description) ? result.Description : description;
             result.TypeOfShop = IsStringEmpty(typeOfShop) ? result.TypeOfShop : typeOfShop;
+            result.Phone = IsStringEmpty(phone) ? result.Phone : phone;
             result.City = IsStringEmpty(city) ? result.City : city;
             result.UpdatedAt = dateNow;
 
             var previousShopProducts = await _productRepository.FindAll(id);
-            var deletedShopProducts = previousShopProducts.Where(a => listOfNewProducts.Where(b => a.ProductId == b.ProductId).Count() == 0).ToList();
+            var deletedShopProducts = previousShopProducts.Where(a => listOfNewProducts.Where(b => a.ProductId == b.ProductId).Any()).ToList();
             var addedShopProducts = listOfNewProducts.Where(a => a.ProductId == null).ToList();
 
             foreach (var product in deletedShopProducts)

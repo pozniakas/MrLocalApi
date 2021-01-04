@@ -47,7 +47,7 @@ namespace MrLocalBackend.Services.Helpers
             return true;
         }
 
-        public async Task<bool> ValidateShopData(string name, string status, string description, string typeOfShop, string city, bool isUpdate)
+        public async Task<bool> ValidateShopData(string name, string status, string description, string typeOfShop, string phone, string city, bool isUpdate)
         {
             static bool IsStringEmpty(string str) => str == null || str.Length == 0;
 
@@ -55,16 +55,18 @@ namespace MrLocalBackend.Services.Helpers
             string[] arrayOfCities = { "Vilnius", "Kaunas", "Klaipėda", "Šiauliai", "Panevėžys" };
             string[] arrayOfStatusTypes = { "Active", "Not Active", "Paused" };
             var nameRegex = new Regex(@"^[\w'\-,.][^0-9_!¡?÷?¿/\\+=@#$%ˆ&*(){}|~<>;:[\]]{2,}$");
+            var phoneRegex = new Regex(@"^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\./0-9]\d{0,9}$");
             var shops = await _shopRepository.FindAll();
 
             var isValidName = (isUpdate && IsStringEmpty(name) || isUpdate && shops.Where(i => i.Name == name).Count() == 1) || (name != null && name.Length > 2 && nameRegex.IsMatch(name) && !shops.Where(i => i.Name == name).Any());
             var isValidStatus = (isUpdate && IsStringEmpty(status)) || Array.Exists(arrayOfStatusTypes, i => i == status) || (!isUpdate && IsStringEmpty(status));
             var isValidDescription = (isUpdate && IsStringEmpty(description)) || (description != null && description.Length > 2);
             var isValidTypeOfShop = (isUpdate && IsStringEmpty(description)) || Array.Exists(arrayOfShopTypes, i => i == typeOfShop);
+            var isValidPhoneNumber = (isUpdate && IsStringEmpty(phone)) || (phone != null && phoneRegex.IsMatch(phone));
             var isValidCity = (isUpdate && IsStringEmpty(city)) || Array.Exists(arrayOfCities, i => i == city);
 
-            bool[] validators = { isValidName, isValidStatus, isValidDescription, isValidTypeOfShop, isValidCity };
-            string[] namesOfParams = { "name", "status", "description", "typeOfShop", "city" };
+            bool[] validators = { isValidName, isValidStatus, isValidDescription, isValidTypeOfShop, isValidPhoneNumber, isValidCity };
+            string[] namesOfParams = { "name", "status", "description", "typeOfShop", "phone number", "city" };
 
             for (var i = 0; i < validators.Length; i++)
             {
