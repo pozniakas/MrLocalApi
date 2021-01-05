@@ -39,7 +39,7 @@ namespace MrLocalBackend.Repositories
             var shopId = Guid.NewGuid().ToString();
             var status = "Not Active";
             var shop = new Shop(shopId, name, status, description, typeOfShop, phone, city, createdAt, updatedAt, userId);
-
+            
             var connection = "Server=localhost\\SQLEXPRESS;Database=MrLocal;Trusted_Connection=True";
 
             using (var cn = new SqlConnection())
@@ -74,8 +74,8 @@ namespace MrLocalBackend.Repositories
                 }
 
             }
-
-            return shop != null ? CheckForProducts(shop) : shop;
+            var shopWithAllDetails = await FindOne(shop.ShopId);
+            return shopWithAllDetails != null ? CheckForProducts(shopWithAllDetails) : shopWithAllDetails;
         }
 
         public async Task<Shop> Update(string id, string name, string status, string description, string typeOfShop, string phone, string city, Product[] listOfNewProducts)
