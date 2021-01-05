@@ -4,3 +4,4 @@ Stack:
 - Entity Framework Core
 - JWT Token
 - NLog
+- XUnit
