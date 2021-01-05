@@ -38,7 +38,7 @@ namespace MrLocalDb.Entities
         [Column(TypeName = "nvarchar(50)")]
         public string TypeOfShop { get; set; }
         [Required]
-        [Column(TypeName = "nvarchar(12)")]
+        [Column(TypeName = "nvarchar(50)")]
         public string Phone { get; set; }
         [Required]
         [Column(TypeName = "nvarchar(50)")]

@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using MrLocalBackend.Repositories.Interfaces;
 using MrLocalDb;
 using MrLocalDb.Entities;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,13 +36,46 @@ namespace MrLocalBackend.Repositories
         {
             var updatedAt = DateTime.UtcNow;
             var createdAt = DateTime.UtcNow;
-            var id = Guid.NewGuid().ToString();
-            var shop = new Shop(id, name, "Not Active", description, typeOfShop, phone, city, createdAt, updatedAt, userId);
+            var shopId = Guid.NewGuid().ToString();
+            var status = "Not Active";
+            var shop = new Shop(shopId, name, status, description, typeOfShop, phone, city, createdAt, updatedAt, userId);
+            
+            var connection = "Server=localhost\\SQLEXPRESS;Database=MrLocal;Trusted_Connection=True";
 
-            _context.Shops.Add(shop);
-            await _context.SaveChangesAsync();
+            using (var cn = new SqlConnection())
+            {
+                cn.ConnectionString = connection;
+                try
+                {
+                    cn.Open();
+                    Console.WriteLine("Connection opened");
+                    using (var command = new SqlCommand())
+                    {
+                        command.Connection = cn;
+                        command.CommandType = CommandType.Text;
+                        command.CommandText = $"INSERT INTO Shops(ShopId,Name,Status,Description,TypeOfShop,Phone,City,CreatedAt,UpdatedAt,UserId) VALUES ('{shopId}','{name}','{status}','{description}', '{typeOfShop}','{phone}','{city}','{createdAt}','{updatedAt}','{userId}')";
 
-            return shop != null ? CheckForProducts(shop) : shop;
+                        var rowsAffectedCount = await command.ExecuteNonQueryAsync();
+                    }
+                }
+                catch (SqlException ex)
+                {
+                    Console.WriteLine(ex);
+                }
+                catch (Exception e)
+                {
+                    // log it here
+                    Console.WriteLine(e);
+                }
+                finally
+                {
+                    cn.Close();
+                    Console.WriteLine("Connection closed");
+                }
+
+            }
+            var shopWithAllDetails = await FindOne(shop.ShopId);
+            return shopWithAllDetails != null ? CheckForProducts(shopWithAllDetails) : shopWithAllDetails;
         }
 
         public async Task<Shop> Update(string id, string name, string status, string description, string typeOfShop, string phone, string city, Product[] listOfNewProducts)
