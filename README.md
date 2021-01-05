@@ -1,2 +1,5 @@
-# MrLocal Api
-![Schema](https://i.imgur.com/gtYtG3v.png)
+# Mr. Local API
+Stack:
+- ASP.NET
+- Entity Framework
+- JWT Token
